@@ -1,0 +1,11 @@
+.idea/
+.vscode/
+
+*.py[cod]
+__pycache__/
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+tools/app.log

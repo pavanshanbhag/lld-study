@@ -1,98 +1,118 @@
-# Design Patterns in Python
+# Design Patterns (Go + Python)
 
-This directory contains Python implementations of various design patterns, following the same examples and structure as the Java implementations.
+Implementations organized by category. Each pattern has `golang/` and/or `python/` subfolders.
 
-## Implemented Patterns
+```
+design-patterns/
+├── creational/     singleton, factory, builder, prototype, abstractfactory
+├── structural/     adapter, bridge, composite, decorator, facade, flyweight, proxy
+└── behavioral/     strategy, observer, state, command, and more
+```
 
-### Creational Patterns
-- **[Adapter Pattern](adapter/)** - Convert interface of a class into another interface
-- **[Factory Method Pattern](factory/)** - Create objects without specifying exact classes
-- **[Builder Pattern](builder/)** - Construct complex objects step by step
-- **[Singleton Pattern](singleton/)** - Ensure only one instance of a class exists
+## Running Python demos
 
-### Behavioral Patterns
-- **[Observer Pattern](observer/)** - Define one-to-many dependency between objects
-- **[Strategy Pattern](strategy/)** - Define family of algorithms and make them interchangeable
-
-### Structural Patterns
-- **Abstract Factory Pattern** - Create families of related objects
-- **Bridge Pattern** - Separate abstraction from implementation
-- **Composite Pattern** - Compose objects into tree structures
-- **Decorator Pattern** - Add behavior to objects dynamically
-- **Facade Pattern** - Provide simplified interface to complex subsystem
-- **Flyweight Pattern** - Minimize memory usage with shared objects
-- **Proxy Pattern** - Provide placeholder/surrogate for another object
-
-### Additional Behavioral Patterns
-- **Chain of Responsibility** - Pass requests along handler chain
-- **Command Pattern** - Encapsulate requests as objects
-- **Iterator Pattern** - Access elements sequentially without exposing structure
-- **Mediator Pattern** - Define how objects interact with each other
-- **Memento Pattern** - Capture and restore object state
-- **State Pattern** - Allow object to alter behavior when state changes
-- **Template Method Pattern** - Define skeleton of algorithm in base class
-- **Visitor Pattern** - Define new operations without changing classes
-
-## Running the Examples
-
-Each pattern directory contains demo files that can be run independently:
+Most Python packages use relative imports. Run from the **pattern directory** (parent of `python/`):
 
 ```bash
-# Run adapter pattern demo
-python -m design-patterns.python.adapter.ecommerce_app
-
-# Run factory pattern demo
-python -m design-patterns.python.factory.factory_method_demo
-
-# Run builder pattern demo
-python -m design-patterns.python.builder.http_app_builder
-
-# Run singleton pattern demo
-python -m design-patterns.python.singleton.singleton_demo
-
-# Run observer pattern demo
-python -m design-patterns.python.observer.fitness_app_observer_demo
-
-# Run strategy pattern demo
-python -m design-patterns.python.strategy.ecommerce_app_demo
+cd 00-foundations/design-patterns/<category>/<pattern>
+python3 -m python.<demo_module>
 ```
 
-## Key Features
+Examples:
 
-- **Same Examples**: Uses identical examples as Java implementations for consistency
-- **Pythonic Code**: Follows Python conventions and best practices
-- **Type Hints**: Includes type annotations for better code clarity
-- **Separate Files**: Each class is in its own file for better organization
-- **Abstract Base Classes**: Uses ABC for interfaces and abstract classes
-- **Documentation**: Comprehensive docstrings and comments
+```bash
+# Strategy
+cd 00-foundations/design-patterns/behavioral/strategy
+python3 -m python.ecommerce_app_demo
 
-## Pattern Structure
+# Adapter
+cd 00-foundations/design-patterns/structural/adapter
+python3 -m python.ecommerce_app
 
-Each pattern follows this structure:
+# Factory
+cd 00-foundations/design-patterns/creational/factory
+python3 -m python.factory_method_demo
+
+# Singleton
+cd 00-foundations/design-patterns/creational/singleton
+python3 -m python.singleton_demo
+
+# Chain of Responsibility
+cd 00-foundations/design-patterns/behavioral/chainofresponsibility
+python3 -m python.main
 ```
-pattern_name/
-├── __init__.py
-├── interface_or_abstract.py      # Abstract base classes/interfaces
-├── concrete_implementations.py   # Concrete classes
-├── context_or_client.py          # Context classes or clients
-├── demo.py                       # Demonstration of the pattern
-└── README.md                     # Pattern-specific documentation
+
+## Running Go demos
+
+From the pattern's `golang/` folder (most have their own `go.mod` and `main.go`):
+
+```bash
+cd 00-foundations/design-patterns/behavioral/strategy/golang
+go run .
 ```
 
-## Design Principles Demonstrated
+Patterns without a local `go.mod` can still be read as reference code.
 
-- **Open/Closed Principle**: Open for extension, closed for modification
-- **Dependency Inversion**: Depend on abstractions, not concretions
-- **Single Responsibility**: Each class has one reason to change
-- **Composition over Inheritance**: Favor object composition
-- **Encapsulation**: Hide implementation details behind interfaces
+---
 
-## Contributing
+## Creational Patterns
 
-When adding new patterns or modifying existing ones:
-1. Follow the existing file structure and naming conventions
-2. Include comprehensive type hints
-3. Add detailed docstrings
-4. Create meaningful demo examples
-5. Maintain consistency with Java implementations
-6. Include README documentation for each pattern
+| Pattern | Python | Go | Demo |
+|---------|--------|-----|------|
+| [Singleton](creational/singleton/) | ✓ | ✓ | `python3 -m python.singleton_demo` |
+| [Factory Method](creational/factory/) | ✓ | ✓ | `python3 -m python.factory_method_demo` |
+| [Builder](creational/builder/) | ✓ | ✓ | `python3 -m python.http_app_builder` |
+| [Prototype](creational/prototype/) | ✓ | ✓ | `python3 -m python.game` |
+| [Abstract Factory](creational/abstractfactory/) | ✓ | — | `python3 -m python.shoe_manufacture` |
+
+## Structural Patterns
+
+| Pattern | Python | Go | Demo |
+|---------|--------|-----|------|
+| [Adapter](structural/adapter/) | ✓ | ✓ | `python3 -m python.ecommerce_app` |
+| [Bridge](structural/bridge/) | ✓ | ✓ | `python3 -m python.bridge_demo` |
+| [Composite](structural/composite/) | ✓ | ✓ | `python3 -m python.organization.composite_demo` |
+| [Decorator](structural/decorator/) | ✓ | ✓ | `python3 -m python.decorator_demo` |
+| [Facade](structural/facade/) | ✓ | ✓ | `python3 -m python.deployment_app_facade` |
+| [Flyweight](structural/flyweight/) | ✓ | ✓ | `python3 -m python.flyweight_demo` |
+| [Proxy](structural/proxy/) | ✓ | ✓ | `python3 -m python.image_gallery_app_v2` |
+
+## Behavioral Patterns
+
+| Pattern | Python | Go | Demo |
+|---------|--------|-----|------|
+| [Chain of Responsibility](behavioral/chainofresponsibility/) | ✓ | ✓ | `python3 -m python.main` |
+| [Command](behavioral/command/) | ✓ | — | `python3 -m python.command_pattern_demo` |
+| [Iterator](behavioral/iterator/) | ✓ | ✓ | `python3 -m python.iterator_demo` |
+| [Mediator](behavioral/mediator/) | ✓ | ✓ | (see `python/mediator_app.py`) |
+| [Memento](behavioral/memento/) | ✓ | ✓ | `python3 -m python.text_editor_undo_v2` |
+| [Observer](behavioral/observer/) | ✓ | ✓ | `python3 -m python.fitness_app_observer_demo` |
+| [State](behavioral/state/) | ✓ | ✓ | `python3 -m python.vending_machine_app` |
+| [Strategy](behavioral/strategy/) | ✓ | ✓ | `python3 -m python.ecommerce_app_demo` |
+| [Template Method](behavioral/templatemethod/) | ✓ | ✓ | `python3 -m python.report_app_template_method` |
+| [Visitor](behavioral/visitor/) | ✓ | — | (stub — no demo yet) |
+
+> Run all commands from the pattern directory shown in the first column link, e.g. `cd behavioral/strategy` before `python3 -m python.ecommerce_app_demo`.
+
+## Pattern layout
+
+```
+<category>/<pattern>/
+├── golang/          # Go implementation (+ go.mod, main.go where applicable)
+└── python/          # Python implementation (__init__.py + demo modules)
+    ├── __init__.py
+    ├── ...
+    └── *_demo.py
+```
+
+## All-patterns runner
+
+`all_patterns_demo.py` in this directory was written for the old flat layout and may not work without path adjustments. Prefer running individual pattern demos above.
+
+## Design principles
+
+- **Open/Closed** — open for extension, closed for modification
+- **Dependency Inversion** — depend on abstractions, not concretions
+- **Single Responsibility** — one reason to change per class
+- **Composition over Inheritance** — favor object composition
+- **Encapsulation** — hide implementation behind interfaces
