@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	bookingSystem := GetBookingSystem()
+	bookingSystem := NewBookingSystem()
 
 	// Create concerts
 	concert1Seats := GenerateSeats(100)

@@ -1,37 +1,21 @@
 import threading
 from typing import Dict, List, Optional
-from member import Member
+
 from connection_service import ConnectionService
-from newsfeed_service import NewsFeedService
-from search_service import SearchService
-from notification_service import NotificationService
 from feed_sorting_strategy import ChronologicalSortStrategy
+from member import Member
+from newsfeed_service import NewsFeedService
+from notification_service import NotificationService
 from post import Post
+from search_service import SearchService
+
 
 class LinkedInSystem:
-    _instance: Optional['LinkedInSystem'] = None
-    _lock = threading.Lock()
-
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self):
-        if hasattr(self, 'initialized'):
-            return
-
         self.members: Dict[str, Member] = {}
         self.connection_service = ConnectionService(NotificationService())
         self.news_feed_service = NewsFeedService()
         self.search_service = SearchService(self.members.values())
-        self.initialized = True
-
-    @classmethod
-    def get_instance(cls) -> 'LinkedInSystem':
-        return cls()
 
     def register_member(self, member: Member) -> None:
         self.members[member.get_id()] = member

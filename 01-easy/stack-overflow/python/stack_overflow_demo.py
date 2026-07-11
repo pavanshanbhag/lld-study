@@ -1,7 +1,8 @@
-from stack_overflow_service import StackOverflowService
 from enums import VoteType
-from search_strategy import UserSearchStrategy, TagSearchStrategy
+from search_strategy import TagSearchStrategy, UserSearchStrategy
+from stack_overflow_service import StackOverflowService
 from tag import Tag
+
 
 class StackOverflowDemo:
     @staticmethod

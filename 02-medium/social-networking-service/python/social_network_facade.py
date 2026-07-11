@@ -1,17 +1,21 @@
-from user_service import UserService
-from post_service import PostService
+from typing import List
+
+from commentable_entity import Post
 from newsfeed_service import NewsFeedService
 from post_observer import UserNotifier
+from post_service import PostService
+from repository import PostRepository, UserRepository
 from user import User
-from typing import List
-from commentable_entity import Post
+from user_service import UserService
+
 
 class SocialNetworkFacade:
     def __init__(self):
-        self.user_service = UserService()
-        self.post_service = PostService()
+        user_repository = UserRepository()
+        post_repository = PostRepository()
+        self.user_service = UserService(user_repository)
+        self.post_service = PostService(post_repository)
         self.news_feed_service = NewsFeedService()
-        # Wire up the observer
         self.post_service.add_observer(UserNotifier())
 
     def create_user(self, name: str, email: str) -> User:

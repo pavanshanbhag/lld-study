@@ -2,11 +2,11 @@ import threading
 import uuid
 from abc import ABC
 from datetime import datetime
-from typing import Dict, List, Optional, Set, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
-from enums import VoteType, EventType
-from user import User
+from enums import EventType, VoteType
 from tag import Tag
+from user import User
 
 if TYPE_CHECKING:
     from event import Event
@@ -34,15 +34,15 @@ class Post(Content):
     def __init__(self, post_id: str, body: str, author: User):
         super().__init__(post_id, body, author)
         self.vote_count = 0
-        self.voters: Dict[str, VoteType] = {}
-        self.comments: List['Comment'] = []
-        self.observers: List['PostObserver'] = []
+        self.voters: dict[str, VoteType] = {}
+        self.comments: list[Comment] = []
+        self.observers: list[PostObserver] = []
         self._lock = threading.Lock()
 
-    def add_observer(self, observer: 'PostObserver'):
+    def add_observer(self, observer: PostObserver):
         self.observers.append(observer)
 
-    def notify_observers(self, event: 'Event'):
+    def notify_observers(self, event: Event):
         for observer in self.observers:
             observer.on_post_event(event)
 
@@ -74,25 +74,25 @@ class Post(Content):
     def get_vote_count(self) -> int:
         return self.vote_count
 
-    def add_comment(self, comment: 'Comment'):
+    def add_comment(self, comment: Comment):
         self.comments.append(comment)
 
-    def get_comments(self) -> List['Comment']:
+    def get_comments(self) -> list[Comment]:
         return self.comments
 
 
 class Question(Post):
-    def __init__(self, title: str, body: str, author: User, tags: Set[Tag]):
+    def __init__(self, title: str, body: str, author: User, tags: set[Tag]):
         super().__init__(str(uuid.uuid4()), body, author)
         self.title = title
         self.tags = tags
-        self.answers: List['Answer'] = []
-        self.accepted_answer: Optional['Answer'] = None
+        self.answers: list[Answer] = []
+        self.accepted_answer: Answer | None = None
 
-    def add_answer(self, answer: 'Answer'):
+    def add_answer(self, answer: Answer):
         self.answers.append(answer)
 
-    def accept_answer(self, answer: 'Answer'):
+    def accept_answer(self, answer: Answer):
         with self._lock:
             # Only the question author can accept an answer, and it shouldn't be their own answer
             if (self.author.get_id() != answer.get_author().get_id() and 
@@ -107,13 +107,13 @@ class Question(Post):
     def get_title(self) -> str:
         return self.title
 
-    def get_tags(self) -> Set[Tag]:
+    def get_tags(self) -> set[Tag]:
         return self.tags
 
-    def get_answers(self) -> List['Answer']:
+    def get_answers(self) -> list[Answer]:
         return self.answers
 
-    def get_accepted_answer(self) -> Optional['Answer']:
+    def get_accepted_answer(self) -> Answer | None:
         return self.accepted_answer
 
 

@@ -6,5 +6,5 @@ if TYPE_CHECKING:
 
 class PostObserver(ABC):
     @abstractmethod
-    def on_post_event(self, event: 'Event'):
+    def on_post_event(self, event: Event):
         pass

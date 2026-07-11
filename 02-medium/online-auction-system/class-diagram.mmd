@@ -1,0 +1,40 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class AuctionSystem {
+        +NewAuctionSystem()
+        +RegisterUser(user User)
+        +GetUser(userID string) User
+        +CreateAuctionListing(listing AuctionListing)
+        +SearchAuctionListings(keyword string) AuctionListing
+        +PlaceBid(auctionListingID string, bid Bid) bool
+    }
+
+    class AuctionListing {
+        +NewAuctionListing(id, itemName, description string, startingPrice float64, duration time.Duration, seller User)
+        +PlaceBid(bid Bid) bool
+        +CloseAuction()
+    }
+
+    class Bid {
+        +NewBid(id string, bidder User, amount float64)
+    }
+
+    class User {
+        +NewUser(id, username, email string)
+    }
+
+    class AuctionStatus {
+        <<enumeration>>
+        Active
+        Closed
+    }
+
+    AuctionSystem "1" --> "*" User
+    AuctionSystem "1" --> "*" AuctionListing
+    AuctionListing --> User : Seller
+    AuctionListing --> User : CurrentHighestBidder
+    AuctionListing "1" --> "*" Bid
+    AuctionListing --> AuctionStatus
+    Bid --> User : Bidder

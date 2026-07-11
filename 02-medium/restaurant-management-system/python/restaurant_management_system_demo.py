@@ -5,7 +5,7 @@ class RestaurantManagementSystemDemo:
     def main():
         # --- 1. System Setup using the Restaurant Singleton ---
         print("=== Initializing Restaurant System ===")
-        rms_facade = RestaurantManagementSystemFacade.get_instance()
+        rms_facade = RestaurantManagementSystemFacade()
         
         # --- 2. Add table and staff ---
         table1 = rms_facade.add_table(1, 4)

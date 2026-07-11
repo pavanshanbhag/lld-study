@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	logger := GetLogger()
+	logger := NewLogger(nil)
 
 	// Logging with default configuration
 	logger.Info("This is an information message")

@@ -14,21 +14,14 @@ type StockBroker struct {
     mu             sync.RWMutex
 }
 
-var (
-    instance *StockBroker
-    once     sync.Once
-)
-
-func GetStockBroker() *StockBroker {
-    once.Do(func() {
-        instance = &StockBroker{
-            accounts:   make(map[string]*Account),
-            stocks:    make(map[string]*Stock),
-            orderQueue: make(chan Order, 100), // Buffered channel for orders
-        }
-        go instance.processOrders() // Start order processing goroutine
-    })
-    return instance
+func NewStockBroker() *StockBroker {
+    sb := &StockBroker{
+        accounts:   make(map[string]*Account),
+        stocks:     make(map[string]*Stock),
+        orderQueue: make(chan Order, 100),
+    }
+    go sb.processOrders()
+    return sb
 }
 
 func (sb *StockBroker) CreateAccount(user *User, initialBalance float64) {

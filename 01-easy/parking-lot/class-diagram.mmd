@@ -1,0 +1,42 @@
+%% Modernized design (Go/Python). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class ParkingLot {
+        +NewParkingLot()
+        +AddLevel(level Level)
+        +Park(v Vehicle) ParkResult
+        +Unpark(licensePlate string) ParkingSpot
+        +AvailableCount() int
+    }
+
+    class Level {
+        +NewLevel(floor, spotCount int)
+        +Floor() int
+        +Park(v Vehicle) ParkingSpot
+        +Unpark(licensePlate string) ParkingSpot
+    }
+
+    class ParkingSpot {
+        +NewParkingSpot(size VehicleType)
+        +Park(v Vehicle)
+        +Unpark() Vehicle
+        +IsAvailable() bool
+    }
+
+    class Vehicle {
+        <<interface>>
+        +LicensePlate() string
+        +Type() VehicleType
+    }
+
+    class ParkResult {
+        +LevelFloor int
+        +Spot ParkingSpot
+    }
+
+    ParkingLot "1" --> "*" Level : levels
+    Level "1" --> "*" ParkingSpot : spots
+    ParkingSpot --> Vehicle : occupied by
+    ParkingLot ..> Vehicle : accepts
+    ParkingLot ..> ParkResult : returns

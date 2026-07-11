@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	gameManager := GetGameManager()
+	gameManager := NewGameManager()
 	wg := new(sync.WaitGroup)
 	// Start game 1
 	players1 := []string{"Player 1", "Player 2", "Player 3"}

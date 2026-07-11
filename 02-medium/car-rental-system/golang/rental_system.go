@@ -16,20 +16,12 @@ type RentalSystem struct {
 	mu           sync.RWMutex
 }
 
-var (
-	instance *RentalSystem
-	once     sync.Once
-)
-
-func GetRentalSystem() *RentalSystem {
-	once.Do(func() {
-		instance = &RentalSystem{
-			cars:         make(map[string]*Car),
-			reservations: make(map[string]*Reservation),
-			processor:    NewCreditCardPaymentProcessor(),
-		}
-	})
-	return instance
+func NewRentalSystem() *RentalSystem {
+	return &RentalSystem{
+		cars:         make(map[string]*Car),
+		reservations: make(map[string]*Reservation),
+		processor:    NewCreditCardPaymentProcessor(),
+	}
 }
 
 func (rs *RentalSystem) AddCar(car *Car) {

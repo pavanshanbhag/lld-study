@@ -1,10 +1,11 @@
-from vending_machine import VendingMachine
 from coin import Coin
+from vending_machine import VendingMachine
+
 
 class VendingMachineDemo:
     @staticmethod
     def main():
-        vending_machine = VendingMachine.get_instance()
+        vending_machine = VendingMachine()
 
         # Add products to the inventory
         vending_machine.add_item("A1", "Coke", 25, 3)

@@ -5,6 +5,7 @@
 **Abstraction** is one of the four fundamental principles of Object-Oriented Programming (OOP). It allows you to hide **implementation details** while exposing only the necessary parts of an object. This helps in reducing complexity and increasing maintainability.
 
 Unlike traditional OOP languages like Java or C++, **Golang does not support classes**. However, abstraction in Go is achieved using:
+
 1. **Interfaces**
 2. **Structs with Methods**
 
@@ -13,6 +14,7 @@ Unlike traditional OOP languages like Java or C++, **Golang does not support cla
 **Abstraction** means showing only the **essential details** and hiding the **implementation**. It allows programmers to focus on **what an object does** rather than **how it does it**.
 
 ### **Key Benefits of Abstraction**
+
 - **Reduces complexity**: Hides unnecessary implementation details.
 - **Increases code reusability**: Encourages the reuse of abstracted logic.
 - **Improves maintainability**: Makes code easier to manage and update.
@@ -58,12 +60,14 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Brand: Toyota
 Car is starting...
 ```
 
 **Why Use Interfaces?**
+
 - Promotes **abstraction** by defining behaviors without implementation details.
 - Allows multiple types to adhere to the same contract.
 - Supports **polymorphism** by enabling different implementations to be used interchangeably.
@@ -112,12 +116,14 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Dog barks
 Cat meows
 ```
 
 **Why Use Structs with Methods?**
+
 - Provides a clean and flexible way to define behavior.
 - Makes it easy to extend functionality.
 - Improves code readability and organization.
@@ -167,12 +173,14 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Paid 150.75 using Credit Card
 Paid 200.50 using PayPal
 ```
 
 **Why Use Abstraction in Payment Systems?**
+
 - Allows multiple payment methods without modifying existing code.
 - Improves maintainability and scalability.
 - Provides a **common contract** for different payment types.

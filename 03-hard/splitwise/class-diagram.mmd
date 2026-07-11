@@ -1,0 +1,65 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class SplitwiseService {
+        +NewSplitwiseService()
+        +AddUser(user User)
+        +AddGroup(group Group)
+        +AddExpense(groupID string, expense Expense)
+        +SettleBalance(userID1, userID2 string)
+    }
+
+    class User {
+        +NewUser(id, name, email string)
+    }
+
+    class Group {
+        +NewGroup(id, name string)
+        +AddMember(user User)
+        +AddExpense(expense Expense)
+    }
+
+    class Expense {
+        +NewExpense(id string, amount float64, description string, paidBy User)
+        +AddSplit(split Split)
+    }
+
+    class Split {
+        <<interface>>
+        +GetAmount() float64
+        +SetAmount(amount float64)
+        +GetUser() User
+    }
+
+    class EqualSplit {
+        +NewEqualSplit(user User)
+        +GetAmount() float64
+        +SetAmount(amount float64)
+        +GetUser() User
+    }
+
+    class PercentSplit {
+        +NewPercentSplit(user User, percent float64)
+        +GetAmount() float64
+        +SetAmount(amount float64)
+        +GetUser() User
+    }
+
+    class Transaction {
+        +NewTransaction(id string, sender, receiver User, amount float64)
+    }
+
+    SplitwiseService "1" --> "*" User : users
+    SplitwiseService "1" --> "*" Group : groups
+    SplitwiseService ..> Transaction : creates
+    Group "1" --> "*" User : members
+    Group "1" --> "*" Expense : expenses
+    Expense --> User : paidBy
+    Expense "1" --> "*" Split : splits
+    Split <|.. EqualSplit
+    Split <|.. PercentSplit
+    EqualSplit --> User : user
+    PercentSplit --> User : user
+    Transaction --> User : sender
+    Transaction --> User : receiver

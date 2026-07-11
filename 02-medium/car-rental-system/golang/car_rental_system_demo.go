@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	rentalSystem := GetRentalSystem()
+	rentalSystem := NewRentalSystem()
 
 	// Add cars to the rental system
 	rentalSystem.AddCar(NewCar("Toyota", "Camry", 2022, "ABC123", 50.0))

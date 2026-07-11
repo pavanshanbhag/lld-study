@@ -7,8 +7,8 @@ type CricinfoSystem struct {
 
 func NewCricinfoSystem() *CricinfoSystem {
 	return &CricinfoSystem{
-		matchService:     GetMatchService(),
-		scorecardService: GetScorecardService(),
+		matchService:     NewMatchService(),
+		scorecardService: NewScorecardService(),
 	}
 }
 

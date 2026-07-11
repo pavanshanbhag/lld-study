@@ -1,0 +1,103 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class AirlineManagementSystem {
+        +NewAirlineManagementSystem()
+        +AddFlight(flight Flight)
+        +AddAircraft(aircraft Aircraft)
+        +SearchFlights(source, destination string, date time.Time) Flight
+        +BookFlight(flight Flight, passenger Passenger, seat Seat, price float64) Booking
+        +CancelBooking(bookingNumber string)
+        +ProcessPayment(payment Payment)
+    }
+
+    class FlightSearch {
+        +NewFlightSearch(flights Flight)
+        +SearchFlights(source, destination string, date time.Time) Flight
+    }
+
+    class BookingManager {
+        +NewBookingManager()
+        +CreateBooking(flight Flight, passenger Passenger, seat Seat, price float64) Booking
+        +CancelBooking(bookingNumber string)
+    }
+
+    class PaymentProcessor {
+        +NewPaymentProcessor()
+        +ProcessPayment(payment Payment)
+    }
+
+    class Flight {
+        +NewFlight(flightNumber, source, destination string, departureTime, arrivalTime time.Time)
+    }
+
+    class Aircraft {
+        +NewAircraft(tailNumber, model string, totalSeats int)
+    }
+
+    class Booking {
+        +NewBooking(bookingNumber string, flight Flight, passenger Passenger, seat Seat, price float64)
+        +Cancel()
+    }
+
+    class Passenger {
+        +NewPassenger(id, name, email, phone string)
+    }
+
+    class Seat {
+        +NewSeat(seatNumber string, seatType SeatType)
+        +Reserve()
+        +Release()
+        +GetStatus() SeatStatus
+    }
+
+    class Payment {
+        +NewPayment(paymentID, paymentMethod string, amount float64)
+        +ProcessPayment()
+    }
+
+    class SeatType {
+        <<enumeration>>
+        Economy
+        PremiumEconomy
+        Business
+        FirstClass
+    }
+
+    class SeatStatus {
+        <<enumeration>>
+        Available
+        Reserved
+        Occupied
+    }
+
+    class BookingStatus {
+        <<enumeration>>
+        Confirmed
+        Cancelled
+        Pending
+        Expired
+    }
+
+    class PaymentStatus {
+        <<enumeration>>
+        Pending
+        Completed
+        Failed
+        Refunded
+    }
+
+    AirlineManagementSystem "1" --> "*" Flight
+    AirlineManagementSystem "1" --> "*" Aircraft
+    AirlineManagementSystem "1" --> "1" FlightSearch
+    AirlineManagementSystem "1" --> "1" BookingManager
+    AirlineManagementSystem "1" --> "1" PaymentProcessor
+    Flight "1" --> "*" Seat : AvailableSeats
+    Booking --> Flight
+    Booking --> Passenger
+    Booking --> Seat
+    Booking --> BookingStatus
+    Seat --> SeatType
+    Seat --> SeatStatus
+    Payment --> PaymentStatus

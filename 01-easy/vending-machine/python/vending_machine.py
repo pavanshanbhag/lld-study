@@ -1,28 +1,15 @@
-from inventory import Inventory
 from coin import Coin
+from inventory import Inventory
 from item import Item
-from states import VendingMachineState, IdleState
+from states import IdleState, VendingMachineState
+
 
 class VendingMachine:
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super(VendingMachine, cls).__new__(cls)
-            cls._instance._initialized = False
-        return cls._instance
-
-    def __init__(self):
-        if not hasattr(self, '_initialized') or not self._initialized:
-            self.inventory = Inventory()
-            self.current_state = IdleState(self)
-            self.balance = 0
-            self.selected_item_code = None
-            self._initialized = True
-
-    @classmethod
-    def get_instance(cls):
-        return cls()
+    def __init__(self) -> None:
+        self.inventory = Inventory()
+        self.current_state: VendingMachineState = IdleState(self)
+        self.balance = 0
+        self.selected_item_code: str | None = None
 
     def insert_coin(self, coin: Coin) -> None:
         self.current_state.insert_coin(coin)
@@ -69,7 +56,6 @@ class VendingMachine:
     def set_state(self, state: VendingMachineState) -> None:
         self.current_state = state
 
-    # Getters for states and inventory
     def get_inventory(self) -> Inventory:
         return self.inventory
 

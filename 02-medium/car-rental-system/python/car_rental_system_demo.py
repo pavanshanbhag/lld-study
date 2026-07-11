@@ -7,7 +7,7 @@ from datetime import date, timedelta
 class CarRentalSystemDemo:
     @staticmethod
     def run():
-            rental_system = RentalSystem.get_instance()
+            rental_system = RentalSystem()
 
             # Add cars to the rental system
             rental_system.add_car(Car("Toyota", "Camry", 2022, "ABC123", 50.0))

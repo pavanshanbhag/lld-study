@@ -1,65 +1,65 @@
+from typing import TYPE_CHECKING
+
+from log_appender import LogAppender
 from log_level import LogLevel
 from log_message import LogMessage
-from log_appender import LogAppender
-from typing import List, Optional
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from log_manager import LogManager
 
-class Logger:
-    def __init__(self, name: str, parent: Optional['Logger']):
-        self.name = name
-        self.level: Optional[LogLevel] = None
-        self.parent = parent
-        self.appenders: List[LogAppender] = []
-        self.additivity = True
 
-    def add_appender(self, appender: LogAppender):
+class Logger:
+    def __init__(self, name: str, parent: Logger | None, manager: LogManager) -> None:
+        self.name = name
+        self.level: LogLevel | None = None
+        self.parent = parent
+        self.appenders: list[LogAppender] = []
+        self.additivity = True
+        self._manager = manager
+
+    def add_appender(self, appender: LogAppender) -> None:
         self.appenders.append(appender)
 
-    def get_appenders(self) -> List[LogAppender]:
+    def get_appenders(self) -> list[LogAppender]:
         return self.appenders
 
-    def set_level(self, min_level: LogLevel):
+    def set_level(self, min_level: LogLevel) -> None:
         self.level = min_level
 
-    def set_additivity(self, additivity: bool):
+    def set_additivity(self, additivity: bool) -> None:
         self.additivity = additivity
 
     def get_effective_level(self) -> LogLevel:
-        logger = self
+        logger: Logger | None = self
         while logger is not None:
-            current_level = logger.level
-            if current_level is not None:
-                return current_level
+            if logger.level is not None:
+                return logger.level
             logger = logger.parent
-        return LogLevel.DEBUG  # Default root level
+        return LogLevel.DEBUG
 
-    def log(self, message_level: LogLevel, message: str):
+    def log(self, message_level: LogLevel, message: str) -> None:
         if message_level.is_greater_or_equal(self.get_effective_level()):
             log_message = LogMessage(message_level, self.name, message)
             self._call_appenders(log_message)
 
-    def _call_appenders(self, log_message: LogMessage):
+    def _call_appenders(self, log_message: LogMessage) -> None:
         if self.appenders:
-            from log_manager import LogManager
-            LogManager.get_instance().get_processor().process(log_message, self.appenders)
-        
+            self._manager.get_processor().process(log_message, self.appenders)
+
         if self.additivity and self.parent is not None:
             self.parent._call_appenders(log_message)
 
-    def debug(self, message: str):
+    def debug(self, message: str) -> None:
         self.log(LogLevel.DEBUG, message)
 
-    def info(self, message: str):
+    def info(self, message: str) -> None:
         self.log(LogLevel.INFO, message)
 
-    def warn(self, message: str):
+    def warn(self, message: str) -> None:
         self.log(LogLevel.WARN, message)
 
-    def error(self, message: str):
+    def error(self, message: str) -> None:
         self.log(LogLevel.ERROR, message)
 
-    def fatal(self, message: str):
+    def fatal(self, message: str) -> None:
         self.log(LogLevel.FATAL, message)

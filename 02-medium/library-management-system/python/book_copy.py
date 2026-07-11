@@ -5,11 +5,14 @@ if TYPE_CHECKING:
     from member import Member
     from library_item import LibraryItem
     from item_states import ItemState
+    from transaction_service import TransactionService
+
 
 class BookCopy:
-    def __init__(self, copy_id: str, item: 'LibraryItem'):
+    def __init__(self, copy_id: str, item: 'LibraryItem', transaction_service: 'TransactionService'):
         self.id = copy_id
         self.item = item
+        self._transaction_service = transaction_service
         self.current_state: 'ItemState' = AvailableState()
         item.add_copy(self)
 
@@ -30,6 +33,9 @@ class BookCopy:
 
     def get_item(self) -> 'LibraryItem':
         return self.item
+
+    def get_transaction_service(self) -> 'TransactionService':
+        return self._transaction_service
 
     def is_available(self) -> bool:
         return isinstance(self.current_state, AvailableState)

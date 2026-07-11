@@ -1,10 +1,12 @@
-from user import User
-from repository import UserRepository
 from typing import Optional
 
+from repository import UserRepository
+from user import User
+
+
 class UserService:
-    def __init__(self):
-        self.user_repository = UserRepository.get_instance()
+    def __init__(self, user_repository: UserRepository):
+        self.user_repository = user_repository
 
     def create_user(self, name: str, email: str) -> User:
         user = User(name, email)

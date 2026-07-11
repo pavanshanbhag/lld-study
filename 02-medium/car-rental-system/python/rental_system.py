@@ -3,22 +3,10 @@ from credit_card_payment_processor import CreditCardPaymentProcessor
 from reservation import Reservation
 
 class RentalSystem:
-    _instance = None
-
     def __init__(self):
-        if RentalSystem._instance is not None:
-            raise Exception("This class is a singleton!")
-        else:
-            RentalSystem._instance = self
-            self.cars = {}
-            self.reservations = {}
-            self.payment_processor = CreditCardPaymentProcessor()
-
-    @staticmethod
-    def get_instance():
-        if RentalSystem._instance is None:
-            RentalSystem()
-        return RentalSystem._instance
+        self.cars = {}
+        self.reservations = {}
+        self.payment_processor = CreditCardPaymentProcessor()
 
     def add_car(self, car):
         self.cars[car.license_plate] = car

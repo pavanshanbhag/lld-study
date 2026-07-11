@@ -1,4 +1,3 @@
-import threading
 from typing import Dict, List, Optional
 from customer import Customer
 from delivery_agent import DeliveryAgent
@@ -12,25 +11,12 @@ from order_item import OrderItem
 from menu import Menu
 
 class FoodDeliveryService:
-    _instance = None
-    _lock = threading.Lock()
-
     def __init__(self):
-        if FoodDeliveryService._instance is not None:
-            raise Exception("This class is a singleton!")
         self.customers: Dict[str, Customer] = {}
         self.restaurants: Dict[str, Restaurant] = {}
         self.delivery_agents: Dict[str, DeliveryAgent] = {}
         self.orders: Dict[str, Order] = {}
         self.assignment_strategy: Optional[DeliveryAssignmentStrategy] = None
-
-    @staticmethod
-    def get_instance():
-        if FoodDeliveryService._instance is None:
-            with FoodDeliveryService._lock:
-                if FoodDeliveryService._instance is None:
-                    FoodDeliveryService._instance = FoodDeliveryService()
-        return FoodDeliveryService._instance
 
     def set_assignment_strategy(self, assignment_strategy: DeliveryAssignmentStrategy):
         self.assignment_strategy = assignment_strategy

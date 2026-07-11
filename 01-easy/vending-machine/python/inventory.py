@@ -1,16 +1,17 @@
-from typing import Dict, Optional
+
 from item import Item
+
 
 class Inventory:
     def __init__(self):
-        self.item_map: Dict[str, Item] = {}
-        self.stock_map: Dict[str, int] = {}
+        self.item_map: dict[str, Item] = {}
+        self.stock_map: dict[str, int] = {}
 
     def add_item(self, code: str, item: Item, quantity: int) -> None:
         self.item_map[code] = item
         self.stock_map[code] = quantity
 
-    def get_item(self, code: str) -> Optional[Item]:
+    def get_item(self, code: str) -> Item | None:
         return self.item_map.get(code)
 
     def is_available(self, code: str) -> bool:

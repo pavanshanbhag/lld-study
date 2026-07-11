@@ -1,5 +1,7 @@
 package factory
 
+import "fmt"
+
 // SimpleNotificationFactory creates different types of notifications
 type SimpleNotificationFactory struct{}
 

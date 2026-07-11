@@ -1,34 +1,14 @@
-import threading
 from typing import Dict
 from topic import Topic
 from subscriber import Subscriber
 from message import Message
 from concurrent.futures import ThreadPoolExecutor
 
+
 class PubSubService:
-    _instance = None
-    _lock = threading.Lock()
-
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
-
     def __init__(self):
-        if self._initialized:
-            return
-        
         self.topic_registry: Dict[str, Topic] = {}
-        # A cached thread pool is suitable for handling many short-lived, bursty tasks (message deliveries).
         self.delivery_executor = ThreadPoolExecutor()
-        self._initialized = True
-
-    @classmethod
-    def get_instance(cls):
-        return cls()
 
     def create_topic(self, topic_name: str):
         if topic_name not in self.topic_registry:

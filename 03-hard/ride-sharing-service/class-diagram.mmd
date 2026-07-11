@@ -1,0 +1,53 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class RideService {
+        +NewRideService()
+        +AddPassenger(passenger Passenger)
+        +AddDriver(driver Driver)
+        +RequestRide(passenger Passenger, source, destination Location)
+        +AcceptRide(driver Driver, ride Ride)
+        +StartRide(ride Ride)
+        +CompleteRide(ride Ride)
+        +CancelRide(ride Ride)
+    }
+
+    class Ride {
+    }
+
+    class Driver {
+    }
+
+    class Passenger {
+    }
+
+    class Location {
+    }
+
+    class RideStatus {
+        <<enumeration>>
+        Requested
+        Accepted
+        InProgress
+        Completed
+        Cancelled
+    }
+
+    class DriverStatus {
+        <<enumeration>>
+        Available
+        Busy
+    }
+
+    RideService "1" --> "*" Passenger : passengers
+    RideService "1" --> "*" Driver : drivers
+    RideService "1" --> "*" Ride : rides
+    Ride --> Passenger : passenger
+    Ride ..> Driver : driver
+    Ride --> Location : source
+    Ride --> Location : destination
+    Ride --> RideStatus : status
+    Driver --> Location : location
+    Driver --> DriverStatus : status
+    Passenger --> Location : location

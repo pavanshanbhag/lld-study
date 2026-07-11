@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	libraryManager := GetLibraryManager()
+	libraryManager := NewLibraryManager()
 
 	// Add books to the catalog
 	book1 := NewBook("ISBN1", "Book 1", "Author 1", 2020)

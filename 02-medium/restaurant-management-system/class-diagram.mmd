@@ -1,0 +1,69 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class Restaurant {
+        +NewRestaurant()
+        +AddMenuItem(item MenuItem)
+        +RemoveMenuItem(item MenuItem)
+        +GetMenu() MenuItem
+        +PlaceOrder(order Order)
+        +UpdateOrderStatus(orderID int, status OrderStatus)
+        +MakeReservation(reservation Reservation)
+        +ProcessPayment(payment Payment)
+        +AddStaff(staff Staff)
+    }
+
+    class Order {
+        +NewOrder(id int, items MenuItem, totalAmount float64, status OrderStatus)
+        +SetStatus(status OrderStatus)
+    }
+
+    class MenuItem {
+        +NewMenuItem(id int, name, description string, price float64, available bool)
+    }
+
+    class Reservation {
+        +NewReservation(id int, customerName, contactNumber string, partySize int, reservationTime time.Time)
+    }
+
+    class Payment {
+        +NewPayment(id int, amount float64, method PaymentMethod, status PaymentStatus)
+    }
+
+    class Staff {
+        +NewStaff(id int, name, role, contactNumber string)
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        Pending
+        Preparing
+        Ready
+        Completed
+        Cancelled
+    }
+
+    class PaymentMethod {
+        <<enumeration>>
+        Cash
+        CreditCard
+        MobilePayment
+    }
+
+    class PaymentStatus {
+        <<enumeration>>
+        Pending
+        Completed
+        Failed
+    }
+
+    Restaurant "1" --> "*" MenuItem : menu
+    Restaurant "1" --> "*" Order
+    Restaurant "1" --> "*" Reservation
+    Restaurant "1" --> "*" Payment
+    Restaurant "1" --> "*" Staff
+    Order "1" --> "*" MenuItem : items
+    Order --> OrderStatus
+    Payment --> PaymentMethod
+    Payment --> PaymentStatus

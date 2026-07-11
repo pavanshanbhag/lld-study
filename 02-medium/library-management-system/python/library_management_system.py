@@ -1,38 +1,31 @@
-from typing import Dict, List, Optional
+from typing import Dict, List
 from library_item import LibraryItem
 from member import Member
 from book_copy import BookCopy
 from item_type import ItemType
 from item_factory import ItemFactory
 from search_strategy import SearchStrategy
+from transaction_service import TransactionService
+
 
 class LibraryManagementSystem:
-    _instance: Optional['LibraryManagementSystem'] = None
-
     def __init__(self):
-        if LibraryManagementSystem._instance is not None:
-            raise Exception("This class is a singleton!")
         self.catalog: Dict[str, LibraryItem] = {}
         self.members: Dict[str, Member] = {}
         self.copies: Dict[str, BookCopy] = {}
-
-    @staticmethod
-    def get_instance() -> 'LibraryManagementSystem':
-        if LibraryManagementSystem._instance is None:
-            LibraryManagementSystem._instance = LibraryManagementSystem()
-        return LibraryManagementSystem._instance
+        self.transaction_service = TransactionService()
 
     def add_item(self, item_type: ItemType, item_id: str, title: str, author: str, num_copies: int) -> List[BookCopy]:
         book_copies = []
         item = ItemFactory.create_item(item_type, item_id, title, author)
         self.catalog[item_id] = item
-        
+
         for i in range(num_copies):
             copy_id = f"{item_id}-c{i + 1}"
-            book_copy = BookCopy(copy_id, item)
+            book_copy = BookCopy(copy_id, item, self.transaction_service)
             self.copies[copy_id] = book_copy
             book_copies.append(book_copy)
-        
+
         print(f"Added {num_copies} copies of '{title}'")
         return book_copies
 
@@ -44,7 +37,7 @@ class LibraryManagementSystem:
     def checkout(self, member_id: str, copy_id: str) -> None:
         member = self.members.get(member_id)
         book_copy = self.copies.get(copy_id)
-        
+
         if member is not None and book_copy is not None:
             book_copy.checkout(member)
         else:
@@ -60,9 +53,8 @@ class LibraryManagementSystem:
     def place_hold(self, member_id: str, item_id: str) -> None:
         member = self.members.get(member_id)
         item = self.catalog.get(item_id)
-        
+
         if member is not None and item is not None:
-            # Place hold on any copy that is checked out
             for book_copy in item.get_copies():
                 if not book_copy.is_available():
                     book_copy.place_hold(member)

@@ -1,0 +1,35 @@
+[project]
+name = "lld-study"
+version = "0.1.0"
+description = "Low Level Design interview study repo (Go + Python)"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "mypy>=1.15",
+    "pytest>=8.3",
+    "ruff>=0.11",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+src = ["01-easy"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+files = [
+    "01-easy/parking-lot/python/parking_lot.py",
+    "01-easy/parking-lot/python/parking_lot_demo.py",
+    "01-easy/parking-lot/python/tests",
+]
+exclude = ["01-easy/parking-lot/python/tests/__pycache__"]
+
+[tool.pytest.ini_options]
+addopts = "-q"

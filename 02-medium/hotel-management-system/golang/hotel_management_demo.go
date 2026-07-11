@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	hotelSystem := GetHotelManagementSystem()
+	hotelSystem := NewHotelManagementSystem()
 
 	// Create guests
 	guest1 := NewGuest("G001", "John Doe", "john@example.com", "1234567890")

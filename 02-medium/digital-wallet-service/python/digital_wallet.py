@@ -7,18 +7,10 @@ from currency_converter import CurrencyConverter
 from transaction import Transaction
 
 class DigitalWallet:
-    _instance = None
-
     def __init__(self):
         self.users = {}
         self.accounts = {}
         self.payment_methods = {}
-
-    @classmethod
-    def get_instance(cls):
-        if cls._instance is None:
-            cls._instance = cls()
-        return cls._instance
 
     def create_user(self, user):
         self.users[user.id] = user

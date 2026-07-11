@@ -1,0 +1,33 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class ElevatorController {
+        +NewElevatorController(numElevators, capacity int)
+        +RequestElevator(sourceFloor, destinationFloor int)
+        +Stop()
+    }
+
+    class Elevator {
+        +NewElevator(id, capacity int)
+        +AddRequest(request Request) bool
+        +Run()
+        +Stop()
+    }
+
+    class Request {
+        +NewRequest(sourceFloor, destinationFloor int)
+        SourceFloor int
+        DestinationFloor int
+    }
+
+    class Direction {
+        <<enumeration>>
+        Up
+        Down
+    }
+
+    ElevatorController "1" --> "*" Elevator
+    Elevator "1" --> "*" Request : requests channel
+    Elevator --> Direction : currentDirection
+    ElevatorController ..> Request : creates

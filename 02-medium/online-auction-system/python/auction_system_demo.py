@@ -10,7 +10,7 @@ import time
 class AuctionSystemDemo:
     @staticmethod
     def main():
-        auction_service = AuctionService.get_instance()
+        auction_service = AuctionService()
 
         alice = auction_service.create_user("Alice")
         bob = auction_service.create_user("Bob")

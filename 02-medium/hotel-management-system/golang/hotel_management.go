@@ -13,20 +13,12 @@ type HotelManagementSystem struct {
 	mu           sync.RWMutex
 }
 
-var (
-	instance *HotelManagementSystem
-	once     sync.Once
-)
-
-func GetHotelManagementSystem() *HotelManagementSystem {
-	once.Do(func() {
-		instance = &HotelManagementSystem{
-			guests:       make(map[string]*Guest),
-			rooms:        make(map[string]*Room),
-			reservations: make(map[string]*Reservation),
-		}
-	})
-	return instance
+func NewHotelManagementSystem() *HotelManagementSystem {
+	return &HotelManagementSystem{
+		guests:       make(map[string]*Guest),
+		rooms:        make(map[string]*Room),
+		reservations: make(map[string]*Reservation),
+	}
 }
 
 func (h *HotelManagementSystem) AddGuest(guest *Guest) {

@@ -1,3 +1,3 @@
 module design-patterns/golang/builder
 
-go 1.21 
+go 1.25

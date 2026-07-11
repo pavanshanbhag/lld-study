@@ -1,6 +1,7 @@
 import threading
 import uuid
 
+
 class User:
     def __init__(self, name: str):
         self.id = str(uuid.uuid4())

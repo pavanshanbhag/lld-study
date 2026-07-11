@@ -3,7 +3,7 @@ package ridesharingservice
 import "fmt"
 
 func Run() {
-	rideService := GetRideService()
+	rideService := NewRideService()
 
 	// Create passengers
 	passenger1 := &Passenger{ID: 1, Name: "John Doe", Contact: "1234567890", Location: &Location{Latitude: 37.7749, Longitude: -122.4194}}

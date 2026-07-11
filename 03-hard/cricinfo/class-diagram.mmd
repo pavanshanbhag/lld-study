@@ -1,0 +1,84 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class CricinfoSystem {
+        +NewCricinfoSystem()
+        +AddMatch(match Match)
+        +GetMatch(matchID string) Match
+        +GetAllMatches() Match[]
+        +UpdateMatchStatus(matchID string, status MatchStatus)
+        +CreateScorecard(match Match) string
+        +GetScorecard(scorecardID string) Scorecard
+        +UpdateScore(scorecardID, teamID string, score int)
+        +AddInnings(scorecardID string, innings Innings)
+    }
+
+    class MatchService {
+        +NewMatchService()
+        +AddMatch(match Match)
+        +GetMatch(matchID string) Match
+        +GetAllMatches() Match[]
+        +UpdateMatchStatus(matchID string, status MatchStatus)
+    }
+
+    class ScorecardService {
+        +NewScorecardService()
+        +CreateScorecard(match Match) string
+        +GetScorecard(scorecardID string) Scorecard
+        +UpdateScore(scorecardID, teamID string, score int)
+        +AddInnings(scorecardID string, innings Innings)
+    }
+
+    class Match {
+        +NewMatch(id, title, venue string, startTime time, teams Team[])
+    }
+
+    class Team {
+        +NewTeam(id, name string, players Player[])
+    }
+
+    class Player {
+        +NewPlayer(id, name, role string)
+    }
+
+    class Scorecard {
+        +NewScorecard(id string, match Match)
+        +UpdateScore(teamID string, score int)
+        +AddInnings(innings Innings)
+    }
+
+    class Innings {
+        +NewInnings(id, battingTeamID, bowlingTeamID string)
+        +AddOver(over Over)
+    }
+
+    class Over {
+        +NewOver(overNumber int)
+        +AddBall(ball Ball)
+    }
+
+    class Ball {
+        +NewBall(ballNumber int, bowler, batsman, result string)
+    }
+
+    class MatchStatus {
+        <<enumeration>>
+        MatchStatusScheduled
+        MatchStatusInProgress
+        MatchStatusCompleted
+        MatchStatusAbandoned
+    }
+
+    CricinfoSystem "1" --> "1" MatchService : matchService
+    CricinfoSystem "1" --> "1" ScorecardService : scorecardService
+    MatchService "1" --> "*" Match : matches
+    ScorecardService "1" --> "*" Scorecard : scorecards
+    Match "1" --> "*" Team : teams
+    Match --> MatchStatus : status
+    Match ..> Scorecard : scorecard
+    Team "1" --> "*" Player : players
+    Scorecard "1" --> "1" Match : match
+    Scorecard "1" --> "*" Innings : innings
+    Innings "1" --> "*" Over : overs
+    Over "1" --> "*" Ball : balls

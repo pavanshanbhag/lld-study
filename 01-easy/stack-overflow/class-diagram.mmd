@@ -1,0 +1,80 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class StackOverflow {
+        +NewStackOverflow()
+        +CreateUser(username, email string) User
+        +AskQuestion(user User, title, content string, tags []string) Question
+        +AnswerQuestion(user User, question Question, content string) Answer
+        +AddComment(user User, target Commentable, content string) Comment
+        +VoteQuestion(user User, question Question, value int)
+        +VoteAnswer(user User, answer Answer, value int)
+        +AcceptAnswer(answer Answer)
+        +SearchQuestions(query string) Question
+    }
+
+    class Votable {
+        <<interface>>
+        +Vote(user User, value int) error
+        +GetVoteCount() int
+    }
+
+    class Commentable {
+        <<interface>>
+        +AddComment(comment Comment) error
+        +GetComments() Comment
+    }
+
+    class User {
+        +NewUser(id, username, email string)
+        +UpdateReputation(value int)
+        +GetReputation() int
+        +AddQuestion(q Question)
+        +AddAnswer(a Answer)
+    }
+
+    class Question {
+        +NewQuestion(author User, title, content string, tagNames []string)
+        +AddAnswer(answer Answer) error
+        +Vote(user User, value int) error
+        +GetVoteCount() int
+        +AddComment(comment Comment) error
+    }
+
+    class Answer {
+        +NewAnswer(author User, question Question, content string)
+        +Vote(user User, value int) error
+        +MarkAsAccepted() error
+        +IsAccepted() bool
+        +AddComment(comment Comment) error
+    }
+
+    class Comment {
+        +NewComment(author User, content string)
+    }
+
+    class Tag {
+        +NewTag(name string)
+    }
+
+    class Vote {
+        User User
+        Value int
+    }
+
+    StackOverflow "1" --> "*" User
+    StackOverflow "1" --> "*" Question
+    StackOverflow "1" --> "*" Answer
+    StackOverflow "1" --> "*" Tag
+    User "1" --> "*" Question : asks
+    User "1" --> "*" Answer : writes
+    Question "1" --> "*" Answer
+    Question "1" --> "*" Tag
+    Question "1" --> "*" Vote
+    Answer "1" --> "*" Vote
+    Question ..|> Votable
+    Answer ..|> Votable
+    Question ..|> Commentable
+    Answer ..|> Commentable
+    Comment --> User : author

@@ -1,0 +1,42 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class GameManager {
+        +NewGameManager()
+        +StartNewGame(wg WaitGroup, playerNames string[])
+    }
+
+    class SnakeAndLadderGame {
+        +NewSnakeAndLadderGame(playerNames string[])
+        +Play(wg WaitGroup)
+    }
+
+    class Board {
+        +NewBoard()
+        +GetNewPosition(position int) int
+    }
+
+    class Player {
+        +NewPlayer(name string)
+    }
+
+    class Dice {
+        +NewDice()
+        +Roll() int
+    }
+
+    class Snake {
+        +NewSnake(start, end int)
+    }
+
+    class Ladder {
+        +NewLadder(start, end int)
+    }
+
+    GameManager "1" --> "*" SnakeAndLadderGame : games
+    SnakeAndLadderGame "1" --> "1" Board : board
+    SnakeAndLadderGame "1" --> "*" Player : players
+    SnakeAndLadderGame "1" --> "1" Dice : dice
+    Board "1" --> "*" Snake : snakes
+    Board "1" --> "*" Ladder : ladders

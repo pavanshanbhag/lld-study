@@ -1,0 +1,70 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class MusicStreamingService {
+        +NewMusicStreamingService()
+    }
+
+    class MusicLibrary {
+        +NewMusicLibrary()
+        +AddSong(song Song)
+        +AddAlbum(album Album)
+        +AddArtist(artist Artist)
+        +SearchSongs(query string) Song[]
+    }
+
+    class UserManager {
+        +NewUserManager()
+        +RegisterUser(user User)
+        +LoginUser(username, password string) User
+    }
+
+    class MusicRecommender {
+        +NewMusicRecommender()
+        +RecommendSongs(user User) Song[]
+    }
+
+    class MusicPlayer {
+        +NewMusicPlayer()
+        +PlaySong(song Song)
+        +PauseSong()
+        +SeekTo(time int)
+    }
+
+    class Song {
+    }
+
+    class Album {
+    }
+
+    class Artist {
+    }
+
+    class Playlist {
+        +NewPlaylist(id, name string, owner User)
+        +AddSong(song Song)
+        +RemoveSong(song Song)
+    }
+
+    class User {
+        +NewUser(id, username, password string)
+        +AddPlaylist(playlist Playlist)
+        +RemovePlaylist(playlist Playlist)
+    }
+
+    MusicStreamingService "1" --> "1" MusicLibrary : musicLibrary
+    MusicStreamingService "1" --> "1" UserManager : userManager
+    MusicStreamingService "1" --> "1" MusicRecommender : musicRecommender
+    MusicLibrary "1" --> "*" Song : songs
+    MusicLibrary "1" --> "*" Album : albums
+    MusicLibrary "1" --> "*" Artist : artists
+    UserManager "1" --> "*" User : users
+    MusicRecommender ..> User : recommends for
+    MusicRecommender ..> Song : recommendations
+    MusicPlayer ..> Song : currentSong
+    Artist "1" --> "*" Album : albums
+    Album "1" --> "*" Song : songs
+    User "1" --> "*" Playlist : playlists
+    Playlist --> User : owner
+    Playlist "1" --> "*" Song : songs

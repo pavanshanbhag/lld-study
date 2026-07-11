@@ -2,18 +2,17 @@ package singleton
 
 import "sync"
 
-// LazySingleton implements lazy initialization singleton pattern
+// LazySingleton implements lazy initialization singleton pattern.
 type LazySingleton struct{}
 
 var (
-	instance *LazySingleton
-	once     sync.Once
+	lazyInstance *LazySingleton
+	lazyOnce     sync.Once
 )
 
-// GetInstance returns the singleton instance
-func GetInstance() *LazySingleton {
-	once.Do(func() {
-		instance = &LazySingleton{}
+func GetLazyInstance() *LazySingleton {
+	lazyOnce.Do(func() {
+		lazyInstance = &LazySingleton{}
 	})
-	return instance
+	return lazyInstance
 }

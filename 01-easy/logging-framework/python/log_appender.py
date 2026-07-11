@@ -1,8 +1,9 @@
 import threading
 from abc import ABC, abstractmethod
-from log_formatter import LogFormatter
+
+from log_formatter import LogFormatter, SimpleTextFormatter
 from log_message import LogMessage
-from log_formatter import SimpleTextFormatter
+
 
 class LogAppender(ABC):
     @abstractmethod

@@ -12,17 +12,12 @@ type OnlineShoppingService struct {
 	Orders   map[string]*Order
 }
 
-var instance *OnlineShoppingService
-
-func GetInstance() *OnlineShoppingService {
-	if instance == nil {
-		instance = &OnlineShoppingService{
-			Users:    make(map[string]*User),
-			Products: make(map[string]*Product),
-			Orders:   make(map[string]*Order),
-		}
+func NewOnlineShoppingService() *OnlineShoppingService {
+	return &OnlineShoppingService{
+		Users:    make(map[string]*User),
+		Products: make(map[string]*Product),
+		Orders:   make(map[string]*Order),
 	}
-	return instance
 }
 
 func (s *OnlineShoppingService) RegisterUser(user *User) {

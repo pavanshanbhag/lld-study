@@ -1,6 +1,8 @@
 import threading
 from datetime import datetime
+
 from log_level import LogLevel
+
 
 class LogMessage:
     def __init__(self, level: LogLevel, logger_name: str, message: str):

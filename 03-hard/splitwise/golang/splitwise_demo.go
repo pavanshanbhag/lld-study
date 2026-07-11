@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	service := GetSplitwiseService()
+	service := NewSplitwiseService()
 
 	// Create users
 	user1 := NewUser("1", "Alice", "alice@example.com")

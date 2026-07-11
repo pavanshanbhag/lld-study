@@ -1,37 +1,55 @@
 package parkinglot
 
 type ParkingSpot struct {
-	spotNumber    int
-	vehicleType   VehicleType
-	parkedVehicle Vehicle
+	number      int
+	vehicleType VehicleType
+	vehicle     Vehicle
 }
 
-func NewParkingSpot(spotNumber int, vehicleType VehicleType) *ParkingSpot {
-	return &ParkingSpot{spotNumber: spotNumber, vehicleType: vehicleType}
+func NewParkingSpot(number int, vehicleType VehicleType) *ParkingSpot {
+	return &ParkingSpot{number: number, vehicleType: vehicleType}
 }
 
-func (ps *ParkingSpot) IsAvailable() bool {
-	return ps.parkedVehicle == nil
-}
+func (s *ParkingSpot) Number() int { return s.number }
 
-func (ps *ParkingSpot) ParkVehicle(vehicle Vehicle) {
-	if ps.IsAvailable() && vehicle.GetType() == ps.vehicleType {
-		ps.parkedVehicle = vehicle
+func (s *ParkingSpot) VehicleType() VehicleType { return s.vehicleType }
+
+func (s *ParkingSpot) Available() bool { return s.vehicle == nil }
+
+func (s *ParkingSpot) Park(v Vehicle) error {
+	if !s.Available() {
+		return ErrSpotNotAvailable
 	}
+	if v.Type() != s.vehicleType {
+		return ErrSpotNotAvailable
+	}
+	s.vehicle = v
+	return nil
 }
 
-func (ps *ParkingSpot) UnparkVehicle() {
-	ps.parkedVehicle = nil
+func (s *ParkingSpot) Unpark() (Vehicle, error) {
+	if s.Available() {
+		return nil, ErrVehicleNotFound
+	}
+	v := s.vehicle
+	s.vehicle = nil
+	return v, nil
 }
 
-func (ps *ParkingSpot) GetSpotNumber() int {
-	return ps.spotNumber
+func (s *ParkingSpot) ParkedVehicle() Vehicle { return s.vehicle }
+
+type SpotStatus struct {
+	Level    int
+	Number   int
+	Type     VehicleType
+	Occupied bool
 }
 
-func (ps *ParkingSpot) GetVehicleType() VehicleType {
-	return ps.vehicleType
-}
-
-func (ps *ParkingSpot) GetParkedVehicle() Vehicle {
-	return ps.parkedVehicle
+func (s *ParkingSpot) Status(level int) SpotStatus {
+	return SpotStatus{
+		Level:    level,
+		Number:   s.number,
+		Type:     s.vehicleType,
+		Occupied: !s.Available(),
+	}
 }

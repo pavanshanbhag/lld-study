@@ -1,0 +1,80 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class LinkedInService {
+        +NewLinkedInService()
+        +RegisterUser(user User)
+        +LoginUser(email, password string) User
+        +UpdateUserProfile(user User)
+        +SendConnectionRequest(sender, receiver User)
+        +AcceptConnectionRequest(user, connectionUser User)
+        +SearchUsers(keyword string) User
+        +PostJobListing(jobPosting JobPosting)
+        +SearchJobPostings(keyword string) JobPosting
+        +SendMessage(sender, receiver User, content string)
+        +GetNotifications(userID string) Notification
+    }
+
+    class User {
+        +NewUser(id, name, email, password string)
+        +AddConnection(connection Connection)
+        +AddMessage(message Message, isSent bool)
+    }
+
+    class Profile {
+        +NewProfile()
+        +SetSummary(summary string)
+        +SetHeadline(headline string)
+    }
+
+    class Connection {
+        +NewConnection(user User)
+    }
+
+    class JobPosting {
+        +NewJobPosting(id, title, description string, requirements []string, location string)
+    }
+
+    class Message {
+        +NewMessage(id string, sender, receiver User, content string)
+    }
+
+    class Notification {
+        +NewNotification(id string, user User, notifType NotificationType, content string)
+    }
+
+    class Experience {
+        Title string
+        Company string
+    }
+
+    class Education {
+        School string
+        Degree string
+    }
+
+    class Skill {
+        Name string
+    }
+
+    class NotificationType {
+        <<enumeration>>
+        ConnectionRequest
+        Message
+        JobPosting
+    }
+
+    LinkedInService "1" --> "*" User
+    LinkedInService "1" --> "*" JobPosting
+    LinkedInService "1" --> "*" Notification
+    User "1" --> "1" Profile
+    User "1" --> "*" Connection
+    User "1" --> "*" Message : inbox, sent
+    Profile "1" --> "*" Experience
+    Profile "1" --> "*" Education
+    Profile "1" --> "*" Skill
+    Connection --> User
+    Message --> User : sender, receiver
+    Notification --> User
+    Notification --> NotificationType

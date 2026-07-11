@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	service := GetFoodDeliveryService()
+	service := NewFoodDeliveryService()
 
 	// Register customers
 	customer1 := NewCustomer("C001", "John Doe", "john@example.com", "1234567890")

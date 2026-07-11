@@ -1,6 +1,8 @@
 import uuid
 from datetime import datetime
+
 from user import User
+
 
 class Comment:
     def __init__(self, content: str, author: User):

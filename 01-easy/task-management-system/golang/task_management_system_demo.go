@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	taskManager := GetTaskManager()
+	taskManager := NewTaskManager()
 
 	// Create users
 	user1 := NewUser("1", "John Doe", "john@example.com")

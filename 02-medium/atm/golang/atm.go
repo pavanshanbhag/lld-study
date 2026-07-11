@@ -44,7 +44,13 @@ func (a *ATM) WithdrawCash(accountNumber string, amount float64) error {
 		return err
 	}
 
-	return a.cashDispenser.DispenseCash(int(amount))
+	if err := a.cashDispenser.DispenseCash(int(amount)); err != nil {
+		deposit := NewDepositTransaction(a.generateTransactionID(), account, amount)
+		_ = a.bankingService.ProcessTransaction(deposit)
+		return err
+	}
+
+	return nil
 }
 
 func (a *ATM) DepositCash(accountNumber string, amount float64) error {

@@ -1,69 +1,73 @@
-from parking_lot import ParkingLot
-from parking_floor import ParkingFloor
-from parking_spot import ParkingSpot
-from vehicle_size import VehicleSize
-from fee_strategy import VehicleBasedFeeStrategy
-from bike import Bike
-from car import Car
-from truck import Truck
+"""Parking lot demo entrypoint."""
 
-class ParkingLotDemo:
-    @staticmethod
-    def main():
-        parking_lot = ParkingLot.get_instance()
+from __future__ import annotations
 
-        # 1. Initialize the parking lot with floors and spots
-        floor1 = ParkingFloor(1)
-        floor1.add_spot(ParkingSpot("F1-S1", VehicleSize.SMALL))
-        floor1.add_spot(ParkingSpot("F1-M1", VehicleSize.MEDIUM))
-        floor1.add_spot(ParkingSpot("F1-L1", VehicleSize.LARGE))
+import logging
 
-        floor2 = ParkingFloor(2)
-        floor2.add_spot(ParkingSpot("F2-M1", VehicleSize.MEDIUM))
-        floor2.add_spot(ParkingSpot("F2-M2", VehicleSize.MEDIUM))
+from parking_lot import (
+    Bike,
+    Car,
+    ParkingFloor,
+    ParkingLot,
+    ParkingSpot,
+    Truck,
+    VehicleBasedFeeStrategy,
+    VehicleSize,
+)
 
-        parking_lot.add_floor(floor1)
-        parking_lot.add_floor(floor2)
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 
-        parking_lot.set_fee_strategy(VehicleBasedFeeStrategy())
 
-        # 2. Simulate vehicle entries
-        print("\n--- Vehicle Entries ---")
-        floor1.display_availability()
-        floor2.display_availability()
+def main() -> None:
+    lot = ParkingLot(fee_strategy=VehicleBasedFeeStrategy())
 
-        bike = Bike("B-123")
-        car = Car("C-456")
-        truck = Truck("T-789")
+    floor1 = ParkingFloor(floor_number=1)
+    floor1.add_spot(ParkingSpot("F1-S1", VehicleSize.SMALL))
+    floor1.add_spot(ParkingSpot("F1-M1", VehicleSize.MEDIUM))
+    floor1.add_spot(ParkingSpot("F1-L1", VehicleSize.LARGE))
 
-        bike_ticket = parking_lot.park_vehicle(bike)
-        car_ticket = parking_lot.park_vehicle(car)
-        truck_ticket = parking_lot.park_vehicle(truck)
+    floor2 = ParkingFloor(floor_number=2)
+    floor2.add_spot(ParkingSpot("F2-M1", VehicleSize.MEDIUM))
+    floor2.add_spot(ParkingSpot("F2-M2", VehicleSize.MEDIUM))
 
-        print("\n--- Availability after parking ---")
-        floor1.display_availability()
-        floor2.display_availability()
+    lot.add_floor(floor1)
+    lot.add_floor(floor2)
 
-        # 3. Simulate another car entry (should go to floor 2)
-        car2 = Car("C-999")
-        car2_ticket = parking_lot.park_vehicle(car2)
+    print("--- Vehicle Entries ---")
+    _print_availability(floor1, floor2)
 
-        # 4. Simulate a vehicle entry that fails (no available spots)
-        bike2 = Bike("B-000")
-        failed_bike_ticket = parking_lot.park_vehicle(bike2)
+    bike = Bike("B-123")
+    car = Car("C-456")
+    truck = Truck("T-789")
 
-        # 5. Simulate vehicle exits and fee calculation
-        print("\n--- Vehicle Exits ---")
+    lot.park_vehicle(bike)
+    lot.park_vehicle(car)
+    lot.park_vehicle(truck)
 
-        if car_ticket is not None:
-            fee = parking_lot.unpark_vehicle(car.get_license_number())
-            if fee is not None:
-                print(f"Car C-456 unparked. Fee: ${fee:.2f}")
+    print("--- Availability after parking ---")
+    _print_availability(floor1, floor2)
 
-        print("\n--- Availability after one car leaves ---")
-        floor1.display_availability()
-        floor2.display_availability()
+    lot.park_vehicle(Car("C-999"))
+
+    try:
+        lot.park_vehicle(Bike("B-000"))
+    except Exception as exc:  # noqa: BLE001 - demo
+        print(f"Expected failure for B-000: {exc}")
+
+    print("--- Vehicle Exits ---")
+    fee = lot.unpark_vehicle(car.license_number)
+    print(f"Car C-456 unparked. Fee: ${fee:.2f}")
+
+    print("--- Availability after one car leaves ---")
+    _print_availability(floor1, floor2)
+
+
+def _print_availability(floor1: ParkingFloor, floor2: ParkingFloor) -> None:
+    for floor in (floor1, floor2):
+        print(f"--- Floor {floor.floor_number} Availability ---")
+        for size, count in floor.availability().items():
+            print(f"  {size.value} spots: {count}")
 
 
 if __name__ == "__main__":
-    ParkingLotDemo.main()
+    main()

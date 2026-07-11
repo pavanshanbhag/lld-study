@@ -1,0 +1,105 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class ChessGame {
+        +NewChessGame()
+        +Start()
+    }
+
+    class Board {
+        +NewBoard()
+        +GetPiece(row, col int) Piece
+        +SetPiece(row, col int, piece Piece)
+        +IsValidMove(piece Piece, destRow, destCol int) bool
+        +IsCheckmate(color Color) bool
+        +IsStalemate(color Color) bool
+    }
+
+    class Player {
+        +NewPlayer(color Color)
+        +MakeMove(board Board, move Move) error
+    }
+
+    class Move {
+        +NewMove(piece Piece, destRow, destCol int)
+    }
+
+    class Piece {
+        <<interface>>
+        +CanMove(board Board, destRow, destCol int) bool
+        +GetColor() Color
+        +GetRow() int
+        +GetCol() int
+        +SetPosition(row, col int)
+    }
+
+    class BasePiece {
+        +GetColor() Color
+        +GetRow() int
+        +GetCol() int
+        +SetPosition(row, col int)
+    }
+
+    class Pawn {
+        +NewPawn(color Color, row, col int)
+        +CanMove(board Board, destRow, destCol int) bool
+    }
+
+    class Rook {
+        +NewRook(color Color, row, col int)
+        +CanMove(board Board, destRow, destCol int) bool
+    }
+
+    class Knight {
+        +NewKnight(color Color, row, col int)
+        +CanMove(board Board, destRow, destCol int) bool
+    }
+
+    class Bishop {
+        +NewBishop(color Color, row, col int)
+        +CanMove(board Board, destRow, destCol int) bool
+    }
+
+    class Queen {
+        +NewQueen(color Color, row, col int)
+        +CanMove(board Board, destRow, destCol int) bool
+    }
+
+    class King {
+        +NewKing(color Color, row, col int)
+        +CanMove(board Board, destRow, destCol int) bool
+    }
+
+    class Color {
+        <<enumeration>>
+        White
+        Black
+    }
+
+    class InvalidMoveError {
+        +NewInvalidMoveError(message string)
+        +Error() string
+    }
+
+    ChessGame "1" --> "1" Board : board
+    ChessGame "1" --> "2" Player : players
+    ChessGame ..> Move : creates
+    Player --> Board : moves on
+    Player ..> Move : executes
+    Move --> Piece : piece
+    Board "1" --> "*" Piece : pieces
+    Piece <|.. Pawn
+    Piece <|.. Rook
+    Piece <|.. Knight
+    Piece <|.. Bishop
+    Piece <|.. Queen
+    Piece <|.. King
+    BasePiece <|-- Pawn
+    BasePiece <|-- Rook
+    BasePiece <|-- Knight
+    BasePiece <|-- Bishop
+    BasePiece <|-- Queen
+    BasePiece <|-- King
+    Player --> Color : color
+    Piece ..> Color : color

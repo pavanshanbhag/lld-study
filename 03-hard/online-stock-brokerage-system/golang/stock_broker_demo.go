@@ -3,7 +3,7 @@ package onlinestockbrokeragesystem
 import "fmt"
 
 func Run() {
-    broker := GetStockBroker()
+    broker := NewStockBroker()
 
     // Create user and account
     user := NewUser("U001", "John Doe", "john@example.com")

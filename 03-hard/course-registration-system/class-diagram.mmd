@@ -1,0 +1,34 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class CourseRegistrationSystem {
+        +NewCourseRegistrationSystem()
+        +AddCourse(course Course)
+        +AddStudent(student Student)
+        +SearchCourses(query string) Course[]
+        +RegisterCourse(student Student, course Course) error
+        +GetRegisteredCourses(student Student) Course[]
+    }
+
+    class Course {
+        +NewCourse(code, name, instructor string, maxCapacity int)
+        +GetEnrolledStudents() int
+        +IncrementEnrolled()
+    }
+
+    class Student {
+        +NewStudent(id int, name, email string)
+        +AddCourse(course Course)
+    }
+
+    class Registration {
+        +NewRegistration(student Student, course Course)
+    }
+
+    CourseRegistrationSystem "1" --> "*" Course : courses
+    CourseRegistrationSystem "1" --> "*" Student : students
+    CourseRegistrationSystem "1" --> "*" Registration : registrations
+    Registration --> Student : student
+    Registration --> Course : course
+    Student "1" --> "*" Course : registeredCourses

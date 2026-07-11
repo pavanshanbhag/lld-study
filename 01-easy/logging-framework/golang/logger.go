@@ -9,18 +9,11 @@ type Logger struct {
 	mu     sync.RWMutex
 }
 
-var (
-	instance *Logger
-	once     sync.Once
-)
-
-func GetLogger() *Logger {
-	once.Do(func() {
-		instance = &Logger{
-			config: NewLoggerConfig(LogLevelInfo, NewConsoleAppender()),
-		}
-	})
-	return instance
+func NewLogger(config *LoggerConfig) *Logger {
+	if config == nil {
+		config = NewLoggerConfig(LogLevelInfo, NewConsoleAppender())
+	}
+	return &Logger{config: config}
 }
 
 func (l *Logger) SetConfig(config *LoggerConfig) {

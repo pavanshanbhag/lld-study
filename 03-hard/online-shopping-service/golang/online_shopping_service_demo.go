@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	shoppingService := GetInstance()
+	shoppingService := NewOnlineShoppingService()
 
 	user1 := NewUser("U001", "John Doe", "john@example.com", "password123")
 	user2 := NewUser("U002", "Jane Smith", "jane@example.com", "password456")

@@ -1,0 +1,70 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class OnlineShoppingService {
+        +NewOnlineShoppingService()
+        +RegisterUser(user User)
+        +AddProduct(product Product)
+        +SearchProducts(keyword string) Product[]
+        +PlaceOrder(user User, cart ShoppingCart, paymentMethod Payment) Order
+    }
+
+    class User {
+        +NewUser(id, name, email, password string)
+        +AddOrder(order Order)
+    }
+
+    class Product {
+        +NewProduct(id, name, description string, price float64, quantity int)
+        +UpdateQuantity(quantity int)
+        +IsAvailable(quantity int) bool
+    }
+
+    class ShoppingCart {
+        +NewShoppingCart()
+        +AddItem(product Product, quantity int)
+        +RemoveItem(productId string)
+        +GetItems() OrderItem[]
+        +Clear()
+    }
+
+    class Order {
+        +NewOrder(id string, user User, items OrderItem[])
+        +SetStatus(status OrderStatus)
+    }
+
+    class OrderItem {
+        +NewOrderItem(product Product, quantity int)
+    }
+
+    class Payment {
+        <<interface>>
+        +ProcessPayment(amount float64) bool
+    }
+
+    class CreditCardPayment {
+        +ProcessPayment(amount float64) bool
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        Pending
+        Processing
+        Shipped
+        Delivered
+        Cancelled
+    }
+
+    OnlineShoppingService "1" --> "*" User : users
+    OnlineShoppingService "1" --> "*" Product : products
+    OnlineShoppingService "1" --> "*" Order : orders
+    OnlineShoppingService ..> ShoppingCart : checkout
+    OnlineShoppingService ..> Payment : accepts
+    User "1" --> "*" Order : orders
+    Order --> User : user
+    Order "1" --> "*" OrderItem : items
+    Order --> OrderStatus : status
+    OrderItem --> Product : product
+    ShoppingCart "1" --> "*" OrderItem : items
+    Payment <|.. CreditCardPayment

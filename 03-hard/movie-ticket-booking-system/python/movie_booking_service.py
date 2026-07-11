@@ -10,25 +10,11 @@ from booking_manager import BookingManager
 from payment_strategy import PaymentStrategy
 from datetime import datetime
 from booking import Booking
-import threading
 from pricing_strategy import PricingStrategy
 from seat import Seat
 
 class MovieBookingService:
-    _instance: Optional['MovieBookingService'] = None
-    _lock = threading.Lock()
-
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self):
-        if hasattr(self, 'initialized'):
-            return
-
         self.cities: Dict[str, City] = {}
         self.cinemas: Dict[str, Cinema] = {}
         self.movies: Dict[str, Movie] = {}
@@ -37,16 +23,10 @@ class MovieBookingService:
 
         self.seat_lock_manager = SeatLockManager()
         self.booking_manager = BookingManager(self.seat_lock_manager)
-        self.initialized = True
-
-    @classmethod
-    def get_instance(cls) -> 'MovieBookingService':
-        return cls()
 
     def get_booking_manager(self) -> BookingManager:
         return self.booking_manager
 
-    # Data Management Methods
     def add_city(self, city_id: str, name: str) -> City:
         city = City(city_id, name)
         self.cities[city.get_id()] = city
@@ -79,7 +59,6 @@ class MovieBookingService:
             payment_strategy
         )
 
-    # Search Functionality
     def find_shows(self, movie_title: str, city_name: str) -> List[Show]:
         result = []
         for show in self.shows.values():
@@ -90,8 +69,6 @@ class MovieBookingService:
         return result
 
     def _find_cinema_for_show(self, show: Show) -> Optional[Cinema]:
-        # This is inefficient. In a real system, shows would have a direct link to the cinema.
-        # For this example, we traverse the cinema list.
         for cinema in self.cinemas.values():
             if show.get_screen() in cinema.get_screens():
                 return cinema

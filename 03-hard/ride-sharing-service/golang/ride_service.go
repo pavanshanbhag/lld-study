@@ -15,19 +15,13 @@ type RideService struct {
 	mu             sync.Mutex
 }
 
-var instance *RideService
-var once sync.Once
-
-func GetRideService() *RideService {
-	once.Do(func() {
-		instance = &RideService{
-			passengers:     make(map[int]*Passenger),
-			drivers:        make(map[int]*Driver),
-			rides:          make(map[int]*Ride),
-			requestedRides: make(chan *Ride, 10),
-		}
-	})
-	return instance
+func NewRideService() *RideService {
+	return &RideService{
+		passengers:     make(map[int]*Passenger),
+		drivers:        make(map[int]*Driver),
+		rides:          make(map[int]*Ride),
+		requestedRides: make(chan *Ride, 10),
+	}
 }
 
 func (rs *RideService) AddPassenger(passenger *Passenger) {

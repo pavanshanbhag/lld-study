@@ -1,19 +1,20 @@
+import time
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
+
 from direction import Direction
 from light_color import LightColor
-from typing import TYPE_CHECKING
-import time
 
 if TYPE_CHECKING:
     from intersection_controller import IntersectionController
 
 class IntersectionState(ABC):
     @abstractmethod
-    def handle(self, context: 'IntersectionController'):
+    def handle(self, context: IntersectionController):
         pass
 
 class EastWestGreenState(IntersectionState):
-    def handle(self, context: 'IntersectionController'):
+    def handle(self, context: IntersectionController):
         print(f"\n--- INTERSECTION {context.get_id()}: Cycle -> East-West GREEN ---")
 
         # Turn East and West green, ensure North and South are red
@@ -40,7 +41,7 @@ class EastWestGreenState(IntersectionState):
         context.set_state(NorthSouthGreenState())
 
 class NorthSouthGreenState(IntersectionState):
-    def handle(self, context: 'IntersectionController'):
+    def handle(self, context: IntersectionController):
         print(f"\n--- INTERSECTION {context.get_id()}: Cycle Start -> North-South GREEN ---")
 
         # Turn North and South green, ensure East and West are red

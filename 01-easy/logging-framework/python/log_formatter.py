@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+
 from log_message import LogMessage
+
 
 class LogFormatter(ABC):
     @abstractmethod

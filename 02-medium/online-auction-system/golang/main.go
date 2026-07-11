@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	auctionSystem := GetInstance()
+	auctionSystem := NewAuctionSystem()
 
 	// Register users
 	user1 := NewUser("1", "John Doe", "john@example.com")

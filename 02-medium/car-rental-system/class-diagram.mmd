@@ -1,0 +1,49 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class RentalSystem {
+        +NewRentalSystem()
+        +AddCar(car Car)
+        +SearchCars(make, model string, startDate, endDate time.Time) Car
+        +MakeReservation(customer Customer, car Car, startDate, endDate time.Time) Reservation
+        +CancelReservation(reservationID string)
+        +ProcessPayment(reservation Reservation) bool
+    }
+
+    class Car {
+        +NewCar(make, model string, year int, licensePlate string, rentalPricePerDay float64)
+        +IsAvailable() bool
+        +SetAvailable(available bool)
+    }
+
+    class Customer {
+        +NewCustomer(name, contactInfo, driversLicenseNumber string)
+    }
+
+    class Reservation {
+        +NewReservation(reservationID string, customer Customer, car Car, startDate, endDate time.Time)
+    }
+
+    class PaymentProcessor {
+        <<interface>>
+        +ProcessPayment(amount float64) bool
+    }
+
+    class CreditCardPaymentProcessor {
+        +NewCreditCardPaymentProcessor()
+        +ProcessPayment(amount float64) bool
+    }
+
+    class PayPalPaymentProcessor {
+        +NewPayPalPaymentProcessor()
+        +ProcessPayment(amount float64) bool
+    }
+
+    RentalSystem "1" --> "*" Car
+    RentalSystem "1" --> "*" Reservation
+    RentalSystem --> PaymentProcessor : processor
+    Reservation --> Customer
+    Reservation --> Car
+    PaymentProcessor <|.. CreditCardPaymentProcessor
+    PaymentProcessor <|.. PayPalPaymentProcessor

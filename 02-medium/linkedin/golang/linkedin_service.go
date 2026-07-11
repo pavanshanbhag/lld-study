@@ -14,20 +14,12 @@ type LinkedInService struct {
 	mu            sync.RWMutex
 }
 
-var (
-	instance *LinkedInService
-	once     sync.Once
-)
-
-func GetLinkedInService() *LinkedInService {
-	once.Do(func() {
-		instance = &LinkedInService{
-			users:         make(map[string]*User),
-			jobPostings:   make(map[string]*JobPosting),
-			notifications: make(map[string][]*Notification),
-		}
-	})
-	return instance
+func NewLinkedInService() *LinkedInService {
+	return &LinkedInService{
+		users:         make(map[string]*User),
+		jobPostings:   make(map[string]*JobPosting),
+		notifications: make(map[string][]*Notification),
+	}
 }
 
 func (s *LinkedInService) RegisterUser(user *User) {

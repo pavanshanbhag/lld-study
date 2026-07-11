@@ -6,16 +6,8 @@ type PaymentProcessor struct {
 	mu sync.Mutex
 }
 
-var (
-	paymentProcessor *PaymentProcessor
-	paymentOnce      sync.Once
-)
-
-func GetPaymentProcessor() *PaymentProcessor {
-	paymentOnce.Do(func() {
-		paymentProcessor = &PaymentProcessor{}
-	})
-	return paymentProcessor
+func NewPaymentProcessor() *PaymentProcessor {
+	return &PaymentProcessor{}
 }
 
 func (p *PaymentProcessor) ProcessPayment(payment *Payment) {

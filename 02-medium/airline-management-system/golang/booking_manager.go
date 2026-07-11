@@ -13,19 +13,12 @@ type BookingManager struct {
 	mu             sync.RWMutex
 }
 
-var (
-	bookingManager *BookingManager
-	bookingOnce    sync.Once
-)
-
-func GetBookingManager() *BookingManager {
-	bookingOnce.Do(func() {
-		bookingManager = &BookingManager{
-			bookings: make(map[string]*Booking),
-		}
-	})
-	return bookingManager
+func NewBookingManager() *BookingManager {
+	return &BookingManager{
+		bookings: make(map[string]*Booking),
+	}
 }
+
 
 func (bm *BookingManager) CreateBooking(flight *Flight, passenger *Passenger, seat *Seat, price float64) *Booking {
 	bm.mu.Lock()

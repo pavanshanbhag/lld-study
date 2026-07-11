@@ -1,18 +1,17 @@
-from typing import Dict, Set, List
-from user import User
-from content import Question
-from content import Answer
-from tag import Tag
+
+from content import Answer, Post, Question
 from enums import VoteType
-from search_strategy import SearchStrategy
 from reputation_manager import ReputationManager
-from content import Post
+from search_strategy import SearchStrategy
+from tag import Tag
+from user import User
+
 
 class StackOverflowService:
     def __init__(self):
-        self.users: Dict[str, User] = {}
-        self.questions: Dict[str, Question] = {}
-        self.answers: Dict[str, Answer] = {}
+        self.users: dict[str, User] = {}
+        self.questions: dict[str, Question] = {}
+        self.answers: dict[str, Answer] = {}
         self.reputation_manager = ReputationManager()
 
     def create_user(self, name: str) -> User:
@@ -20,7 +19,7 @@ class StackOverflowService:
         self.users[user.get_id()] = user
         return user
 
-    def post_question(self, user_id: str, title: str, body: str, tags: Set[Tag]) -> Question:
+    def post_question(self, user_id: str, title: str, body: str, tags: set[Tag]) -> Question:
         author = self.users[user_id]
         question = Question(title, body, author, tags)
         question.add_observer(self.reputation_manager)
@@ -46,7 +45,7 @@ class StackOverflowService:
         answer = self.answers[answer_id]
         question.accept_answer(answer)
 
-    def search_questions(self, strategies: List[SearchStrategy]) -> List[Question]:
+    def search_questions(self, strategies: list[SearchStrategy]) -> list[Question]:
         results = list(self.questions.values())
 
         for strategy in strategies:

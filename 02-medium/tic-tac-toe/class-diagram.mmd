@@ -1,0 +1,28 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class Game {
+        +NewGame(player1, player2 Player) Game
+        +Play()
+    }
+
+    class Board {
+        +NewBoard()
+        +InitializeBoard()
+        +MakeMove(row, col int, symbol rune) error
+        +IsFull() bool
+        +HasWinner() bool
+        +PrintBoard()
+    }
+
+    class Player {
+        +NewPlayer(name string, symbol rune)
+        Name string
+        Symbol rune
+    }
+
+    Game "1" --> "2" Player : Player1, Player2
+    Game "1" --> "1" Board
+    Game --> Player : CurrentPlayer
+    Board ..> Player : symbol per move

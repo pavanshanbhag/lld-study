@@ -18,8 +18,8 @@ func NewAirlineManagementSystem() *AirlineManagementSystem {
     system := &AirlineManagementSystem{
         flights:          make([]*Flight, 0),
         aircrafts:        make([]*Aircraft, 0),
-        bookingManager:   GetBookingManager(),
-        paymentProcessor: GetPaymentProcessor(),
+        bookingManager:   NewBookingManager(),
+        paymentProcessor: NewPaymentProcessor(),
     }
     system.flightSearch = NewFlightSearch(system.flights)
     return system

@@ -1,0 +1,78 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class HotelManagementSystem {
+        +NewHotelManagementSystem()
+        +AddGuest(guest Guest)
+        +AddRoom(room Room)
+        +BookRoom(guest Guest, room Room, checkInDate, checkOutDate time.Time) Reservation
+        +CancelReservation(reservationID string) error
+        +CheckIn(reservationID string) error
+        +CheckOut(reservationID string, payment Payment) error
+    }
+
+    class Guest {
+        +NewGuest(id, name, email, phoneNumber string)
+    }
+
+    class Room {
+        +NewRoom(id string, roomType RoomType, price float64)
+        +Book() error
+        +CheckIn() error
+        +CheckOut() error
+        +GetStatus() RoomStatus
+    }
+
+    class Reservation {
+        +NewReservation(id string, guest Guest, room Room, checkInDate, checkOutDate time.Time)
+        +Cancel() error
+    }
+
+    class Payment {
+        <<interface>>
+        +ProcessPayment(amount float64) bool
+    }
+
+    class CreditCardPayment {
+        +NewCreditCardPayment()
+        +ProcessPayment(amount float64) bool
+    }
+
+    class CashPayment {
+        +NewCashPayment()
+        +ProcessPayment(amount float64) bool
+    }
+
+    class RoomType {
+        <<enumeration>>
+        Single
+        Double
+        Deluxe
+        Suite
+    }
+
+    class RoomStatus {
+        <<enumeration>>
+        Available
+        Booked
+        Occupied
+    }
+
+    class ReservationStatus {
+        <<enumeration>>
+        Confirmed
+        Cancelled
+    }
+
+    HotelManagementSystem "1" --> "*" Guest
+    HotelManagementSystem "1" --> "*" Room
+    HotelManagementSystem "1" --> "*" Reservation
+    Reservation --> Guest
+    Reservation --> Room
+    Reservation --> ReservationStatus
+    Room --> RoomType
+    Room --> RoomStatus
+    Payment <|.. CreditCardPayment
+    Payment <|.. CashPayment
+    HotelManagementSystem ..> Payment : checkout

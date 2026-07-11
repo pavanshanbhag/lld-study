@@ -68,7 +68,8 @@ func main() {
 }
 ```
 
-### Output:
+### Output
+
 ```
 Engine started with 150 HP.
 The Alloy wheel is rotating.
@@ -81,18 +82,22 @@ Car is moving!
 ## Why Prefer Composition Over Inheritance?
 
 ### 1. **Encapsulation and Flexibility**
-   - Composition allows us to change the behavior of an object dynamically by replacing components at runtime.
-   - Inheritance makes it difficult to modify an existing class hierarchy without breaking existing code.
+
+- Composition allows us to change the behavior of an object dynamically by replacing components at runtime.
+- Inheritance makes it difficult to modify an existing class hierarchy without breaking existing code.
 
 ### 2. **Better Code Reusability**
-   - Composition promotes reusable components. The `Engine`, `Wheel`, and `Transmission` structs can be used in multiple types of vehicles (Car, Bike, Truck) without modification.
+
+- Composition promotes reusable components. The `Engine`, `Wheel`, and `Transmission` structs can be used in multiple types of vehicles (Car, Bike, Truck) without modification.
 
 ### 3. **Avoids Inheritance Pitfalls**
-   - Inheritance can lead to deep struct hierarchies, making maintenance difficult.
-   - It enforces strict parent-child relationships, which can be too rigid for some designs.
+
+- Inheritance can lead to deep struct hierarchies, making maintenance difficult.
+- It enforces strict parent-child relationships, which can be too rigid for some designs.
 
 ### 4. **Supports Interface-Based Design**
-   - Composition can be combined with interfaces to achieve powerful decoupling.
+
+- Composition can be combined with interfaces to achieve powerful decoupling.
 
 ---
 
@@ -139,7 +144,8 @@ func main() {
 }
 ```
 
-### Output:
+### Output
+
 ```
 Petrol Engine started.
 Car is ready to go!

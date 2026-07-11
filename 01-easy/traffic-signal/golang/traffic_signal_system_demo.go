@@ -5,7 +5,7 @@ import "time"
 // Run demonstrates the Traffic Signal System functionality
 func Run() {
 	// Initialize the traffic controller
-	trafficController := GetTrafficController()
+	trafficController := NewTrafficController()
 
 	// Create roads
 	road1 := NewRoad("R1", "Main Street")

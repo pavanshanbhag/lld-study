@@ -1,0 +1,57 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class Logger {
+        +NewLogger(config LoggerConfig) Logger
+        +SetConfig(config LoggerConfig)
+        +Debug(message string) error
+        +Info(message string) error
+        +Warning(message string) error
+        +Error(message string) error
+        +Fatal(message string) error
+    }
+
+    class LoggerConfig {
+        +NewLoggerConfig(level LogLevel, appender LogAppender)
+        +Level LogLevel
+        +Appender LogAppender
+    }
+
+    class LogMessage {
+        +NewLogMessage(level LogLevel, message string)
+    }
+
+    class LogAppender {
+        <<interface>>
+        +Append(message LogMessage) error
+    }
+
+    class ConsoleAppender {
+        +Append(message LogMessage) error
+    }
+
+    class FileAppender {
+        +Append(message LogMessage) error
+    }
+
+    class DatabaseAppender {
+        +Append(message LogMessage) error
+    }
+
+    class LogLevel {
+        <<enumeration>>
+        DEBUG
+        INFO
+        WARNING
+        ERROR
+        FATAL
+    }
+
+    Logger "1" --> "1" LoggerConfig : config
+    LoggerConfig --> LogLevel : level
+    LoggerConfig --> LogAppender : appender
+    LogAppender <|.. ConsoleAppender
+    LogAppender <|.. FileAppender
+    LogAppender <|.. DatabaseAppender
+    Logger ..> LogMessage : creates

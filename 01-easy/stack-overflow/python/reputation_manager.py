@@ -1,6 +1,7 @@
-from post_observer import PostObserver
-from event import Event
 from enums import EventType
+from event import Event
+from post_observer import PostObserver
+
 
 class ReputationManager(PostObserver):
     QUESTION_UPVOTE_REP = 5

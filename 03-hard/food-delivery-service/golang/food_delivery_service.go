@@ -14,21 +14,13 @@ type FoodDeliveryService struct {
 	mu             sync.RWMutex
 }
 
-var (
-	instance *FoodDeliveryService
-	once     sync.Once
-)
-
-func GetFoodDeliveryService() *FoodDeliveryService {
-	once.Do(func() {
-		instance = &FoodDeliveryService{
-			customers:      make(map[string]*Customer),
-			restaurants:    make(map[string]*Restaurant),
-			orders:         make(map[string]*Order),
-			deliveryAgents: make(map[string]*DeliveryAgent),
-		}
-	})
-	return instance
+func NewFoodDeliveryService() *FoodDeliveryService {
+	return &FoodDeliveryService{
+		customers:      make(map[string]*Customer),
+		restaurants:    make(map[string]*Restaurant),
+		orders:         make(map[string]*Order),
+		deliveryAgents: make(map[string]*DeliveryAgent),
+	}
 }
 
 func (s *FoodDeliveryService) RegisterCustomer(customer *Customer) {

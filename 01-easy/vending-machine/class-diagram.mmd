@@ -1,0 +1,79 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class VendingMachine {
+        +NewVendingMachine()
+        +SelectProduct(product Product)
+        +InsertCoin(coin Coin)
+        +InsertNote(note Note)
+        +DispenseProduct()
+        +ReturnChange()
+        +SetState(state VendingMachineState)
+    }
+
+    class VendingMachineState {
+        <<interface>>
+        +SelectProduct(product Product)
+        +InsertCoin(coin Coin)
+        +InsertNote(note Note)
+        +DispenseProduct()
+        +ReturnChange()
+    }
+
+    class IdleState {
+        +SelectProduct(product Product)
+        +InsertCoin(coin Coin)
+        +InsertNote(note Note)
+    }
+
+    class ReadyState {
+        +InsertCoin(coin Coin)
+        +InsertNote(note Note)
+        +ReturnChange()
+    }
+
+    class DispenseState {
+        +DispenseProduct()
+    }
+
+    class ReturnChangeState {
+        +ReturnChange()
+    }
+
+    class Inventory {
+        +NewInventory()
+        +AddProduct(product Product, quantity int)
+        +IsAvailable(product Product) bool
+    }
+
+    class Product {
+        +NewProduct(name string, price float64)
+    }
+
+    class Coin {
+        <<enumeration>>
+        PENNY
+        NICKEL
+        DIME
+        QUARTER
+    }
+
+    class Note {
+        <<enumeration>>
+        ONE
+        FIVE
+        TEN
+        TWENTY
+    }
+
+    VendingMachine --> VendingMachineState : currentState
+    VendingMachine "1" --> "1" Inventory
+    VendingMachine ..> Product : selectedProduct
+    VendingMachineState <|.. IdleState
+    VendingMachineState <|.. ReadyState
+    VendingMachineState <|.. DispenseState
+    VendingMachineState <|.. ReturnChangeState
+    Inventory "1" --> "*" Product : stock
+    VendingMachine ..> Coin
+    VendingMachine ..> Note

@@ -1,0 +1,66 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class ATM {
+        +NewATM(bankingService BankingService, cashDispenser CashDispenser)
+        +AuthenticateUser(card Card) error
+        +CheckBalance(accountNumber string) (float64, error)
+        +WithdrawCash(accountNumber string, amount float64) error
+        +DepositCash(accountNumber string, amount float64) error
+    }
+
+    class BankingService {
+        +NewBankingService()
+        +CreateAccount(accountNumber string, initialBalance float64)
+        +GetAccount(accountNumber string) Account
+        +ProcessTransaction(transaction Transaction) error
+    }
+
+    class Account {
+        +NewAccount(accountNumber string, balance float64)
+        +GetBalance() float64
+        +Debit(amount float64) error
+        +Credit(amount float64) error
+    }
+
+    class Card {
+        +NewCard(cardNumber, pin string)
+    }
+
+    class CashDispenser {
+        +NewCashDispenser(initialCash int)
+        +DispenseCash(amount int) error
+    }
+
+    class Transaction {
+        <<interface>>
+        +Execute() error
+    }
+
+    class BaseTransaction {
+        TransactionID string
+        Account Account
+        Amount float64
+    }
+
+    class WithdrawalTransaction {
+        +NewWithdrawalTransaction(id string, account Account, amount float64)
+        +Execute() error
+    }
+
+    class DepositTransaction {
+        +NewDepositTransaction(id string, account Account, amount float64)
+        +Execute() error
+    }
+
+    ATM "1" --> "1" BankingService
+    ATM "1" --> "1" CashDispenser
+    ATM ..> Card : authenticates
+    BankingService "1" --> "*" Account
+    Transaction <|.. WithdrawalTransaction
+    Transaction <|.. DepositTransaction
+    BaseTransaction <|-- WithdrawalTransaction
+    BaseTransaction <|-- DepositTransaction
+    BaseTransaction --> Account
+    ATM ..> Transaction : creates

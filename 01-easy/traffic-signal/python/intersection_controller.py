@@ -1,12 +1,13 @@
-from direction import Direction
-from traffic_light import TrafficLight
-from intersection_state import IntersectionState, NorthSouthGreenState
-from observer import TrafficObserver
-from typing import Dict, List
 import threading
 
+from direction import Direction
+from intersection_state import IntersectionState, NorthSouthGreenState
+from observer import TrafficObserver
+from traffic_light import TrafficLight
+
+
 class IntersectionController:
-    def __init__(self, intersection_id: int, traffic_lights: Dict[Direction, TrafficLight], 
+    def __init__(self, intersection_id: int, traffic_lights: dict[Direction, TrafficLight], 
                  green_duration: int, yellow_duration: int):
         self._id = intersection_id
         self._traffic_lights = traffic_lights
@@ -51,18 +52,18 @@ class IntersectionController:
             self._id = intersection_id
             self._green_duration = 5000  # default 5s
             self._yellow_duration = 2000  # default 2s
-            self._observers: List[TrafficObserver] = []
+            self._observers: list[TrafficObserver] = []
 
-        def with_durations(self, green: int, yellow: int) -> 'IntersectionController.Builder':
+        def with_durations(self, green: int, yellow: int) -> IntersectionController.Builder:
             self._green_duration = green
             self._yellow_duration = yellow
             return self
 
-        def add_observer(self, observer: TrafficObserver) -> 'IntersectionController.Builder':
+        def add_observer(self, observer: TrafficObserver) -> IntersectionController.Builder:
             self._observers.append(observer)
             return self
 
-        def build(self) -> 'IntersectionController':
+        def build(self) -> IntersectionController:
             lights = {}
             for direction in Direction:
                 light = TrafficLight(self._id, direction)

@@ -1,0 +1,38 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class TaskManager {
+        +NewTaskManager()
+        +CreateTask(task Task)
+        +UpdateTask(task Task)
+        +DeleteTask(taskID string)
+        +SearchTasks(keyword string) Task[]
+        +FilterTasks(status, dates, priority) Task[]
+        +MarkTaskAsCompleted(taskID string)
+        +GetTaskHistory(user User) Task[]
+    }
+
+    class Task {
+        +NewTask(id, title, desc, dueDate, priority, user)
+        +GetId() string
+        +GetStatus() TaskStatus
+        +SetStatus(status TaskStatus)
+    }
+
+    class User {
+        +NewUser(id, name, email string)
+        +GetId() string
+    }
+
+    class TaskStatus {
+        <<enumeration>>
+        Pending
+        InProgress
+        Completed
+    }
+
+    TaskManager "1" --> "*" Task : tasks
+    TaskManager "1" --> "*" User : users via assignments
+    Task "1" --> "1" User : assignedUser
+    Task --> TaskStatus : status

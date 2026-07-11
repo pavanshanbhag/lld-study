@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	service := GetLinkedInService()
+	service := NewLinkedInService()
 
 	// Create users
 	user1 := NewUser("1", "John Doe", "john@example.com", "password")

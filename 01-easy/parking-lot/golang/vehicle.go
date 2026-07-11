@@ -1,27 +1,49 @@
 package parkinglot
 
+import "fmt"
+
 type VehicleType int
 
 const (
-	CAR VehicleType = iota
-	MOTORCYCLE
-	TRUCK
+	VehicleMotorcycle VehicleType = iota
+	VehicleCar
+	VehicleTruck
 )
 
-type Vehicle interface {
-	GetLicensePlate() string
-	GetType() VehicleType
+func (t VehicleType) String() string {
+	switch t {
+	case VehicleMotorcycle:
+		return "motorcycle"
+	case VehicleCar:
+		return "car"
+	case VehicleTruck:
+		return "truck"
+	default:
+		return fmt.Sprintf("VehicleType(%d)", t)
+	}
 }
 
-type BaseVehicle struct {
+type Vehicle interface {
+	LicensePlate() string
+	Type() VehicleType
+}
+
+type vehicle struct {
 	licensePlate string
 	vehicleType  VehicleType
 }
 
-func (v *BaseVehicle) GetLicensePlate() string {
-	return v.licensePlate
+func (v vehicle) LicensePlate() string { return v.licensePlate }
+func (v vehicle) Type() VehicleType    { return v.vehicleType }
+
+func NewCar(licensePlate string) Vehicle {
+	return vehicle{licensePlate: licensePlate, vehicleType: VehicleCar}
 }
 
-func (v *BaseVehicle) GetType() VehicleType {
-	return v.vehicleType
+func NewMotorcycle(licensePlate string) Vehicle {
+	return vehicle{licensePlate: licensePlate, vehicleType: VehicleMotorcycle}
+}
+
+func NewTruck(licensePlate string) Vehicle {
+	return vehicle{licensePlate: licensePlate, vehicleType: VehicleTruck}
 }

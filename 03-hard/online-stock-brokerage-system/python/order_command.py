@@ -11,14 +11,12 @@ class OrderCommand(ABC):
         pass
 
 class BuyStockCommand(OrderCommand):
-    def __init__(self, account: Account, order: Order):
+    def __init__(self, account: Account, order: Order, stock_exchange: StockExchange | None = None):
         self.account = account
         self.order = order
-        self.stock_exchange = StockExchange.get_instance()
+        self.stock_exchange = stock_exchange or StockExchange()
 
     def execute(self) -> None:
-        # For market order, we can't pre-check funds perfectly.
-        # For limit order, we can pre-authorize the amount.
         estimated_cost = self.order.get_quantity() * self.order.get_price()
         if self.order.get_type() == OrderType.LIMIT and self.account.get_balance() < estimated_cost:
             raise InsufficientFundsException("Not enough cash to place limit buy order.")
@@ -26,10 +24,10 @@ class BuyStockCommand(OrderCommand):
         self.stock_exchange.place_buy_order(self.order)
 
 class SellStockCommand(OrderCommand):
-    def __init__(self, account: Account, order: Order):
+    def __init__(self, account: Account, order: Order, stock_exchange: StockExchange | None = None):
         self.account = account
         self.order = order
-        self.stock_exchange = StockExchange.get_instance()
+        self.stock_exchange = stock_exchange or StockExchange()
 
     def execute(self) -> None:
         if self.account.get_stock_quantity(self.order.get_stock().get_symbol()) < self.order.get_quantity():

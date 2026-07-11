@@ -6,15 +6,10 @@ type GameManager struct {
 	Games []*SnakeAndLadderGame
 }
 
-var instance *GameManager
-
-func GetGameManager() *GameManager {
-	if instance == nil {
-		instance = &GameManager{
-			Games: []*SnakeAndLadderGame{},
-		}
+func NewGameManager() *GameManager {
+	return &GameManager{
+		Games: []*SnakeAndLadderGame{},
 	}
-	return instance
 }
 
 func (gm *GameManager) StartNewGame(wg *sync.WaitGroup, playerNames []string) {

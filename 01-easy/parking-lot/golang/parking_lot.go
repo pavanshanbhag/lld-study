@@ -1,42 +1,82 @@
 package parkinglot
 
+import (
+	"sync"
+)
+
+type ParkResult struct {
+	LevelFloor int
+	Spot       *ParkingSpot
+}
+
 type ParkingLot struct {
+	mu     sync.RWMutex
 	levels []*Level
 }
 
-var instance *ParkingLot
-
-func GetParkingLotInstance() *ParkingLot {
-	if instance == nil {
-		instance = &ParkingLot{levels: []*Level{}}
-	}
-	return instance
+func NewParkingLot() *ParkingLot {
+	return &ParkingLot{levels: make([]*Level, 0)}
 }
 
 func (p *ParkingLot) AddLevel(level *Level) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
 	p.levels = append(p.levels, level)
 }
 
-func (p *ParkingLot) ParkVehicle(vehicle Vehicle) bool {
+func (p *ParkingLot) Park(v Vehicle) (ParkResult, error) {
+	if v == nil || v.LicensePlate() == "" {
+		return ParkResult{}, ErrInvalidVehicle
+	}
+
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
 	for _, level := range p.levels {
-		if level.ParkVehicle(vehicle) {
-			return true
+		spot, err := level.Park(v)
+		if err == nil {
+			return ParkResult{LevelFloor: level.Floor(), Spot: spot}, nil
+		}
+		if err != ErrLotFull {
+			return ParkResult{}, err
 		}
 	}
-	return false
+	return ParkResult{}, ErrLotFull
 }
 
-func (p *ParkingLot) UnparkVehicle(vehicle Vehicle) bool {
+func (p *ParkingLot) Unpark(licensePlate string) (*ParkingSpot, error) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
 	for _, level := range p.levels {
-		if level.UnparkVehicle(vehicle) {
-			return true
+		spot, err := level.Unpark(licensePlate)
+		if err == nil {
+			return spot, nil
+		}
+		if err != ErrVehicleNotFound {
+			return nil, err
 		}
 	}
-	return false
+	return nil, ErrVehicleNotFound
 }
 
-func (p *ParkingLot) DisplayAvailability() {
+func (p *ParkingLot) Availability() []SpotStatus {
+	p.mu.RLock()
+	defer p.mu.RUnlock()
+
+	var status []SpotStatus
 	for _, level := range p.levels {
-		level.DisplayAvailability()
+		status = append(status, level.Availability()...)
 	}
+	return status
+}
+
+func (p *ParkingLot) AvailableCount() int {
+	count := 0
+	for _, s := range p.Availability() {
+		if !s.Occupied {
+			count++
+		}
+	}
+	return count
 }

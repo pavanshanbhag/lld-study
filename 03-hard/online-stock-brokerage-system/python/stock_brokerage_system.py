@@ -3,29 +3,11 @@ from user import User
 from stock import Stock
 from order import Order
 from order_command import BuyStockCommand, SellStockCommand
-import threading
 
 class StockBrokerageSystem:
-    _instance: Optional['StockBrokerageSystem'] = None
-    _lock = threading.Lock()
-
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self):
-        if hasattr(self, 'initialized'):
-            return
         self.users: Dict[str, User] = {}
         self.stocks: Dict[str, Stock] = {}
-        self.initialized = True
-
-    @classmethod
-    def get_instance(cls) -> 'StockBrokerageSystem':
-        return cls()
 
     def register_user(self, name: str, initial_amount: float) -> User:
         user = User(name, initial_amount)

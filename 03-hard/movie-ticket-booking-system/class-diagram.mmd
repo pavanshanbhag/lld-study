@@ -1,0 +1,77 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class MovieTicketBookingSystem {
+        +NewMovieTicketBookingSystem()
+        +AddMovie(movie Movie)
+        +AddTheater(theater Theater)
+        +AddShow(show Show)
+        +GetShow(showID string) Show
+        +BookTickets(user User, show Show, selectedSeats Seat[]) Booking
+        +ConfirmBooking(bookingID string) error
+        +CancelBooking(bookingID string) error
+    }
+
+    class Movie {
+        +NewMovie(id, title, description string, durationMinutes int)
+    }
+
+    class Theater {
+        +NewTheater(id, name, location string)
+    }
+
+    class Show {
+        +NewShow(id string, movie Movie, theater Theater, startTime, endTime time, seats Seat[])
+    }
+
+    class Seat {
+        +NewSeat(id string, row, column int, seatType SeatType, price float64, status SeatStatus)
+        +GetStatus() SeatStatus
+        +SetStatus(status SeatStatus)
+        +GetPrice() float64
+    }
+
+    class Booking {
+        +NewBooking(id string, user User, show Show, seats Seat[], totalPrice float64, status BookingStatus)
+        +GetStatus() BookingStatus
+        +SetStatus(status BookingStatus)
+    }
+
+    class User {
+        +NewUser(id, name, email string)
+    }
+
+    class SeatType {
+        <<enumeration>>
+        SeatTypeNormal
+        SeatTypePremium
+    }
+
+    class SeatStatus {
+        <<enumeration>>
+        SeatStatusAvailable
+        SeatStatusBooked
+    }
+
+    class BookingStatus {
+        <<enumeration>>
+        BookingStatusPending
+        BookingStatusConfirmed
+        BookingStatusCancelled
+    }
+
+    MovieTicketBookingSystem "1" --> "*" Movie : movies
+    MovieTicketBookingSystem "1" --> "*" Theater : theaters
+    MovieTicketBookingSystem "1" --> "*" Show : shows
+    MovieTicketBookingSystem "1" --> "*" Booking : bookings
+    Show --> Movie : movie
+    Show --> Theater : theater
+    Show "1" --> "*" Seat : seats
+    Theater "1" --> "*" Show : shows
+    Booking --> User : user
+    Booking --> Show : show
+    Booking "1" --> "*" Seat : seats
+    Booking --> BookingStatus : status
+    Seat --> SeatType : type
+    Seat --> SeatStatus : status

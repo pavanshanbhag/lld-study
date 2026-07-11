@@ -43,3 +43,12 @@ class LRUCache(Generic[K, V]):
             node = self.map[key]
             self.dll.remove(node)
             del self.map[key]
+
+    def size(self) -> int:
+        with self.lock:
+            return len(self.map)
+
+    def clear(self) -> None:
+        with self.lock:
+            self.map.clear()
+            self.dll = DoublyLinkedList()

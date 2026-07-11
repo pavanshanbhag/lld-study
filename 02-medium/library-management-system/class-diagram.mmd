@@ -1,0 +1,31 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class LibraryManager {
+        +NewLibraryManager()
+        +AddBook(book Book)
+        +RemoveBook(isbn string)
+        +GetBook(isbn string) Book
+        +RegisterMember(member Member)
+        +BorrowBook(memberID, isbn string) error
+        +ReturnBook(memberID, isbn string) error
+        +SearchBooks(keyword string) Book
+    }
+
+    class Book {
+        +NewBook(isbn, title, author string, publicationYear int)
+        +IsAvailable() bool
+        +SetAvailable(available bool)
+    }
+
+    class Member {
+        +NewMember(memberID, name, contactInfo string)
+        +BorrowBook(book Book)
+        +ReturnBook(book Book)
+        +GetBorrowedBooks() Book
+    }
+
+    LibraryManager "1" --> "*" Book : catalog
+    LibraryManager "1" --> "*" Member : members
+    Member "1" --> "*" Book : borrowedBooks

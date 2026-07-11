@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
+
 from direction import Direction
 from light_color import LightColor
+
 
 class TrafficObserver(ABC):
     @abstractmethod

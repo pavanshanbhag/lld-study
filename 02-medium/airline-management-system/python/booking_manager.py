@@ -3,19 +3,10 @@ from booking import Booking
 from threading import Lock
 
 class BookingManager:
-    _instance = None
-    _lock = Lock()
-
-    def __new__(cls):
-        if not cls._instance:
-            with cls._lock:
-                if not cls._instance:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self):
         self.bookings = {}
         self.booking_counter = 0
+        self._lock = Lock()
 
     def create_booking(self, flight, passenger, seat, price):
         booking_number = self._generate_booking_number()

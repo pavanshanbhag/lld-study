@@ -51,13 +51,39 @@ CricInfo · Splitwise · Chess · Snake & Ladder · Ride Sharing · Course Regis
 
 Voting System (solution only)
 
+## Toolchain
+
+| Tool | Version |
+|------|---------|
+| Go | **1.25** (`go.mod`) |
+| Python | **3.14** (`.python-version`, managed with [uv](https://docs.astral.sh/uv/)) |
+
+```bash
+# One-time setup
+uv sync
+
+# Run full test suite (33 LLD topics + 19 pattern demos)
+chmod +x tools/check.sh
+./tools/check.sh all
+
+# Tier-specific
+./tools/check.sh easy      # 01-easy (7 topics)
+./tools/check.sh medium    # 02-medium (15 topics)
+./tools/check.sh hard      # 03-hard (11 topics)
+./tools/check.sh patterns  # 19 Go design-pattern demos
+```
+
+**Modernization status:** All 33 LLD topics have constructor-based lifecycle, Go smoke tests (`go test -race`), and Python smoke tests. **parking-lot** remains the full idiomatic reference (ruff + mypy strict). See [docs/MODERNIZATION.md](docs/MODERNIZATION.md).
+
 ## How to run
 
 See [tools/README.md](tools/README.md).
 
 **Go (from repo root):** uncomment an import in `main.go`, then `go run .`
 
-**Python:** `cd <topic>/python && python <name>_demo.py`
+**Python (parking-lot pilot):** `uv run python 01-easy/parking-lot/python/parking_lot_demo.py`
+
+**Other Python topics:** `cd <topic>/python && python3 <name>_demo.py`
 
 ## Attribution
 

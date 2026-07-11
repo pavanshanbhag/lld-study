@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	coffeeMachine := GetCoffeeMachine()
+	coffeeMachine := NewCoffeeMachine()
 
 	// Display coffee menu
 	coffeeMachine.DisplayMenu()

@@ -9,6 +9,7 @@ In Object-Oriented Programming (OOP), an **interface** is a crucial concept that
 An **interface** is a set of method signatures that a type must implement. It defines a contract that implementing types must adhere to.
 
 ### **Key Characteristics of Interfaces in Go**
+
 - Interfaces in Go are **implicit**, meaning types don’t explicitly declare they implement an interface.
 - They define **method signatures** that types must implement.
 - Interfaces **enable polymorphism**, allowing functions to operate on different types that share a common behavior.
@@ -19,6 +20,7 @@ An **interface** is a set of method signatures that a type must implement. It de
 ## **Defining and Implementing an Interface in Go**
 
 ### **Step 1: Define an Interface**
+
 To define an interface, we use the `interface` keyword.
 
 ```go
@@ -34,6 +36,7 @@ type Vehicle interface {
 ```
 
 ### **Step 2: Implement the Interface**
+
 A type implements an interface by defining methods with the same signatures.
 
 ```go
@@ -52,6 +55,7 @@ func (c Car) Stop() {
 ```
 
 ### **Step 3: Using the Implemented Interface**
+
 Now, let's create an instance and call the methods.
 
 ```go
@@ -63,6 +67,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Car is starting...
 Car is stopping...
@@ -98,6 +103,7 @@ func (f FlyingCar) Drive() {
 ```
 
 ### **Usage**
+
 ```go
 func main() {
     var myVehicle Flyable = FlyingCar{}
@@ -109,6 +115,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 FlyingCar is flying...
 FlyingCar is driving...
@@ -161,6 +168,7 @@ func (p PayPalPayment) Pay(amount float64) {
 ```
 
 ### **Usage**
+
 ```go
 func main() {
     var payment1 Payment = CreditCardPayment{}
@@ -172,6 +180,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Paid 100.50 using Credit Card
 Paid 200.75 using PayPal

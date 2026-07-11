@@ -5,16 +5,10 @@ from registration import Registration
 from datetime import datetime
 
 class CourseRegistrationSystem:
-    instance = None
-    courses: Dict[str, Course] = {}
-    students: Dict[int, Student] = {}
-    registrations: List[Registration] = []
-
-    @staticmethod
-    def get_instance():
-        if CourseRegistrationSystem.instance is None:
-            CourseRegistrationSystem.instance = CourseRegistrationSystem()
-        return CourseRegistrationSystem.instance
+    def __init__(self):
+        self.courses: Dict[str, Course] = {}
+        self.students: Dict[int, Student] = {}
+        self.registrations: List[Registration] = []
 
     def add_course(self, course: Course):
         self.courses[course.get_code()] = course

@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	bookingSystem := GetBookingSystem()
+	bookingSystem := NewMovieTicketBookingSystem()
 
 	// Add movies
 	movie1 := NewMovie("M1", "Movie 1", "Description 1", 120)

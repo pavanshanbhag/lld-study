@@ -1,0 +1,59 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class SocialNetwork {
+        +NewSocialNetwork()
+        +RegisterUser(user User) error
+        +LoginUser(email, password string) User
+        +UpdateUserProfile(user User)
+        +SendFriendRequest(senderID, receiverID string) error
+        +AcceptFriendRequest(userID, friendID string) error
+        +CreatePost(post Post) error
+        +GetNewsfeed(userID string) Post
+        +LikePost(userID, postID string) error
+        +CommentOnPost(comment Comment) error
+        +GetNotifications(userID string) Notification
+    }
+
+    class User {
+        +NewUser(id, name, email, password, profilePicture, bio string)
+        +AddFriend(friendID string)
+        +AddPost(post Post)
+        +GetFriends() string
+        +GetPosts() Post
+    }
+
+    class Post {
+        +NewPost(id, userID, content string, imageURLs, videoURLs []string)
+        +AddLike(userID string) bool
+        +AddComment(comment Comment)
+        +GetLikes() string
+        +GetComments() Comment
+    }
+
+    class Comment {
+        +NewComment(id, userID, postID, content string)
+    }
+
+    class Notification {
+        +NewNotification(id, userID string, notifType NotificationType, content string)
+    }
+
+    class NotificationType {
+        <<enumeration>>
+        FriendRequest
+        FriendRequestAccepted
+        Like
+        Comment
+        Mention
+    }
+
+    SocialNetwork "1" --> "*" User
+    SocialNetwork "1" --> "*" Post
+    SocialNetwork "1" --> "*" Notification
+    User "1" --> "*" Post
+    Post "1" --> "*" Comment
+    Post --> User : UserID
+    Comment --> Post : PostID
+    Notification --> NotificationType

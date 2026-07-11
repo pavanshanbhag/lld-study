@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
+
 from coin import Coin
 
 if TYPE_CHECKING:
@@ -9,7 +10,7 @@ if TYPE_CHECKING:
 class VendingMachineState(ABC):
     """Abstract base class for all vending machine states."""
     
-    def __init__(self, machine: 'VendingMachine'):
+    def __init__(self, machine: VendingMachine):
         self.machine = machine
     
     @abstractmethod

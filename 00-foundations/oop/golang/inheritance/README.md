@@ -11,6 +11,7 @@ Unlike traditional OOP languages like Java and C++, **Go does not have classical
 Go does not support class-based inheritance. Instead, it uses **struct embedding**, which allows one struct to include another, inheriting its fields and methods. This achieves a similar effect to traditional inheritance.
 
 ### **Key Benefits of Struct Embedding in Go**
+
 - **Composition over Inheritance**: Encourages modular and maintainable design.
 - **Code Reusability**: Allows reusing functionality without rigid class hierarchies.
 - **Method Overriding**: Embedded structs’ methods can be overridden in the outer struct.
@@ -21,6 +22,7 @@ Go does not support class-based inheritance. Instead, it uses **struct embedding
 ## **How to Implement Inheritance-like Behavior in Go**
 
 ### **Step 1: Define a Parent Struct**
+
 A struct in Go acts like a class with fields and methods.
 
 ```go
@@ -39,6 +41,7 @@ func (a Animal) Eat() {
 ```
 
 ### **Step 2: Embed the Parent Struct in a Child Struct**
+
 The `Dog` struct embeds `Animal`, inheriting its fields and methods.
 
 ```go
@@ -53,6 +56,7 @@ func (d Dog) Bark() {
 ```
 
 ### **Step 3: Use the Child Struct**
+
 We create an instance of `Dog`, which has access to both `Animal` and `Dog` methods.
 
 ```go
@@ -64,6 +68,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Buddy is eating...
 Buddy is barking...
@@ -94,6 +99,7 @@ type Car struct {
 ```
 
 ### **Usage**
+
 ```go
 func main() {
     myCar := Car{Engine{200}, Wheels{4}}
@@ -103,6 +109,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Horsepower: 200
 Wheels: 4
@@ -134,6 +141,7 @@ func (d Dog) Speak() {
 ```
 
 ### **Usage**
+
 ```go
 func main() {
     myDog := Dog{Animal{Name: "Buddy"}}
@@ -142,6 +150,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Buddy barks
 ```
@@ -167,6 +176,7 @@ func (d Dog) Speak() {
 ```
 
 ### **Usage**
+
 ```go
 func main() {
     var myAnimal Animal = Dog{Name: "Buddy"}
@@ -175,6 +185,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Buddy barks
 ```

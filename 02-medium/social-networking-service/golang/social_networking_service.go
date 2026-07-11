@@ -14,20 +14,12 @@ type SocialNetwork struct {
 	mu            sync.RWMutex
 }
 
-var (
-	instance *SocialNetwork
-	once     sync.Once
-)
-
-func GetSocialNetwork() *SocialNetwork {
-	once.Do(func() {
-		instance = &SocialNetwork{
-			users:         make(map[string]*User),
-			posts:         make(map[string]*Post),
-			notifications: make(map[string][]*Notification),
-		}
-	})
-	return instance
+func NewSocialNetwork() *SocialNetwork {
+	return &SocialNetwork{
+		users:         make(map[string]*User),
+		posts:         make(map[string]*Post),
+		notifications: make(map[string][]*Notification),
+	}
 }
 
 func (sn *SocialNetwork) RegisterUser(user *User) error {
@@ -63,11 +55,8 @@ func (sn *SocialNetwork) SendFriendRequest(senderID, receiverID string) error {
 	sn.mu.Lock()
 	defer sn.mu.Unlock()
 
-	receiver, exists := sn.users[receiverID]
-	if !exists {
+	if _, exists := sn.users[receiverID]; !exists {
 		return fmt.Errorf("receiver not found")
-	} else {
-		fmt.Printf(receiver.ID)
 	}
 
 	notification := NewNotification(

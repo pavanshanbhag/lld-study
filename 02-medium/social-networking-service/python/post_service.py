@@ -1,12 +1,14 @@
+from typing import List
+
+from commentable_entity import Comment, Post
 from post_observer import PostObserver
 from repository import PostRepository
 from user import User
-from typing import List
-from commentable_entity import Post, Comment
+
 
 class PostService:
-    def __init__(self):
-        self.post_repository = PostRepository.get_instance()
+    def __init__(self, post_repository: PostRepository):
+        self.post_repository = post_repository
         self.observers: List[PostObserver] = []
 
     def add_observer(self, observer: PostObserver):

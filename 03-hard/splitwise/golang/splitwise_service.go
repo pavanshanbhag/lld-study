@@ -12,17 +12,11 @@ type SplitwiseService struct {
 	mu      sync.Mutex
 }
 
-var instance *SplitwiseService
-var once sync.Once
-
-func GetSplitwiseService() *SplitwiseService {
-	once.Do(func() {
-		instance = &SplitwiseService{
-			users:  make(map[string]*User),
-			groups: make(map[string]*Group),
-		}
-	})
-	return instance
+func NewSplitwiseService() *SplitwiseService {
+	return &SplitwiseService{
+		users:  make(map[string]*User),
+		groups: make(map[string]*Group),
+	}
 }
 
 func (s *SplitwiseService) AddUser(user *User) {

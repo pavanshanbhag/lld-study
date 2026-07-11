@@ -44,14 +44,14 @@ python3 -m python.main
 
 ## Running Go demos
 
-From the pattern's `golang/` folder (most have their own `go.mod` and `main.go`):
+Requires **Go 1.25** (same as repo root `go.mod`). Each pattern has its own `go.mod` under `golang/`:
 
 ```bash
 cd 00-foundations/design-patterns/behavioral/strategy/golang
-go run .
+go run ./cmd/demo/
 ```
 
-Patterns without a local `go.mod` can still be read as reference code.
+All 19 Go patterns use `cmd/demo/` — run from the pattern's `golang/` directory.
 
 ---
 
@@ -98,7 +98,7 @@ Patterns without a local `go.mod` can still be read as reference code.
 
 ```
 <category>/<pattern>/
-├── golang/          # Go implementation (+ go.mod, main.go where applicable)
+├── golang/          # Go implementation (go.mod go 1.25, cmd/demo/)
 └── python/          # Python implementation (__init__.py + demo modules)
     ├── __init__.py
     ├── ...

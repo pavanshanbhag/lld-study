@@ -1,18 +1,19 @@
 import threading
-from typing import List, Optional, Set
-from datetime import date
 import uuid
-from user import User
-from task_priority import TaskPriority
-from task_status import TaskStatus
-from comment import Comment
+from datetime import date
+
 from activity_log import ActivityLog
-from task_state import TodoState, TaskState
-from task_observer import TaskObserver
+from comment import Comment
 from tag import Tag
+from task_observer import TaskObserver
+from task_priority import TaskPriority
+from task_state import TaskState, TodoState
+from task_status import TaskStatus
+from user import User
+
 
 class Task:
-    def __init__(self, builder: 'TaskBuilder'):
+    def __init__(self, builder: TaskBuilder):
         self._id = builder._id
         self._title = builder._title
         self._description = builder._description
@@ -22,10 +23,10 @@ class Task:
         self._assignee = builder._assignee
         self._tags = builder._tags
         self._current_state = TodoState()  # Initial state
-        self._comments: List[Comment] = []
-        self._subtasks: List['Task'] = []
-        self._activity_logs: List[ActivityLog] = []
-        self._observers: List[TaskObserver] = []
+        self._comments: list[Comment] = []
+        self._subtasks: list[Task] = []
+        self._activity_logs: list[ActivityLog] = []
+        self._observers: list[TaskObserver] = []
         self._lock = threading.Lock()
         self.add_log(f"Task created with title: {self._title}")
     
@@ -46,7 +47,7 @@ class Task:
             self.add_log(f"Comment added by {comment.author.name}")
             self.notify_observers("comment")
     
-    def add_subtask(self, subtask: 'Task'):
+    def add_subtask(self, subtask: Task):
         with self._lock:
             self._subtasks.append(subtask)
             self.add_log(f"Subtask added: {subtask.get_title()}")
@@ -107,7 +108,7 @@ class Task:
     def get_due_date(self) -> date:
         return self._due_date
     
-    def get_assignee(self) -> Optional[User]:
+    def get_assignee(self) -> User | None:
         return self._assignee
     
     def set_title(self, title: str):
@@ -131,29 +132,29 @@ class Task:
             self._assignee = None
             self._tags = set()
         
-        def description(self, description: str) -> 'Task.TaskBuilder':
+        def description(self, description: str) -> Task.TaskBuilder:
             self._description = description
             return self
         
-        def due_date(self, due_date: date) -> 'Task.TaskBuilder':
+        def due_date(self, due_date: date) -> Task.TaskBuilder:
             self._due_date = due_date
             return self
         
-        def priority(self, priority: TaskPriority) -> 'Task.TaskBuilder':
+        def priority(self, priority: TaskPriority) -> Task.TaskBuilder:
             self._priority = priority
             return self
         
-        def assignee(self, assignee: User) -> 'Task.TaskBuilder':
+        def assignee(self, assignee: User) -> Task.TaskBuilder:
             self._assignee = assignee
             return self
         
-        def created_by(self, created_by: User) -> 'Task.TaskBuilder':
+        def created_by(self, created_by: User) -> Task.TaskBuilder:
             self._created_by = created_by
             return self
         
-        def tags(self, tags: Set[Tag]) -> 'Task.TaskBuilder':
+        def tags(self, tags: set[Tag]) -> Task.TaskBuilder:
             self._tags = tags
             return self
         
-        def build(self) -> 'Task':
+        def build(self) -> Task:
             return Task(self)

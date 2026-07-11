@@ -13,20 +13,12 @@ type CourseRegistrationSystem struct {
 	mu            sync.RWMutex
 }
 
-var (
-	instance *CourseRegistrationSystem
-	once     sync.Once
-)
-
-func GetRegistrationSystem() *CourseRegistrationSystem {
-	once.Do(func() {
-		instance = &CourseRegistrationSystem{
-			courses:       make(map[string]*Course),
-			students:      make(map[int]*Student),
-			registrations: make([]*Registration, 0),
-		}
-	})
-	return instance
+func NewCourseRegistrationSystem() *CourseRegistrationSystem {
+	return &CourseRegistrationSystem{
+		courses:       make(map[string]*Course),
+		students:      make(map[int]*Student),
+		registrations: make([]*Registration, 0),
+	}
 }
 
 func (rs *CourseRegistrationSystem) AddCourse(course *Course) {

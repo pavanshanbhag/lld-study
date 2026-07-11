@@ -12,19 +12,11 @@ type AuctionSystem struct {
 	mu              sync.RWMutex
 }
 
-var (
-	instance *AuctionSystem
-	once     sync.Once
-)
-
-func GetInstance() *AuctionSystem {
-	once.Do(func() {
-		instance = &AuctionSystem{
-			users:           make(map[string]*User),
-			auctionListings: make(map[string]*AuctionListing),
-		}
-	})
-	return instance
+func NewAuctionSystem() *AuctionSystem {
+	return &AuctionSystem{
+		users:           make(map[string]*User),
+		auctionListings: make(map[string]*AuctionListing),
+	}
 }
 
 func (as *AuctionSystem) RegisterUser(user *User) {

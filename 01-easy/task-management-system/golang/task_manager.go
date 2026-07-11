@@ -11,17 +11,11 @@ type TaskManager struct {
 	mu        sync.Mutex
 }
 
-var instance *TaskManager
-var once sync.Once
-
-func GetTaskManager() *TaskManager {
-	once.Do(func() {
-		instance = &TaskManager{
-			tasks:     make(map[string]*Task),
-			userTasks: make(map[string][]*Task),
-		}
-	})
-	return instance
+func NewTaskManager() *TaskManager {
+	return &TaskManager{
+		tasks:     make(map[string]*Task),
+		userTasks: make(map[string][]*Task),
+	}
 }
 
 func (tm *TaskManager) CreateTask(task *Task) {

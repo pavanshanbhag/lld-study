@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from transaction_service import TransactionService
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from book_copy import BookCopy
     from member import Member
+
 
 class ItemState(ABC):
     @abstractmethod
@@ -22,7 +22,7 @@ class ItemState(ABC):
 
 class AvailableState(ItemState):
     def checkout(self, book_copy: 'BookCopy', member: 'Member') -> None:
-        TransactionService.get_instance().create_loan(book_copy, member)
+        book_copy.get_transaction_service().create_loan(book_copy, member)
         book_copy.set_state(CheckedOutState())
         print(f"{book_copy.get_id()} checked out by {member.get_name()}")
 
@@ -38,13 +38,12 @@ class CheckedOutState(ItemState):
         print(f"{book_copy.get_id()} is already checked out.")
 
     def return_item(self, book_copy: 'BookCopy') -> None:
-        TransactionService.get_instance().end_loan(book_copy)
+        book_copy.get_transaction_service().end_loan(book_copy)
         print(f"{book_copy.get_id()} returned.")
-        
-        # If there are holds, move to OnHold state. Otherwise, become Available.
+
         if book_copy.get_item().has_observers():
             book_copy.set_state(OnHoldState())
-            book_copy.get_item().notify_observers()  # Notify members that item is back but on hold
+            book_copy.get_item().notify_observers()
         else:
             book_copy.set_state(AvailableState())
 
@@ -55,10 +54,9 @@ class CheckedOutState(ItemState):
 
 class OnHoldState(ItemState):
     def checkout(self, book_copy: 'BookCopy', member: 'Member') -> None:
-        # Only a member who placed the hold can check it out.
         if book_copy.get_item().is_observer(member):
-            TransactionService.get_instance().create_loan(book_copy, member)
-            book_copy.get_item().remove_observer(member)  # Remove from waiting list
+            book_copy.get_transaction_service().create_loan(book_copy, member)
+            book_copy.get_item().remove_observer(member)
             book_copy.set_state(CheckedOutState())
             print(f"Hold fulfilled. {book_copy.get_id()} checked out by {member.get_name()}")
         else:

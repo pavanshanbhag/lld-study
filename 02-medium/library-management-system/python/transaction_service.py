@@ -1,28 +1,20 @@
-from typing import Dict, Optional, TYPE_CHECKING
+from typing import Dict
 from loan import Loan
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from book_copy import BookCopy
     from member import Member
 
+
 class TransactionService:
-    _instance: Optional['TransactionService'] = None
-
     def __init__(self):
-        if TransactionService._instance is not None:
-            raise Exception("This class is a singleton!")
-        self.active_loans: Dict[str, Loan] = {}  # Key: BookCopy ID
-
-    @staticmethod
-    def get_instance() -> 'TransactionService':
-        if TransactionService._instance is None:
-            TransactionService._instance = TransactionService()
-        return TransactionService._instance
+        self.active_loans: Dict[str, Loan] = {}
 
     def create_loan(self, book_copy: 'BookCopy', member: 'Member') -> None:
         if book_copy.get_id() in self.active_loans:
             raise ValueError("This copy is already on loan.")
-        
+
         loan = Loan(book_copy, member)
         self.active_loans[book_copy.get_id()] = loan
         member.add_loan(loan)

@@ -10,15 +10,8 @@ type TrafficController struct {
 	mu    sync.Mutex
 }
 
-var instance *TrafficController
-var once sync.Once
-
-// GetTrafficController returns the singleton instance of TrafficController
-func GetTrafficController() *TrafficController {
-	once.Do(func() {
-		instance = &TrafficController{roads: make(map[string]*Road)}
-	})
-	return instance
+func NewTrafficController() *TrafficController {
+	return &TrafficController{roads: make(map[string]*Road)}
 }
 
 func (tc *TrafficController) AddRoad(road *Road) {

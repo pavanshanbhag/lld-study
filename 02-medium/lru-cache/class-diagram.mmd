@@ -1,0 +1,21 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class LRUCache {
+        +NewLRUCache(capacity int) LRUCache
+        +Get(key K) (V, bool)
+        +Put(key K, value V)
+        +Size() int
+        +Clear()
+    }
+
+    class Node {
+        key K
+        value V
+        prev Node
+        next Node
+    }
+
+    LRUCache "1" --> "*" Node : doubly linked list
+    LRUCache "1" --> map : cache map~K, Node~

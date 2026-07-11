@@ -1,0 +1,36 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class TrafficController {
+        +NewTrafficController()
+        +AddRoad(road Road)
+        +StartTrafficControl()
+        +HandleEmergency(roadID string)
+    }
+
+    class Road {
+        +NewRoad(id, name string)
+        +SetTrafficLight(tl TrafficLight)
+        +ID string
+        +Name string
+    }
+
+    class TrafficLight {
+        +NewTrafficLight(id string, red, yellow, green ms int)
+        +ChangeSignal(signal Signal)
+        +RedDuration int
+        +YellowDuration int
+        +GreenDuration int
+    }
+
+    class Signal {
+        <<enumeration>>
+        Red
+        Yellow
+        Green
+    }
+
+    TrafficController "1" --> "*" Road : roads
+    Road "1" --> "1" TrafficLight : trafficLight
+    TrafficLight --> Signal : current

@@ -13,6 +13,7 @@ Polymorphism in Go is primarily achieved using **interfaces**, as Go does not su
 **Polymorphism** means "many forms." It allows a method, function, or object to behave differently based on the context. Polymorphism enables **dynamic method resolution** and **method flexibility**, making applications easier to extend and maintain.
 
 ### **Key Benefits of Polymorphism**
+
 - **Code Reusability**: Write a single interface that works for multiple types.
 - **Scalability**: Add new functionalities with minimal code changes.
 - **Maintainability**: Reduce complexity and improve code clarity.
@@ -61,12 +62,14 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Dog barks
 Cat meows
 ```
 
 **Why Use Interfaces for Polymorphism?**
+
 - Provides a flexible and modular design.
 - Encourages dependency inversion and loose coupling.
 - Allows multiple types to satisfy the same interface.
@@ -116,12 +119,14 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Car is starting...
 Bike is starting...
 ```
 
 **Why Use Function Parameters for Polymorphism?**
+
 - Allows flexible function behavior based on the type passed.
 - Enhances code modularity and testability.
 
@@ -167,12 +172,14 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Paid 100.50 using Credit Card
 Paid 200.75 using PayPal
 ```
 
 **Why Use Polymorphism in Payment Systems?**
+
 - Allows new payment methods to be added **without modifying existing code**.
 - Provides a **flexible and scalable** design.
 - Improves **code readability and maintainability**.

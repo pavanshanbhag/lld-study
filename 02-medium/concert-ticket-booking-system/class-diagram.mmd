@@ -1,0 +1,64 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class ConcertTicketBookingSystem {
+        +NewBookingSystem()
+        +AddConcert(concert Concert)
+        +GetConcert(concertID string) Concert
+        +SearchConcerts(artist, venue string, dateTime time.Time) Concert
+        +BookTickets(user User, concert Concert, seats Seat) Booking
+        +CancelBooking(bookingID string)
+    }
+
+    class Concert {
+        +NewConcert(id, artist, venue string, dateTime time.Time, seats Seat)
+    }
+
+    class Booking {
+        +NewBooking(id string, user User, concert Concert, seats Seat)
+        +ConfirmBooking()
+        +CancelBooking()
+    }
+
+    class User {
+        +NewUser(id, name, email string)
+    }
+
+    class Seat {
+        +NewSeat(id, seatNumber string, seatType SeatType, price float64)
+        +Book() error
+        +Release()
+        +GetStatus() SeatStatus
+    }
+
+    class SeatType {
+        <<enumeration>>
+        Regular
+        Premium
+        VIP
+    }
+
+    class SeatStatus {
+        <<enumeration>>
+        Available
+        Booked
+        Reserved
+    }
+
+    class BookingStatus {
+        <<enumeration>>
+        Pending
+        Confirmed
+        Cancelled
+    }
+
+    ConcertTicketBookingSystem "1" --> "*" Concert
+    ConcertTicketBookingSystem "1" --> "*" Booking
+    Concert "1" --> "*" Seat
+    Booking --> User
+    Booking --> Concert
+    Booking "1" --> "*" Seat
+    Booking --> BookingStatus
+    Seat --> SeatType
+    Seat --> SeatStatus

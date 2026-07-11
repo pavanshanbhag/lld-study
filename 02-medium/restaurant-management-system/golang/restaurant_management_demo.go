@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	restaurant := GetRestaurantInstance()
+	restaurant := NewRestaurant()
 
 	// Add menu items
 	restaurant.AddMenuItem(NewMenuItem(1, "Burger", "Delicious burger", 9.99, true))

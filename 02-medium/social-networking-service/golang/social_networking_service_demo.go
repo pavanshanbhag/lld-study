@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	socialNetwork := GetSocialNetwork()
+	socialNetwork := NewSocialNetwork()
 
 	// Create users
 	user1 := NewUser("1", "John Doe", "john@example.com", "password", "profile1.jpg", "I love coding!")

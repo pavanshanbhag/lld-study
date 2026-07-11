@@ -1,0 +1,81 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class DigitalWallet {
+        +NewDigitalWallet()
+        +CreateUser(user User)
+        +CreateAccount(account Account)
+        +AddPaymentMethod(method PaymentMethod)
+        +TransferFunds(sourceAccount, destinationAccount Account, amount big.Float, currency Currency) error
+        +GetTransactionHistory(account Account) Transaction
+    }
+
+    class User {
+        +NewUser(id, name, email, password string)
+        +AddAccount(account Account)
+        +RemoveAccount(account Account)
+    }
+
+    class Account {
+        +NewAccount(id string, user User, accountNumber string, currency Currency)
+        +Deposit(amount big.Float)
+        +Withdraw(amount big.Float) error
+        +GetBalance() big.Float
+        +AddTransaction(transaction Transaction)
+        +GetTransactions() Transaction
+    }
+
+    class Transaction {
+        +NewTransaction(id string, sourceAccount, destinationAccount Account, amount big.Float, currency Currency)
+    }
+
+    class CurrencyConverter {
+        +NewCurrencyConverter()
+        +Convert(amount big.Float, sourceCurrency, targetCurrency Currency) big.Float
+    }
+
+    class PaymentMethod {
+        <<interface>>
+        +ProcessPayment(amount big.Float, currency Currency) bool
+        +GetID() string
+        +GetUser() User
+    }
+
+    class BasePaymentMethod {
+        ID string
+        User User
+        +GetID() string
+        +GetUser() User
+    }
+
+    class CreditCard {
+        +NewCreditCard(id string, user User, cardNumber, expirationDate, cvv string)
+        +ProcessPayment(amount big.Float, currency Currency) bool
+    }
+
+    class BankAccount {
+        +NewBankAccount(id string, user User, accountNumber, routingNumber string)
+        +ProcessPayment(amount big.Float, currency Currency) bool
+    }
+
+    class Currency {
+        <<enumeration>>
+        USD
+        EUR
+        GBP
+        JPY
+    }
+
+    DigitalWallet "1" --> "*" User
+    DigitalWallet "1" --> "*" Account
+    DigitalWallet "1" --> "*" PaymentMethod
+    DigitalWallet "1" --> "1" CurrencyConverter
+    User "1" --> "*" Account
+    Account "1" --> "*" Transaction
+    Transaction --> Account : source, destination
+    PaymentMethod <|.. CreditCard
+    PaymentMethod <|.. BankAccount
+    BasePaymentMethod <|-- CreditCard
+    BasePaymentMethod <|-- BankAccount
+    Account --> Currency

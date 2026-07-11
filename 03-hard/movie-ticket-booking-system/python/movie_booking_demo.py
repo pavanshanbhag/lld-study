@@ -12,7 +12,7 @@ class MovieBookingDemo:
   @staticmethod
   def main():
       # Setup
-      service = MovieBookingService.get_instance()
+      service = MovieBookingService()
 
       nyc = service.add_city("city1", "New York")
       la = service.add_city("city2", "Los Angeles")

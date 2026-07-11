@@ -10,7 +10,8 @@ Association is **not inheritance**—rather, it is a relationship between object
 
 Association defines a connection between two structs, where one struct is linked to another. The association can be **one-to-one**, **one-to-many**, **many-to-one**, or **many-to-many**. Objects in an association can exist independently of each other.
 
-### Key Characteristics of Association:
+### Key Characteristics of Association
+
 - Represents a **uses-a** or **knows-a** relationship.
 - Objects in an association **can exist independently**.
 - Can be **unidirectional** or **bidirectional**.
@@ -61,7 +62,8 @@ func main() {
 }
 ```
 
-### Output:
+### Output
+
 ```
 Mr. Smith teaches:
  - Alice
@@ -75,20 +77,24 @@ Mrs. Johnson teaches:
 ## Types of Association
 
 ### 1. **One-to-One Association**
-   - Each object of struct A is associated with one object of struct B.
-   - Example: A `Person` has one `Passport`.
+
+- Each object of struct A is associated with one object of struct B.
+- Example: A `Person` has one `Passport`.
 
 ### 2. **One-to-Many Association**
-   - One object of struct A can be associated with multiple objects of struct B.
-   - Example: A `Teacher` teaches multiple `Students`.
+
+- One object of struct A can be associated with multiple objects of struct B.
+- Example: A `Teacher` teaches multiple `Students`.
 
 ### 3. **Many-to-One Association**
-   - Multiple objects of struct A can be associated with one object of struct B.
-   - Example: Multiple `Students` belong to one `School`.
+
+- Multiple objects of struct A can be associated with one object of struct B.
+- Example: Multiple `Students` belong to one `School`.
 
 ### 4. **Many-to-Many Association**
-   - Multiple objects of struct A can be associated with multiple objects of struct B.
-   - Example: `Teachers` and `Students`.
+
+- Multiple objects of struct A can be associated with multiple objects of struct B.
+- Example: `Teachers` and `Students`.
 
 ---
 
@@ -162,7 +168,8 @@ func main() {
 }
 ```
 
-### Output:
+### Output
+
 ```
 Books in City Library:
  - 1984

@@ -1,0 +1,31 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class CoffeeMachine {
+        +NewCoffeeMachine()
+        +DisplayMenu()
+        +SelectCoffee(name string) Coffee
+        +DispenseCoffee(coffee Coffee, payment Payment) error
+    }
+
+    class Coffee {
+        +GetName() string
+        +GetPrice() float64
+        +GetRecipe() map
+    }
+
+    class Ingredient {
+        +GetName() string
+        +GetQuantity() int
+        +UpdateQuantity(delta int)
+    }
+
+    class Payment {
+        +NewPayment(amount float64)
+    }
+
+    CoffeeMachine "1" --> "*" Coffee : menu
+    CoffeeMachine "1" --> "*" Ingredient : inventory
+    Coffee "1" --> "*" Ingredient : recipe uses
+    CoffeeMachine ..> Payment : accepts

@@ -1,0 +1,80 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class StockBroker {
+        +NewStockBroker()
+        +CreateAccount(user User, initialBalance float64)
+        +GetAccount(accountID string) Account
+        +AddStock(stock Stock)
+        +GetStock(symbol string) Stock
+        +PlaceOrder(order Order)
+    }
+
+    class User {
+        +NewUser(userID, name, email string)
+    }
+
+    class Account {
+        +NewAccount(accountID string, user User, initialBalance float64)
+        +Deposit(amount float64)
+        +Withdraw(amount float64) error
+        +GetBalance() float64
+    }
+
+    class Portfolio {
+        +NewPortfolio(account Account)
+        +AddStock(stock Stock, quantity int)
+        +RemoveStock(stock Stock, quantity int) error
+        +GetHoldings() map
+    }
+
+    class Stock {
+        +NewStock(symbol, name string, price float64)
+        +UpdatePrice(newPrice float64)
+        +GetPrice() float64
+    }
+
+    class Order {
+        <<interface>>
+        +Execute() error
+        +GetStatus() OrderStatus
+        +SetStatus(status OrderStatus)
+    }
+
+    class BaseOrder {
+        +GetStatus() OrderStatus
+        +SetStatus(status OrderStatus)
+    }
+
+    class BuyOrder {
+        +NewBuyOrder(orderID string, account Account, stock Stock, quantity int, price float64)
+        +Execute() error
+    }
+
+    class SellOrder {
+        +NewSellOrder(orderID string, account Account, stock Stock, quantity int, price float64)
+        +Execute() error
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        OrderStatusPending
+        OrderStatusExecuted
+        OrderStatusRejected
+    }
+
+    StockBroker "1" --> "*" Account : accounts
+    StockBroker "1" --> "*" Stock : stocks
+    StockBroker ..> Order : orderQueue
+    Account --> User : user
+    Account "1" --> "1" Portfolio : portfolio
+    Order <|.. BuyOrder
+    Order <|.. SellOrder
+    BaseOrder <|-- BuyOrder
+    BaseOrder <|-- SellOrder
+    BaseOrder --> Account : account
+    BaseOrder --> Stock : stock
+    BaseOrder --> OrderStatus : status
+    Portfolio --> Account : account
+    Portfolio ..> Stock : holdings

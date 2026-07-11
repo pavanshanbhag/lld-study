@@ -6,7 +6,7 @@ import (
 )
 
 func Run() {
-	digitalWallet := GetDigitalWallet()
+	digitalWallet := NewDigitalWallet()
 
 	// Create users
 	user1 := NewUser("U001", "John Doe", "john@example.com", "password123")

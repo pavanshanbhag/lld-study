@@ -5,6 +5,7 @@
 **Encapsulation** is one of the four fundamental principles of Object-Oriented Programming (OOP). It is the practice of **bundling data (variables) and methods** that operate on that data into a single unit (struct) while restricting direct access to the internal details.
 
 Encapsulation in Golang is achieved using:
+
 1. **Exported and Unexported Fields (Visibility Control)**
 2. **Getters and Setters (Methods for Data Access)**
 3. **Data Hiding**
@@ -16,6 +17,7 @@ Encapsulation helps in **data protection, modularity, and maintainability** of t
 Encapsulation means **wrapping** the data (fields) and code (methods) together into a single unit (struct). It restricts direct access to some of an object's components, which helps protect data integrity and prevents unintended modifications.
 
 ### **Key Benefits of Encapsulation**
+
 - **Data Hiding**: Prevents direct access to sensitive data.
 - **Increased Security**: Controls how data is accessed and modified.
 - **Improved Code Maintainability**: Allows changes without affecting other parts of the code.
@@ -26,6 +28,7 @@ Encapsulation means **wrapping** the data (fields) and code (methods) together i
 ## **Encapsulation Using Exported and Unexported Fields**
 
 Golang does not have traditional access modifiers like `private`, `protected`, or `public`. Instead, it uses **capitalization** to determine visibility:
+
 - **Exported fields (Public)**: Fields that start with an **uppercase letter** can be accessed outside the package.
 - **Unexported fields (Private)**: Fields that start with a **lowercase letter** are only accessible within the same package.
 
@@ -73,6 +76,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Current Balance: 1000
 Deposited: 500
@@ -80,6 +84,7 @@ Updated Balance: 1500
 ```
 
 **Why Use Encapsulation?**
+
 - Prevents unauthorized access to the data.
 - Allows controlled modifications through methods.
 
@@ -138,6 +143,7 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Employee Name: John Doe
 Employee Age: 25
@@ -196,12 +202,14 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Withdrawal Successful: 300
 Remaining Balance: 700
 ```
 
 **Why Hide Data?**
+
 - Prevents direct modification of important fields.
 - Ensures data integrity by validating inputs.
 
@@ -210,6 +218,7 @@ Remaining Balance: 700
 ## **Encapsulation in Real-World Applications**
 
 Encapsulation is used in many real-world applications such as:
+
 1. **Banking Systems** - Ensuring account details are private.
 2. **Healthcare Applications** - Protecting patient records.
 3. **E-Commerce Platforms** - Hiding payment processing details.
@@ -252,11 +261,13 @@ func main() {
 ```
 
 ### **Output:**
+
 ```
 Processing payment of 250 for card ****-****-****-5678
 ```
 
 **Why Use Encapsulation in Payment Processing?**
+
 - Protects sensitive data (e.g., credit card numbers).
 - Hides unnecessary details from users.
 - Ensures secure transactions.

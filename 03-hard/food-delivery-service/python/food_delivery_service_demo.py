@@ -10,7 +10,7 @@ class FoodDeliveryServiceDemo:
     @staticmethod
     def main():
         # 1. Setup the system
-        service = FoodDeliveryService.get_instance()
+        service = FoodDeliveryService()
         service.set_assignment_strategy(NearestAvailableAgentStrategy())
 
         # 2. Define Addresses

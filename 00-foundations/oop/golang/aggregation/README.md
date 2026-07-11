@@ -10,7 +10,8 @@ Aggregation allows for better modularity, code reuse, and maintainability. It is
 
 Aggregation is a form of association in OOP where an object of one struct contains a reference (pointer) to an object of another struct. However, the contained object can exist independently of the container. This means that even if the container object is destroyed, the contained object can still be used elsewhere in the application.
 
-### Key Characteristics of Aggregation:
+### Key Characteristics of Aggregation
+
 - Represents a **has-a** relationship.
 - The contained object **can exist independently** of the container.
 - Implemented using references (pointers) to objects.
@@ -68,7 +69,8 @@ func main() {
 }
 ```
 
-### Output:
+### Output
+
 ```
 Professors at Harvard University:
  - Dr. Smith
@@ -81,28 +83,32 @@ Dr. Johnson is teaching Mathematics
 
 ## Aggregation vs Composition
 
-| Feature       | Aggregation | Composition |
-|--------------|------------|-------------|
-| Relationship | "Has-a"    | "Has-a"     |
+| Feature      | Aggregation                                  | Composition                                             |
+| ------------ | -------------------------------------------- | ------------------------------------------------------- |
+| Relationship | "Has-a"                                      | "Has-a"                                                 |
 | Ownership    | Contained object **can exist independently** | Contained object **cannot exist without** the container |
-| Lifetime     | Contained object **outlives** the container | Contained object **is destroyed** with the container |
-| Example      | University and Professors | Car and Engine |
+| Lifetime     | Contained object **outlives** the container  | Contained object **is destroyed** with the container    |
+| Example      | University and Professors                    | Car and Engine                                          |
 
 ---
 
 ## Why Use Aggregation?
 
 ### 1. **Promotes Code Reusability**
-   - Aggregated objects can be used in multiple places without being tightly coupled to a single container struct.
+
+- Aggregated objects can be used in multiple places without being tightly coupled to a single container struct.
 
 ### 2. **Encourages Loose Coupling**
-   - Aggregation allows objects to interact without being dependent on the lifecycle of each other.
+
+- Aggregation allows objects to interact without being dependent on the lifecycle of each other.
 
 ### 3. **Better Maintainability**
-   - Changes in one struct do not heavily impact the other, making the codebase easier to modify and extend.
+
+- Changes in one struct do not heavily impact the other, making the codebase easier to modify and extend.
 
 ### 4. **Real-World Applicability**
-   - Many real-world relationships, such as a school and its teachers, a company and its employees, naturally fit the aggregation model.
+
+- Many real-world relationships, such as a school and its teachers, a company and its employees, naturally fit the aggregation model.
 
 ---
 
@@ -159,7 +165,8 @@ func main() {
 }
 ```
 
-### Output:
+### Output
+
 ```
 Professors at MIT:
 Dr. Adams is teaching Physics

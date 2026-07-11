@@ -2,21 +2,12 @@ import uuid
 from repository import PlayerRepository, MatchRepository
 from match import Match
 from match_states import LiveState, FinishedState
-from enums import MatchStatus
 from player import Player
 
 class CricInfoService:
-    _instance = None
-
     def __init__(self):
         self.match_repository = MatchRepository()
         self.player_repository = PlayerRepository()
-
-    @classmethod
-    def get_instance(cls):
-        if cls._instance is None:
-            cls._instance = CricInfoService()
-        return cls._instance
 
     def create_match(self, team1, team2, format_strategy):
         match_id = str(uuid.uuid4())

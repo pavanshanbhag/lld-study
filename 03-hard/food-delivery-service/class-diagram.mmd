@@ -1,0 +1,73 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class FoodDeliveryService {
+        +NewFoodDeliveryService()
+        +RegisterCustomer(customer Customer)
+        +RegisterRestaurant(restaurant Restaurant)
+        +RegisterDeliveryAgent(agent DeliveryAgent)
+        +GetAvailableRestaurants() Restaurant[]
+        +GetRestaurantMenu(restaurantID string) MenuItem[]
+        +PlaceOrder(customerID, restaurantID string, items OrderItem[]) Order
+        +UpdateOrderStatus(orderID string, status OrderStatus) error
+        +CancelOrder(orderID string) error
+    }
+
+    class Customer {
+        +NewCustomer(id, name, email, phone string)
+    }
+
+    class Restaurant {
+        +NewRestaurant(id, name, address string, menu MenuItem[])
+        +AddMenuItem(item MenuItem)
+        +RemoveMenuItem(item MenuItem)
+        +GetMenu() MenuItem[]
+    }
+
+    class DeliveryAgent {
+        +NewDeliveryAgent(id, name, phone string)
+        +SetAvailable(available bool)
+        +IsAvailable() bool
+    }
+
+    class MenuItem {
+        +NewMenuItem(id, name, description string, price float64)
+        +SetAvailable(available bool)
+        +IsAvailable() bool
+    }
+
+    class OrderItem {
+        +NewOrderItem(menuItem MenuItem, quantity int)
+    }
+
+    class Order {
+        +NewOrder(id string, customer Customer, restaurant Restaurant)
+        +AddItem(item OrderItem)
+        +RemoveItem(item OrderItem)
+        +SetStatus(status OrderStatus)
+        +GetStatus() OrderStatus
+        +AssignDeliveryAgent(agent DeliveryAgent)
+    }
+
+    class OrderStatus {
+        <<enumeration>>
+        OrderStatusPending
+        OrderStatusConfirmed
+        OrderStatusPreparing
+        OrderStatusOutForDelivery
+        OrderStatusDelivered
+        OrderStatusCancelled
+    }
+
+    FoodDeliveryService "1" --> "*" Customer : customers
+    FoodDeliveryService "1" --> "*" Restaurant : restaurants
+    FoodDeliveryService "1" --> "*" Order : orders
+    FoodDeliveryService "1" --> "*" DeliveryAgent : deliveryAgents
+    Restaurant "1" --> "*" MenuItem : menu
+    Order --> Customer : customer
+    Order --> Restaurant : restaurant
+    Order --> OrderStatus : status
+    Order "1" --> "*" OrderItem : items
+    Order ..> DeliveryAgent : deliveryAgent
+    OrderItem --> MenuItem : menuItem

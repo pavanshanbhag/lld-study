@@ -1,0 +1,36 @@
+%% Modernized design (Go). Original upstream PNG kept as class-diagram.png.
+classDiagram
+    direction TB
+
+    class Publisher {
+        +NewPublisher()
+        +RegisterTopic(topic Topic)
+        +Publish(topic Topic, message Message)
+    }
+
+    class Topic {
+        +NewTopic(name string)
+        +AddSubscriber(subscriber Subscriber)
+        +RemoveSubscriber(subscriber Subscriber)
+        +Publish(message Message)
+    }
+
+    class Subscriber {
+        <<interface>>
+        +OnMessage(message Message)
+    }
+
+    class PrintSubscriber {
+        +NewPrintSubscriber(name string)
+        +OnMessage(message Message)
+    }
+
+    class Message {
+        +NewMessage(content string)
+        Content string
+    }
+
+    Publisher "1" --> "*" Topic : registered topics
+    Topic "1" --> "*" Subscriber : subscribers
+    Publisher ..> Message : publishes
+    Subscriber <|.. PrintSubscriber

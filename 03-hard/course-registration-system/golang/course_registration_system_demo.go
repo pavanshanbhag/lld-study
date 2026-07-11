@@ -5,7 +5,7 @@ import (
 )
 
 func Run() {
-	registrationSystem := GetRegistrationSystem()
+	registrationSystem := NewCourseRegistrationSystem()
 
 	// Create courses
 	course1 := NewCourse("CS101", "Introduction to Programming", "John Doe", 50)
