@@ -43,7 +43,7 @@ class Ball:
             temp_ball = Ball(self)
             
             if self.commentary is None:
-                self.commentary = CommentaryManager.get_instance().generate_commentary(temp_ball)
+                self.commentary = CommentaryManager().generate_commentary(temp_ball)
             
             return Ball(self)
 

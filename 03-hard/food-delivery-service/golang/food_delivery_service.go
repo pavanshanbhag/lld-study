@@ -14,22 +14,6 @@ type FoodDeliveryService struct {
 	mu             sync.RWMutex
 }
 
-var (
-	instance *FoodDeliveryService
-	once     sync.Once
-)
-
-func GetFoodDeliveryService() *FoodDeliveryService {
-	once.Do(func() {
-		instance = &FoodDeliveryService{
-			customers:      make(map[string]*Customer),
-			restaurants:    make(map[string]*Restaurant),
-			orders:         make(map[string]*Order),
-			deliveryAgents: make(map[string]*DeliveryAgent),
-		}
-	})
-	return instance
-}
 func NewFoodDeliveryService() *FoodDeliveryService {
 	return &FoodDeliveryService{
 		customers:      make(map[string]*Customer),
@@ -73,7 +57,7 @@ func (s *FoodDeliveryService) GetRestaurantMenu(restaurantID string) []*MenuItem
 	s.mu.RUnlock()
 
 	if restaurant != nil {
-		return restaurant.GetMenu()
+		return restaurant.Menu()
 	}
 	return nil
 }
@@ -132,7 +116,7 @@ func (s *FoodDeliveryService) CancelOrder(orderID string) error {
 		return fmt.Errorf("order not found")
 	}
 
-	if order.GetStatus() != OrderStatusPending {
+	if order.Status() != OrderStatusPending {
 		return fmt.Errorf("cannot cancel order in current status")
 	}
 
@@ -146,7 +130,7 @@ func (s *FoodDeliveryService) CancelOrder(orderID string) error {
 func (s *FoodDeliveryService) notifyCustomer(order *Order) {
 	// TODO: Implement customer notification
 	fmt.Printf("Notifying customer about order %s status: %s\n",
-		order.ID, order.GetStatus())
+		order.ID, order.Status())
 }
 
 func (s *FoodDeliveryService) notifyRestaurant(order *Order) {

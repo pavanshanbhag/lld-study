@@ -2,10 +2,13 @@ package movieticketbookingsystem
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 	"time"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	bookingSystem := NewBookingSystem()
 
 	// Add movies
@@ -53,23 +56,23 @@ func Run() {
 	// Book tickets
 	booking, err := bookingSystem.BookTickets(user, show1, selectedSeats)
 	if err != nil {
-		fmt.Printf("Booking failed: %v\n", err)
+		logger.Info("demo", "msg", fmt.Sprintf("Booking failed: %v\n", err))
 		return
 	}
 
-	fmt.Printf("Booking successful. Booking ID: %s\n", booking.ID)
+	logger.Info("demo", "msg", fmt.Sprintf("Booking successful. Booking ID: %s\n", booking.ID))
 
 	// Confirm booking
 	if err := bookingSystem.ConfirmBooking(booking.ID); err != nil {
-		fmt.Printf("Failed to confirm booking: %v\n", err)
+		logger.Info("demo", "msg", fmt.Sprintf("Failed to confirm booking: %v\n", err))
 		return
 	}
-	fmt.Println("Booking confirmed")
+	logger.Info("demo", "msg", fmt.Sprint("Booking confirmed"))
 
 	// Cancel booking
 	if err := bookingSystem.CancelBooking(booking.ID); err != nil {
-		fmt.Printf("Failed to cancel booking: %v\n", err)
+		logger.Info("demo", "msg", fmt.Sprintf("Failed to cancel booking: %v\n", err))
 		return
 	}
-	fmt.Printf("Booking canceled. Booking ID: %s\n", booking.ID)
+	logger.Info("demo", "msg", fmt.Sprintf("Booking canceled. Booking ID: %s\n", booking.ID))
 }

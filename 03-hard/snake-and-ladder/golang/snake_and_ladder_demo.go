@@ -2,10 +2,13 @@ package snakeandladdergame
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 	"sync"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	gameManager := NewGameManager()
 	wg := new(sync.WaitGroup)
 	// Start game 1
@@ -16,7 +19,7 @@ func Run() {
 	players2 := []string{"Player 4", "Player 5"}
 	gameManager.StartNewGame(wg, players2)
 
-	fmt.Println("Games started. Check game output above.")
+	logger.Info("demo", "msg", fmt.Sprint("Games started. Check game output above."))
 	//Wait for all games to finish
 	wg.Wait()
 }

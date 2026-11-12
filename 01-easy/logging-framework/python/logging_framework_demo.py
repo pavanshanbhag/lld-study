@@ -7,7 +7,7 @@ class LoggingFrameworkDemo:
     @staticmethod
     def main():
         # --- 1. Initial Configuration ---
-        log_manager = LogManager.get_instance()
+        log_manager = LogManager()
         root_logger = log_manager.get_root_logger()
         root_logger.set_level(LogLevel.INFO)  # Set global minimum level to INFO
 

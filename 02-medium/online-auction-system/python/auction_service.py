@@ -8,24 +8,13 @@ from concurrent.futures import ThreadPoolExecutor
 import time
 
 class AuctionService:
-    _instance = None
     _lock = threading.Lock()
 
     def __init__(self):
-        if AuctionService._instance is not None:
-            raise Exception("This class is a singleton!")
         self.users: Dict[str, User] = {}
         self.auctions: Dict[str, Auction] = {}
         self.scheduler = ThreadPoolExecutor(max_workers=10)
         self._shutdown = False
-
-    @staticmethod
-    def get_instance():
-        if AuctionService._instance is None:
-            with AuctionService._lock:
-                if AuctionService._instance is None:
-                    AuctionService._instance = AuctionService()
-        return AuctionService._instance
 
     def create_user(self, name: str) -> User:
         user = User(name)
@@ -47,7 +36,11 @@ class AuctionService:
         return auction
 
     def _scheduled_end_auction(self, auction_id: str, delay: float):
-        time.sleep(delay)
+        end = time.time() + delay
+        while time.time() < end:
+            if self._shutdown:
+                return
+            time.sleep(min(0.05, end - time.time()))
         if not self._shutdown:
             self.end_auction(auction_id)
 
@@ -70,4 +63,5 @@ class AuctionService:
 
     def shutdown(self):
         self._shutdown = True
-        self.scheduler.shutdown(wait=True)
+        # ponytail: wait=False — scheduled end jobs may sleep until auction end_time
+        self.scheduler.shutdown(wait=False, cancel_futures=True)

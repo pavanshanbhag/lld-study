@@ -1,10 +1,5 @@
-from __future__ import annotations
-
-from dataclasses import dataclass
-
-
-@dataclass(slots=True)
 class Move:
-    piece: object
-    dest_row: int
-    dest_col: int
+    def __init__(self, piece, dest_row, dest_col):
+        self.piece = piece
+        self.dest_row = dest_row
+        self.dest_col = dest_col

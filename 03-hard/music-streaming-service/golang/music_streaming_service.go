@@ -8,8 +8,8 @@ type MusicStreamingService struct {
 
 func NewMusicStreamingService() *MusicStreamingService {
 	return &MusicStreamingService{
-		MusicLibrary:     GetMusicLibrary(),
-		UserManager:      GetUserManager(),
-		MusicRecommender: GetMusicRecommender(),
+		MusicLibrary:     NewMusicLibrary(),
+		UserManager:      NewUserManager(),
+		MusicRecommender: NewMusicRecommender(),
 	}
 }

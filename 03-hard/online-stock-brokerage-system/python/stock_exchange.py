@@ -7,15 +7,7 @@ import threading
 from collections import defaultdict
 
 class StockExchange:
-    _instance: Optional['StockExchange'] = None
     _lock = threading.Lock()
-
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self):
         if hasattr(self, 'initialized'):
@@ -24,10 +16,6 @@ class StockExchange:
         self.sell_orders: Dict[str, List[Order]] = defaultdict(list)
         self.match_lock = threading.Lock()
         self.initialized = True
-
-    @classmethod
-    def get_instance(cls) -> 'StockExchange':
-        return cls()
 
     def place_buy_order(self, order: Order) -> None:
         self.buy_orders[order.get_stock().get_symbol()].append(order)

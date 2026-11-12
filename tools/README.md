@@ -7,13 +7,17 @@
 
 ```bash
 uv sync
-./tools/check.sh all       # full suite
-./tools/check.sh easy      # 01-easy Go + Python
-./tools/check.sh medium    # 02-medium Go + Python
-./tools/check.sh hard      # 03-hard Go + Python
-./tools/check.sh patterns  # 19 design-pattern Go demos
-./tools/check.sh parking   # parking-lot reference (ruff + mypy strict)
+./tools/check.sh all        # Go tests + ruff/mypy (parking) + Python tests + patterns + build
+./tools/check.sh easy       # 01-easy Go + Python
+./tools/check.sh medium     # 02-medium Go + Python
+./tools/check.sh hard       # 03-hard Go + Python
+./tools/check.sh test-go    # all LLD Go pkgs (easy/medium/hard + voting)
+./tools/check.sh test-py    # all LLD Python tests (incl. voting)
+./tools/check.sh patterns   # 19 design-pattern Go demos
+./tools/check.sh parking    # parking-lot reference (race + ruff + mypy + pytest)
 ```
+
+Other: `easy-py` / `medium-py` / `hard-py` / `lru` / `lint-py` / `test` / `sync`.
 
 ## Running Go LLD demos
 
@@ -27,13 +31,12 @@ From the **repo root**:
 
 ```bash
 go test -race ./01-easy/parking-lot/golang/
-go test -race ./02-medium/atm/golang/
-go test -race ./03-hard/splitwise/golang/
+./tools/check.sh test-go
 ```
 
-Or run all: `./tools/check.sh test-go`
-
 ## Running Python LLD demos
+
+Always from **repo root** (so imports resolve under that topic):
 
 ```bash
 uv run python 01-easy/parking-lot/python/parking_lot_demo.py
@@ -41,13 +44,14 @@ uv run python 02-medium/atm/python/atm_demo.py
 uv run python 03-hard/splitwise/python/splitwise_demo.py
 ```
 
-### Python tests (isolated import path per topic)
+### Python tests
+
+Topics share common module names (`user.py`, `enums.py`, …). **Isolate `PYTHONPATH` per topic** — do not run a bare multi-topic `pytest` from root.
 
 ```bash
 PYTHONPATH=01-easy/parking-lot/python uv run pytest 01-easy/parking-lot/python/tests -q
+./tools/check.sh test-py
 ```
-
-Or run all: `./tools/check.sh test-py`
 
 ### Strict lint (parking-lot reference only)
 
@@ -58,11 +62,13 @@ uv run mypy 01-easy/parking-lot/python
 
 ## Running Go design patterns
 
-All patterns use `cmd/demo/`:
+Nineteen patterns ship `golang/cmd/demo/`:
 
 ```bash
 cd 00-foundations/design-patterns/behavioral/strategy/golang
 go run ./cmd/demo/
 ```
 
-Or run all: `./tools/check.sh patterns`
+Or: `./tools/check.sh patterns`
+
+Folders without a Go `cmd/demo/` (Abstract Factory, Command, Visitor) are Python-first / incomplete — not in `check.sh patterns`.

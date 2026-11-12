@@ -48,6 +48,10 @@ HARD_GO=(
   ./03-hard/splitwise/golang/
 )
 
+BONUS_GO=(
+  ./04-bonus/voting-system/golang/
+)
+
 PATTERN_DEMOS=(
   "00-foundations/design-patterns/creational/singleton/golang"
   "00-foundations/design-patterns/creational/factory/golang"
@@ -122,7 +126,7 @@ case "${1:-all}" in
     run_pattern_demos
     ;;
   test-go)
-    run_go_tests "${EASY_GO[@]}" "${MEDIUM_GO[@]}" "${HARD_GO[@]}"
+    run_go_tests "${EASY_GO[@]}" "${MEDIUM_GO[@]}" "${HARD_GO[@]}" "${BONUS_GO[@]}"
     ;;
   test-py)
     run_all_pytests
@@ -132,11 +136,11 @@ case "${1:-all}" in
     uv run mypy 01-easy/parking-lot/python
     ;;
   test)
-    run_go_tests "${EASY_GO[@]}" "${MEDIUM_GO[@]}" "${HARD_GO[@]}"
+    run_go_tests "${EASY_GO[@]}" "${MEDIUM_GO[@]}" "${HARD_GO[@]}" "${BONUS_GO[@]}"
     run_all_pytests
     ;;
   all)
-    run_go_tests "${EASY_GO[@]}" "${MEDIUM_GO[@]}" "${HARD_GO[@]}"
+    run_go_tests "${EASY_GO[@]}" "${MEDIUM_GO[@]}" "${HARD_GO[@]}" "${BONUS_GO[@]}"
     uv run ruff check 01-easy/parking-lot/python
     uv run mypy 01-easy/parking-lot/python
     run_all_pytests

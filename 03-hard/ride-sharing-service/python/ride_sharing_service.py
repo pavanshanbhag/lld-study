@@ -10,29 +10,16 @@ from location import Location
 from vehicle import Vehicle
 
 class RideSharingService:
-    _instance = None
     _lock = threading.Lock()
     
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
     
     def __init__(self):
-        if not self._initialized:
-            self._riders: Dict[str, Rider] = {}
-            self._drivers: Dict[str, Driver] = {}
-            self._trips: Dict[str, Trip] = {}
-            self._pricing_strategy: Optional[PricingStrategy] = None
-            self._driver_matching_strategy: Optional[DriverMatchingStrategy] = None
-            self._initialized = True
+        self._riders: Dict[str, Rider] = {}
+        self._drivers: Dict[str, Driver] = {}
+        self._trips: Dict[str, Trip] = {}
+        self._pricing_strategy: Optional[PricingStrategy] = None
+        self._driver_matching_strategy: Optional[DriverMatchingStrategy] = None
     
-    @classmethod
-    def get_instance(cls):
-        return cls()
     
     # Allow changing strategies at runtime for extensibility
     def set_pricing_strategy(self, pricing_strategy: PricingStrategy):

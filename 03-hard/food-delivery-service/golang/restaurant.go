@@ -44,4 +44,3 @@ func (r *Restaurant) Menu() []*MenuItem {
 	return menuCopy
 }
 
-func (r *Restaurant) GetMenu() []*MenuItem { return r.Menu() }

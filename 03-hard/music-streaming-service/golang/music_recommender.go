@@ -9,21 +9,10 @@ type MusicRecommender struct {
 	mu                  sync.RWMutex
 }
 
-var (
-	recommenderInstance *MusicRecommender
-	recommenderOnce     sync.Once
-)
-
-func GetMusicRecommender() *MusicRecommender {
-	recommenderOnce.Do(func() {
-		recommenderInstance = &MusicRecommender{
-			userRecommendations: make(map[string][]*Song),
-		}
-	})
-	return recommenderInstance
-}
 func NewMusicRecommender() *MusicRecommender {
-	return GetMusicRecommender()
+	return &MusicRecommender{
+		userRecommendations: make(map[string][]*Song),
+	}
 }
 
 func (mr *MusicRecommender) RecommendSongs(user *User) []*Song {

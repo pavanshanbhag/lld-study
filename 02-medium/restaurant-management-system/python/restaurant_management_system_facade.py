@@ -11,27 +11,14 @@ from decorators import TaxDecorator, ServiceChargeDecorator
 from bill import Bill, BaseBill
 
 class RestaurantManagementSystemFacade:
-    _instance = None
     _lock = threading.Lock()
     
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
     
     def __init__(self):
-        if not self._initialized:
-            self._restaurant = Restaurant.get_instance()
-            self._order_id_counter = 1
-            self._orders: Dict[int, Order] = {}
-            self._initialized = True
+        self._restaurant = Restaurant()
+        self._order_id_counter = 1
+        self._orders: Dict[int, Order] = {}
     
-    @classmethod
-    def get_instance(cls):
-        return cls()
     
     def add_table(self, table_id: int, capacity: int) -> Table:
         table = Table(table_id, capacity)

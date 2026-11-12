@@ -9,16 +9,11 @@ from payment import Payment
 import uuid
 
 class HotelManagementSystem:
-    _instance = None
-
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance.guests: Dict[str, Guest] = {}
-            cls._instance.rooms: Dict[str, Room] = {}
-            cls._instance.reservations: Dict[str, Reservation] = {}
-            cls._instance.lock = Lock()
-        return cls._instance
+    def __init__(self):
+        self.guests: Dict[str, Guest] = {}
+        self.rooms: Dict[str, Room] = {}
+        self.reservations: Dict[str, Reservation] = {}
+        self.lock = Lock()
 
     def add_guest(self, guest: Guest):
         self.guests[guest.id] = guest

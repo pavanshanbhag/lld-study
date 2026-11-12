@@ -2,18 +2,11 @@ import random
 from enums import WicketType, ExtraType
 
 class CommentaryManager:
-    _instance = None
 
     def __init__(self):
         self.random = random.Random()
         self.commentary_templates = {}
         self.initialize_templates()
-
-    @classmethod
-    def get_instance(cls):
-        if cls._instance is None:
-            cls._instance = CommentaryManager()
-        return cls._instance
 
     def initialize_templates(self):
         self.commentary_templates["RUNS_0"] = [

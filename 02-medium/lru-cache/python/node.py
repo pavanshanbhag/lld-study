@@ -1,15 +1,11 @@
-from __future__ import annotations
+from typing import TypeVar, Generic, Optional
 
-from dataclasses import dataclass, field
-from typing import Generic, TypeVar
+K = TypeVar('K')
+V = TypeVar('V')
 
-K = TypeVar("K")
-V = TypeVar("V")
-
-
-@dataclass(slots=True)
 class Node(Generic[K, V]):
-    key: K
-    value: V
-    prev: Node[K, V] | None = field(default=None, repr=False)
-    next: Node[K, V] | None = field(default=None, repr=False)
+    def __init__(self, key: K, value: V):
+        self.key = key
+        self.value = value
+        self.prev: Optional['Node[K, V]'] = None
+        self.next: Optional['Node[K, V]'] = None

@@ -1,9 +1,6 @@
-from dataclasses import dataclass
-
-
-@dataclass(frozen=True, slots=True)
 class Tag:
-    name: str
+    def __init__(self, name: str):
+        self.name = name
 
     def get_name(self) -> str:
         return self.name

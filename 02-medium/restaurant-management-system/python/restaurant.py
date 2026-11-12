@@ -6,28 +6,15 @@ import threading
 from menu import Menu
 
 class Restaurant:
-    _instance = None
     _lock = threading.Lock()
     
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
     
     def __init__(self):
-        if not self._initialized:
-            self._waiters: Dict[str, Waiter] = {}
-            self._chefs: Dict[str, Chef] = {}
-            self._tables: Dict[int, Table] = {}
-            self._menu = Menu()
-            self._initialized = True
+        self._waiters: Dict[str, Waiter] = {}
+        self._chefs: Dict[str, Chef] = {}
+        self._tables: Dict[int, Table] = {}
+        self._menu = Menu()
     
-    @classmethod
-    def get_instance(cls):
-        return cls()
     
     def add_waiter(self, waiter: Waiter):
         self._waiters[waiter.id] = waiter

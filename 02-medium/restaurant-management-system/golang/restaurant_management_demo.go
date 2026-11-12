@@ -30,7 +30,7 @@ func Run() {
 	restaurant.AddStaff(NewStaff(1, "Alice", "Manager", "9876543210"))
 	restaurant.AddStaff(NewStaff(2, "Bob", "Chef", "5432109876"))
 
-	for _, item := range restaurant.GetMenu() {
+	for _, item := range restaurant.Menu() {
 		logger.Info("menu item", "name", item.Name, "price", item.Price)
 	}
 }

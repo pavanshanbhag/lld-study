@@ -39,5 +39,3 @@ func (s *Seat) Price() float64 {
 	return s.price
 }
 
-func (s *Seat) GetStatus() SeatStatus { return s.Status() }
-func (s *Seat) GetPrice() float64     { return s.Price() }

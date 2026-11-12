@@ -7,7 +7,7 @@ from task_sort_strategy import SortByDueDate
 class TaskManagementSystemDemo:
     @staticmethod
     def main():
-        task_management_system = TaskManagementSystem.get_instance()
+        task_management_system = TaskManagementSystem()
         
         # Create users
         user1 = task_management_system.create_user("John Doe", "john@example.com")

@@ -9,30 +9,17 @@ from recommendation_service import RecommendationService
 from recommendation_strategy import GenreBasedRecommendationStrategy
 
 class MusicStreamingSystem:
-    _instance = None
     _lock = threading.Lock()
     
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
     
     def __init__(self):
-        if not self._initialized:
-            self._users: Dict[str, User] = {}
-            self._songs: Dict[str, Song] = {}
-            self._artists: Dict[str, Artist] = {}
-            self._player = Player()
-            self._search_service = SearchService()
-            self._recommendation_service = RecommendationService(GenreBasedRecommendationStrategy())
-            self._initialized = True
+        self._users: Dict[str, User] = {}
+        self._songs: Dict[str, Song] = {}
+        self._artists: Dict[str, Artist] = {}
+        self._player = Player()
+        self._search_service = SearchService()
+        self._recommendation_service = RecommendationService(GenreBasedRecommendationStrategy())
     
-    @classmethod
-    def get_instance(cls):
-        return cls()
     
     def register_user(self, user: User):
         self._users[user.id] = user

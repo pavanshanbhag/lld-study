@@ -1,21 +1,15 @@
-from __future__ import annotations
-
-import logging
-
-from coin import Coin
 from inventory import Inventory
+from coin import Coin
 from item import Item
-from states import IdleState, VendingMachineState
-
-logger = logging.getLogger(__name__)
-
+from states import VendingMachineState, IdleState
 
 class VendingMachine:
-    def __init__(self) -> None:
+
+    def __init__(self):
         self.inventory = Inventory()
-        self.current_state: VendingMachineState = IdleState(self)
+        self.current_state = IdleState(self)
         self.balance = 0
-        self.selected_item_code: str | None = None
+        self.selected_item_code = None
 
     def insert_coin(self, coin: Coin) -> None:
         self.current_state.insert_coin(coin)
@@ -33,22 +27,17 @@ class VendingMachine:
 
     def dispense_item(self) -> None:
         item = self.inventory.get_item(self.selected_item_code)
-        if item is None:
-            logger.warning("no selected item to dispense")
-            self.reset()
-            self.set_state(IdleState(self))
-            return
-        if self.balance >= item.price:
+        if self.balance >= item.get_price():
             self.inventory.reduce_stock(self.selected_item_code)
-            self.balance -= item.price
-            logger.info("dispensed %s", item.name)
+            self.balance -= item.get_price()
+            print(f"Dispensed: {item.get_name()}")
             if self.balance > 0:
-                logger.info("returning change: %s", self.balance)
+                print(f"Returning change: {self.balance}")
         self.reset()
         self.set_state(IdleState(self))
 
     def refund_balance(self) -> None:
-        logger.info("refunding: %s", self.balance)
+        print(f"Refunding: {self.balance}")
         self.balance = 0
 
     def reset(self) -> None:
@@ -58,7 +47,7 @@ class VendingMachine:
     def add_balance(self, value: int) -> None:
         self.balance += value
 
-    def get_selected_item(self) -> Item | None:
+    def get_selected_item(self) -> Item:
         return self.inventory.get_item(self.selected_item_code)
 
     def set_selected_item_code(self, code: str) -> None:
@@ -67,6 +56,7 @@ class VendingMachine:
     def set_state(self, state: VendingMachineState) -> None:
         self.current_state = state
 
+    # Getters for states and inventory
     def get_inventory(self) -> Inventory:
         return self.inventory
 

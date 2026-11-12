@@ -1,20 +1,16 @@
-# Logging Framework — Python (modernized)
+# Logging Framework — Python
 
-Hierarchical async logging with pluggable appenders:
-
-- `IntEnum` `LogLevel`, `@dataclass` `LogMessage`
-- `logging` for framework diagnostics; console appender remains the sink
-- Constructor-based `LogManager` (no singleton)
+Constructor-based solution (no `get_instance` singleton).
 
 ## Run
 
 ```bash
 # from repo root
 uv run python 01-easy/logging-framework/python/logging_framework_demo.py
-uv run pytest 01-easy/logging-framework/python/tests -q
+PYTHONPATH=01-easy/logging-framework/python uv run pytest 01-easy/logging-framework/python/tests -q
 ```
 
-## Design patterns
+## Notes
 
-- **Composite** — logger hierarchy with parent fallback
-- **Strategy** — formatters / appenders
+- Prefer `ClassName(...)` constructors over singletons
+- Topic tests use isolated `PYTHONPATH` via `./tools/check.sh`

@@ -2,7 +2,13 @@ package onlinestockbrokeragesystem
 
 import "fmt"
 
+import (
+	"log/slog"
+	"os"
+)
+
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	broker := NewStockBroker()
 
 	// Create user and account
@@ -25,18 +31,18 @@ func Run() {
 
 	// Give some time for orders to process
 	// In a real system, you'd use proper synchronization
-	fmt.Println("Processing buy orders...")
+	logger.Info("demo", "msg", fmt.Sprint("Processing buy orders..."))
 
 	// Place sell order
 	sellOrder := NewSellOrder("O003", account, apple, 5, 160.0)
 	broker.PlaceOrder(sellOrder)
 
-	fmt.Println("Processing sell order...")
+	logger.Info("demo", "msg", fmt.Sprint("Processing sell order..."))
 
 	// Print account details
-	fmt.Printf("Account Balance: $%.2f\n", account.GetBalance())
-	fmt.Println("Portfolio Holdings:")
+	logger.Info("demo", "msg", fmt.Sprintf("Account Balance: $%.2f\n", account.GetBalance()))
+	logger.Info("demo", "msg", fmt.Sprint("Portfolio Holdings:"))
 	for symbol, quantity := range account.Portfolio.GetHoldings() {
-		fmt.Printf("%s: %d shares\n", symbol, quantity)
+		logger.Info("demo", "msg", fmt.Sprintf("%s: %d shares\n", symbol, quantity))
 	}
 }

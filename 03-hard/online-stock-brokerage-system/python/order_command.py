@@ -14,7 +14,7 @@ class BuyStockCommand(OrderCommand):
     def __init__(self, account: Account, order: Order):
         self.account = account
         self.order = order
-        self.stock_exchange = StockExchange.get_instance()
+        self.stock_exchange = StockExchange()
 
     def execute(self) -> None:
         # For market order, we can't pre-check funds perfectly.
@@ -29,7 +29,7 @@ class SellStockCommand(OrderCommand):
     def __init__(self, account: Account, order: Order):
         self.account = account
         self.order = order
-        self.stock_exchange = StockExchange.get_instance()
+        self.stock_exchange = StockExchange()
 
     def execute(self) -> None:
         if self.account.get_stock_quantity(self.order.get_stock().get_symbol()) < self.order.get_quantity():

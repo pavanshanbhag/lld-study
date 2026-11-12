@@ -60,9 +60,3 @@ func (r *Room) Status() RoomStatus {
 	defer r.mu.RUnlock()
 	return r.status
 }
-
-func (r *Room) GetStatus() RoomStatus {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	return r.status
-}

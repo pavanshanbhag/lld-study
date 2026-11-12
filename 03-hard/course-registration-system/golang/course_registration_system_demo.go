@@ -2,9 +2,12 @@ package courseregistrationsystem
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	registrationSystem := NewCourseRegistrationSystem()
 
 	// Create courses
@@ -23,27 +26,27 @@ func Run() {
 
 	// Search for courses
 	searchResults := registrationSystem.SearchCourses("CS")
-	fmt.Println("Search Results:")
+	logger.Info("demo", "msg", fmt.Sprint("Search Results:"))
 	for _, course := range searchResults {
-		fmt.Printf("%s - %s\n", course.Code, course.Name)
+		logger.Info("demo", "msg", fmt.Sprintf("%s - %s\n", course.Code, course.Name))
 	}
 
 	// Register courses for students
-	fmt.Println("\nRegistration Results:")
+	logger.Info("demo", "msg", fmt.Sprint("\nRegistration Results:"))
 
 	err := registrationSystem.RegisterCourse(student1, course1)
-	fmt.Printf("Student 1 - Course 1: %v\n", err == nil)
+	logger.Info("demo", "msg", fmt.Sprintf("Student 1 - Course 1: %v\n", err == nil))
 
 	err = registrationSystem.RegisterCourse(student2, course1)
-	fmt.Printf("Student 2 - Course 1: %v\n", err == nil)
+	logger.Info("demo", "msg", fmt.Sprintf("Student 2 - Course 1: %v\n", err == nil))
 
 	err = registrationSystem.RegisterCourse(student1, course2)
-	fmt.Printf("Student 1 - Course 2: %v\n", err == nil)
+	logger.Info("demo", "msg", fmt.Sprintf("Student 1 - Course 2: %v\n", err == nil))
 
 	// Get registered courses for a student
 	registeredCourses := registrationSystem.GetRegisteredCourses(student1)
-	fmt.Println("\nRegistered Courses for Student 1:")
+	logger.Info("demo", "msg", fmt.Sprint("\nRegistered Courses for Student 1:"))
 	for _, course := range registeredCourses {
-		fmt.Printf("%s - %s\n", course.Code, course.Name)
+		logger.Info("demo", "msg", fmt.Sprintf("%s - %s\n", course.Code, course.Name))
 	}
 }

@@ -41,7 +41,7 @@ func (s *Seat) Release() {
 	}
 }
 
-func (s *Seat) GetStatus() SeatStatus {
+func (s *Seat) Status() SeatStatus {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return s.status

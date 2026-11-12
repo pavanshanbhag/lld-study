@@ -2,9 +2,12 @@ package fooddeliveryservice
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	service := NewFoodDeliveryService()
 
 	// Register customers
@@ -43,17 +46,17 @@ func Run() {
 
 	order1, err := service.PlaceOrder(customer1.ID, restaurant1.ID, orderItems)
 	if err != nil {
-		fmt.Printf("Error placing order: %v\n", err)
+		logger.Info("demo", "msg", fmt.Sprintf("Error placing order: %v\n", err))
 		return
 	}
 
 	// Update order status
 	err = service.UpdateOrderStatus(order1.ID, OrderStatusConfirmed)
 	if err != nil {
-		fmt.Printf("Error updating order status: %v\n", err)
+		logger.Info("demo", "msg", fmt.Sprintf("Error updating order status: %v\n", err))
 		return
 	}
-	fmt.Printf("Order status updated: %s\n", order1.GetStatus())
+	logger.Info("demo", "msg", fmt.Sprintf("Order status updated: %s\n", order1.Status()))
 
 	// Place and cancel another order
 	order2Items := []*OrderItem{
@@ -61,12 +64,12 @@ func Run() {
 	}
 	order2, err := service.PlaceOrder(customer2.ID, restaurant2.ID, order2Items)
 	if err != nil {
-		fmt.Printf("Error placing order: %v\n", err)
+		logger.Info("demo", "msg", fmt.Sprintf("Error placing order: %v\n", err))
 		return
 	}
 
 	err = service.CancelOrder(order2.ID)
 	if err != nil {
-		fmt.Printf("Error cancelling order: %v\n", err)
+		logger.Info("demo", "msg", fmt.Sprintf("Error cancelling order: %v\n", err))
 	}
 }

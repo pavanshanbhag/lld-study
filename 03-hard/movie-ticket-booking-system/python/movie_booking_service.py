@@ -15,15 +15,7 @@ from pricing_strategy import PricingStrategy
 from seat import Seat
 
 class MovieBookingService:
-    _instance: Optional['MovieBookingService'] = None
     _lock = threading.Lock()
-
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self):
         if hasattr(self, 'initialized'):
@@ -38,10 +30,6 @@ class MovieBookingService:
         self.seat_lock_manager = SeatLockManager()
         self.booking_manager = BookingManager(self.seat_lock_manager)
         self.initialized = True
-
-    @classmethod
-    def get_instance(cls) -> 'MovieBookingService':
-        return cls()
 
     def get_booking_manager(self) -> BookingManager:
         return self.booking_manager

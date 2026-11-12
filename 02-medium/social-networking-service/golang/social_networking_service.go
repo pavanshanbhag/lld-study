@@ -14,21 +14,6 @@ type SocialNetwork struct {
 	mu            sync.RWMutex
 }
 
-var (
-	instance *SocialNetwork
-	once     sync.Once
-)
-
-func GetSocialNetwork() *SocialNetwork {
-	once.Do(func() {
-		instance = &SocialNetwork{
-			users:         make(map[string]*User),
-			posts:         make(map[string]*Post),
-			notifications: make(map[string][]*Notification),
-		}
-	})
-	return instance
-}
 func NewSocialNetwork() *SocialNetwork {
 	return &SocialNetwork{
 		users:         make(map[string]*User),

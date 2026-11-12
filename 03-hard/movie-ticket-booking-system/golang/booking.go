@@ -35,4 +35,3 @@ func (b *Booking) SetStatus(status BookingStatus) {
 	b.status = status
 }
 
-func (b *Booking) GetStatus() BookingStatus { return b.Status() }

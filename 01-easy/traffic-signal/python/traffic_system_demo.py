@@ -5,7 +5,7 @@ class TrafficSystemDemo:
     @staticmethod
     def main():
         # 1. Get the singleton TrafficControlSystem instance
-        system = TrafficControlSystem.get_instance()
+        system = TrafficControlSystem()
 
         # 2. Add intersections to the system
         system.add_intersection(1, 500, 200)

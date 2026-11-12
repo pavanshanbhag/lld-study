@@ -12,15 +12,7 @@ import threading
 from shopping_cart import ShoppingCart
 
 class OnlineShoppingSystem:
-    _instance = None
     _lock = threading.Lock()
-
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
 
     def __init__(self):
         if hasattr(self, 'initialized'):
@@ -36,10 +28,6 @@ class OnlineShoppingSystem:
         self.search_service = SearchService(self.products.values())
         
         self.initialized = True
-
-    @classmethod
-    def get_instance(cls) -> 'OnlineShoppingSystem':
-        return cls()
 
     def add_product(self, product: Product, initial_stock: int) -> None:
         self.products[product.get_id()] = product

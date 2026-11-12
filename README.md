@@ -9,19 +9,21 @@ Personal study repo for **Low Level Design (LLD)** interview prep — reorganize
 01-easy/            7 interview problems
 02-medium/          15 interview problems
 03-hard/            11 interview problems
-04-bonus/           Extra solutions (no problem write-up)
-tools/              How to run demos
+04-bonus/           Extra solutions (voting-system)
+tools/              check.sh + how to run demos
+docs/               Modernization notes
 assets/images/      Branding assets from upstream
 ```
 
-Each topic folder contains everything for one study session:
+Each interview topic folder contains one study session:
 
 ```
 01-easy/parking-lot/
 ├── problem.md          Requirements & design notes
-├── class-diagram.png   UML diagram
-├── golang/             Go solution
-└── python/             Python solution
+├── class-diagram.png   Upstream UML
+├── class-diagram.mmd   Mermaid (modernized Go types)
+├── golang/             Go solution + README + tests
+└── python/             Python solution + README + tests
 ```
 
 ## Study order
@@ -31,9 +33,11 @@ Each topic folder contains everything for one study session:
 | Section | Contents |
 |---------|----------|
 | `oop/` | Classes, inheritance, polymorphism, composition, etc. |
-| `design-patterns/creational/` | Singleton, Factory, Builder, Prototype, Abstract Factory |
+| `design-patterns/creational/` | Singleton, Factory, Builder, Prototype (+ Python Abstract Factory) |
 | `design-patterns/structural/` | Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy |
 | `design-patterns/behavioral/` | Strategy, Observer, State, Command, and more |
+
+**Go pattern demos:** 19 topics with `golang/cmd/demo/` (run via `./tools/check.sh patterns`). Command / Visitor / Abstract Factory are Python-oriented or incomplete on the Go side — see [design-patterns README](00-foundations/design-patterns/README.md).
 
 ### 2. Easy (`01-easy/`)
 
@@ -53,11 +57,22 @@ Voting System (solution only)
 
 ## How to run
 
-See [tools/README.md](tools/README.md).
+See **[tools/README.md](tools/README.md)** and **[docs/MODERNIZATION.md](docs/MODERNIZATION.md)**.
 
-**Go (from repo root):** uncomment an import in `main.go`, then `go run .`
+```bash
+uv sync
+./tools/check.sh all        # Go tests + Python tests + patterns + build
+./tools/check.sh test-go    # all LLD Go packages (incl. voting)
+./tools/check.sh test-py    # all LLD Python tests
+```
 
-**Python:** `cd <topic>/python && python <name>_demo.py`
+**Go demo (from repo root):** uncomment import + `Run()` in `main.go`, then `go run .`
+
+**Python demo (from repo root):**
+
+```bash
+uv run python 01-easy/parking-lot/python/parking_lot_demo.py
+```
 
 ## Attribution
 

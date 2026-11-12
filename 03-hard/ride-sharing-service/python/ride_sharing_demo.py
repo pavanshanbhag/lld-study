@@ -9,7 +9,7 @@ class RideSharingServiceDemo:
     @staticmethod
     def main():
         # 1. Setup the system using singleton instance
-        service = RideSharingService.get_instance()
+        service = RideSharingService()
         service.set_driver_matching_strategy(NearestDriverMatchingStrategy())
         service.set_pricing_strategy(VehicleBasedPricingStrategy())
         

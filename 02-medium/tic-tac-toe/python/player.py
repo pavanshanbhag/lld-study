@@ -1,17 +1,12 @@
-from __future__ import annotations
-
-from dataclasses import dataclass
-
 from symbol import Symbol
 
-
-@dataclass(slots=True)
 class Player:
-    name: str
-    symbol: Symbol
-
-    def get_name(self) -> str:
+    def __init__(self, name: str, symbol: Symbol):
+        self.name = name
+        self.symbol = symbol
+    
+    def get_name(self):
         return self.name
-
-    def get_symbol(self) -> Symbol:
+    
+    def get_symbol(self):
         return self.symbol

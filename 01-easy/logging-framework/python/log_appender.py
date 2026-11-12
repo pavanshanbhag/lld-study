@@ -1,12 +1,8 @@
-import logging
 import threading
 from abc import ABC, abstractmethod
-
-from log_formatter import LogFormatter, SimpleTextFormatter
+from log_formatter import LogFormatter
 from log_message import LogMessage
-
-logger = logging.getLogger(__name__)
-
+from log_formatter import SimpleTextFormatter
 
 class LogAppender(ABC):
     @abstractmethod
@@ -25,7 +21,6 @@ class LogAppender(ABC):
     def set_formatter(self, formatter: LogFormatter):
         pass
 
-
 class ConsoleAppender(LogAppender):
     def __init__(self):
         self.formatter = SimpleTextFormatter()
@@ -42,7 +37,6 @@ class ConsoleAppender(LogAppender):
     def get_formatter(self) -> LogFormatter:
         return self.formatter
 
-
 class FileAppender(LogAppender):
     def __init__(self, file_path: str):
         self.formatter = SimpleTextFormatter()
@@ -50,7 +44,7 @@ class FileAppender(LogAppender):
         try:
             self.writer = open(file_path, 'a')
         except Exception as e:
-            logger.error("Failed to create writer for file logs: %s", e)
+            print(f"Failed to create writer for file logs, exception: {e}")
             self.writer = None
 
     def append(self, log_message: LogMessage):
@@ -60,14 +54,14 @@ class FileAppender(LogAppender):
                     self.writer.write(self.formatter.format(log_message) + "\n")
                     self.writer.flush()
                 except Exception as e:
-                    logger.error("Failed to write logs to file: %s", e)
+                    print(f"Failed to write logs to file, exception: {e}")
 
     def close(self):
         if self.writer:
             try:
                 self.writer.close()
             except Exception as e:
-                logger.error("Failed to close logs file: %s", e)
+                print(f"Failed to close logs file, exception: {e}")
 
     def set_formatter(self, formatter: LogFormatter):
         self.formatter = formatter

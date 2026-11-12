@@ -12,21 +12,10 @@ type ScorecardService struct {
 	mu               sync.RWMutex
 }
 
-var (
-	scorecardServiceInstance *ScorecardService
-	scorecardServiceOnce     sync.Once
-)
-
-func GetScorecardService() *ScorecardService {
-	scorecardServiceOnce.Do(func() {
-		scorecardServiceInstance = &ScorecardService{
-			scorecards: make(map[string]*Scorecard),
-		}
-	})
-	return scorecardServiceInstance
-}
 func NewScorecardService() *ScorecardService {
-	return GetScorecardService()
+	return &ScorecardService{
+		scorecards: make(map[string]*Scorecard),
+	}
 }
 
 func (ss *ScorecardService) CreateScorecard(match *Match) string {
@@ -39,7 +28,7 @@ func (ss *ScorecardService) CreateScorecard(match *Match) string {
 	return scorecardID
 }
 
-func (ss *ScorecardService) GetScorecard(scorecardID string) *Scorecard {
+func (ss *ScorecardService) Scorecard(scorecardID string) *Scorecard {
 	ss.mu.RLock()
 	defer ss.mu.RUnlock()
 	return ss.scorecards[scorecardID]

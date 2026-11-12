@@ -1,20 +1,19 @@
-from typing import Dict
+from typing import Dict, Optional, TYPE_CHECKING
 from loan import Loan
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from book_copy import BookCopy
     from member import Member
 
-
 class TransactionService:
+
     def __init__(self):
-        self.active_loans: Dict[str, Loan] = {}
+        self.active_loans: Dict[str, Loan] = {}  # Key: BookCopy ID
 
     def create_loan(self, book_copy: 'BookCopy', member: 'Member') -> None:
         if book_copy.get_id() in self.active_loans:
             raise ValueError("This copy is already on loan.")
-
+        
         loan = Loan(book_copy, member)
         self.active_loans[book_copy.get_id()] = loan
         member.add_loan(loan)

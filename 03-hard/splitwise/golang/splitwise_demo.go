@@ -2,9 +2,12 @@ package splitwise
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	service := NewSplitwiseService()
 
 	// Create users
@@ -35,9 +38,9 @@ func Run() {
 
 	// Print balances
 	for _, user := range []*User{user1, user2, user3} {
-		fmt.Printf("User: %s\n", user.Name)
+		logger.Info("demo", "msg", fmt.Sprintf("User: %s\n", user.Name))
 		for key, balance := range user.Balances {
-			fmt.Printf("  Balance with %s: %.2f\n", key, balance)
+			logger.Info("demo", "msg", fmt.Sprintf("  Balance with %s: %.2f\n", key, balance))
 		}
 	}
 }

@@ -54,4 +54,5 @@ run_all_pytests() {
   run_all_easy_pytests
   run_all_medium_pytests
   run_all_hard_pytests
+  run_topic_pytest "04-bonus/voting-system/python"
 }

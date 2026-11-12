@@ -1,20 +1,16 @@
-# Vending Machine — Python (modernized)
+# Vending Machine — Python
 
-State-machine implementation with inventory and coin handling:
-
-- `@dataclass` `Item`, `IntEnum` `Coin`
-- `logging` in domain/state feedback; demo uses stdout for UX
-- Constructor-based `VendingMachine` (no singleton)
+Constructor-based solution (no `get_instance` singleton).
 
 ## Run
 
 ```bash
 # from repo root
 uv run python 01-easy/vending-machine/python/vending_machine_demo.py
-uv run pytest 01-easy/vending-machine/python/tests -q
+PYTHONPATH=01-easy/vending-machine/python uv run pytest 01-easy/vending-machine/python/tests -q
 ```
 
-## Design patterns
+## Notes
 
-- **State** — idle / selected / has-money / dispensing
-- **Inventory** — stock map keyed by item code
+- Prefer `ClassName(...)` constructors over singletons
+- Topic tests use isolated `PYTHONPATH` via `./tools/check.sh`

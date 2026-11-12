@@ -2,7 +2,13 @@ package ridesharingservice
 
 import "fmt"
 
+import (
+	"log/slog"
+	"os"
+)
+
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	rideService := NewRideService()
 
 	// Create passengers
@@ -34,5 +40,5 @@ func Run() {
 	rideService.AcceptRide(driver2, ride2)
 	rideService.CancelRide(ride2)
 
-	fmt.Println("Demo completed")
+	logger.Info("demo", "msg", fmt.Sprint("Demo completed"))
 }

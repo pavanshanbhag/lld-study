@@ -6,7 +6,7 @@ import time
 class PubSubDemo:
     @staticmethod  
     def main():
-        pub_sub_service = PubSubService.get_instance()
+        pub_sub_service = PubSubService()
 
         # --- Create Subscribers ---
         sports_fan1 = NewsSubscriber("SportsFan1")

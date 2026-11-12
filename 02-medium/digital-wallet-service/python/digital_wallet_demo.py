@@ -9,7 +9,7 @@ from bank_account import BankAccount
 class DigitalWalletDemo:
     @staticmethod
     def run():
-        digital_wallet = DigitalWallet.get_instance()
+        digital_wallet = DigitalWallet()
 
         # Create users
         user1 = User("U001", "John Doe", "john@example.com", "password123")

@@ -69,4 +69,3 @@ func (o *Order) AssignDeliveryAgent(agent *DeliveryAgent) {
 	o.DeliveryAgent = agent
 }
 
-func (o *Order) GetStatus() OrderStatus { return o.Status() }

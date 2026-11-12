@@ -13,7 +13,7 @@ Single-module implementation in `parking_lot.py`:
 ```bash
 # from repo root
 uv run python 01-easy/parking-lot/python/parking_lot_demo.py
-uv run pytest 01-easy/parking-lot/python/tests -q
+PYTHONPATH=01-easy/parking-lot/python uv run pytest 01-easy/parking-lot/python/tests -q
 ```
 
 ## Design patterns

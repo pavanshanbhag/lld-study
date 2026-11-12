@@ -6,26 +6,13 @@ from expense import Expense
 from transaction import Transaction
 
 class SplitwiseService:
-    _instance = None
     _lock = threading.Lock()
     
-    def __new__(cls):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
     
     def __init__(self):
-        if not self._initialized:
-            self._users: Dict[str, User] = {}
-            self._groups: Dict[str, Group] = {}
-            self._initialized = True
+        self._users: Dict[str, User] = {}
+        self._groups: Dict[str, Group] = {}
     
-    @classmethod
-    def get_instance(cls):
-        return cls()
     
     def add_user(self, name: str, email: str) -> User:
         user = User(name, email)

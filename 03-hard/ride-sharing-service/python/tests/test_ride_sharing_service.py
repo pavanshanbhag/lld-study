@@ -13,6 +13,6 @@ def test_ride_sharing_service() -> None:
 
 def test_register_driver() -> None:
     service = RideSharingService()
-    vehicle = Vehicle("KA-01", RideType.SEDAN)
+    vehicle = Vehicle("KA-01", "Sedan", RideType.SEDAN)
     driver = service.register_driver("Bob", "555-0200", vehicle, Location(12.0, 77.0))
     assert driver.get_name() == "Bob"

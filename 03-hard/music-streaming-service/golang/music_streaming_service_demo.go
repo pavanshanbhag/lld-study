@@ -2,9 +2,12 @@ package musicstreamingservice
 
 import (
 	"fmt"
+	"log/slog"
+	"os"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	service := NewMusicStreamingService()
 
 	// Create users
@@ -38,16 +41,16 @@ func Run() {
 	// Login user
 	loggedInUser := service.UserManager.LoginUser("john@example.com", "password123")
 	if loggedInUser != nil {
-		fmt.Printf("User logged in: %s\n", loggedInUser.Username)
+		logger.Info("demo", "msg", fmt.Sprintf("User logged in: %s\n", loggedInUser.Username))
 	} else {
-		fmt.Println("Invalid username or password.")
+		logger.Info("demo", "msg", fmt.Sprint("Invalid username or password."))
 	}
 
 	// Search songs
 	searchResults := service.MusicLibrary.SearchSongs("Song")
-	fmt.Println("\nSearch Results:")
+	logger.Info("demo", "msg", fmt.Sprint("\nSearch Results:"))
 	for _, song := range searchResults {
-		fmt.Printf("Song: %s - %s\n", song.Title, song.Artist)
+		logger.Info("demo", "msg", fmt.Sprintf("Song: %s - %s\n", song.Title, song.Artist))
 	}
 
 	// Create playlist
@@ -58,9 +61,9 @@ func Run() {
 
 	// Get recommendations
 	recommendations := service.MusicRecommender.RecommendSongs(loggedInUser)
-	fmt.Println("\nRecommended Songs:")
+	logger.Info("demo", "msg", fmt.Sprint("\nRecommended Songs:"))
 	for _, song := range recommendations {
-		fmt.Printf("Song: %s - %s\n", song.Title, song.Artist)
+		logger.Info("demo", "msg", fmt.Sprintf("Song: %s - %s\n", song.Title, song.Artist))
 	}
 
 	// Create and use music player
@@ -70,12 +73,12 @@ func Run() {
 	player.SeekTo(60)
 
 	// Display user playlists
-	fmt.Println("\nUser Playlists:")
+	logger.Info("demo", "msg", fmt.Sprint("\nUser Playlists:"))
 	for _, p := range loggedInUser.Playlists {
-		fmt.Printf("Playlist: %s\n", p.Name)
-		fmt.Println("Songs:")
+		logger.Info("demo", "msg", fmt.Sprintf("Playlist: %s\n", p.Name))
+		logger.Info("demo", "msg", fmt.Sprint("Songs:"))
 		for _, s := range p.Songs {
-			fmt.Printf("- %s\n", s.Title)
+			logger.Info("demo", "msg", fmt.Sprintf("- %s\n", s.Title))
 		}
 	}
 }

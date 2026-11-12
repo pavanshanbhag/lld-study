@@ -13,9 +13,6 @@ func NewGameManager() *GameManager {
 }
 
 // GetGameManager kept for upstream demo compatibility; prefer NewGameManager.
-func GetGameManager() *GameManager {
-	return NewGameManager()
-}
 
 func (gm *GameManager) StartNewGame(wg *sync.WaitGroup, playerNames []string) {
 	game := NewSnakeAndLadderGame(playerNames)

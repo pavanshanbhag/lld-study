@@ -12,20 +12,7 @@ type Restaurant struct {
 }
 
 var restaurantInstance *Restaurant
-var once sync.Once
 
-func GetRestaurantInstance() *Restaurant {
-	once.Do(func() {
-		restaurantInstance = &Restaurant{
-			menu:         []MenuItem{},
-			orders:       make(map[int]*Order),
-			reservations: []Reservation{},
-			payments:     make(map[int]*Payment),
-			staff:        []Staff{},
-		}
-	})
-	return restaurantInstance
-}
 func NewRestaurant() *Restaurant {
 	return &Restaurant{
 		menu:         []MenuItem{},
@@ -53,7 +40,7 @@ func (r *Restaurant) RemoveMenuItem(item *MenuItem) {
 	}
 }
 
-func (r *Restaurant) GetMenu() []MenuItem {
+func (r *Restaurant) Menu() []MenuItem {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	return r.menu

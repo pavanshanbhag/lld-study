@@ -10,12 +10,6 @@ class CourseRegistrationSystem:
     students: Dict[int, Student] = {}
     registrations: List[Registration] = []
 
-    @staticmethod
-    def get_instance():
-        if CourseRegistrationSystem.instance is None:
-            CourseRegistrationSystem.instance = CourseRegistrationSystem()
-        return CourseRegistrationSystem.instance
-
     def add_course(self, course: Course):
         self.courses[course.get_code()] = course
 

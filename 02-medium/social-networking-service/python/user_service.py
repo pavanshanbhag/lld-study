@@ -4,7 +4,7 @@ from typing import Optional
 
 class UserService:
     def __init__(self):
-        self.user_repository = UserRepository.get_instance()
+        self.user_repository = UserRepository()
 
     def create_user(self, name: str, email: str) -> User:
         user = User(name, email)

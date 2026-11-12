@@ -6,7 +6,7 @@ class SplitwiseDemo:
     @staticmethod
     def main():
         # 1. Setup the service
-        service = SplitwiseService.get_instance()
+        service = SplitwiseService()
         
         # 2. Create users and groups
         alice = service.add_user("Alice", "alice@a.com")

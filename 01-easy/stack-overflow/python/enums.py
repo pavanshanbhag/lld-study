@@ -1,12 +1,10 @@
-from enum import StrEnum
+from enum import Enum
 
-
-class VoteType(StrEnum):
+class VoteType(Enum):
     UPVOTE = "UPVOTE"
     DOWNVOTE = "DOWNVOTE"
 
-
-class EventType(StrEnum):
+class EventType(Enum):
     UPVOTE_QUESTION = "UPVOTE_QUESTION"
     DOWNVOTE_QUESTION = "DOWNVOTE_QUESTION"
     UPVOTE_ANSWER = "UPVOTE_ANSWER"

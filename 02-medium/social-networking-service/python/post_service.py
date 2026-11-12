@@ -6,7 +6,7 @@ from commentable_entity import Post, Comment
 
 class PostService:
     def __init__(self):
-        self.post_repository = PostRepository.get_instance()
+        self.post_repository = PostRepository()
         self.observers: List[PostObserver] = []
 
     def add_observer(self, observer: PostObserver):

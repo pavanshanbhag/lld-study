@@ -9,21 +9,10 @@ type UserManager struct {
 	mu    sync.RWMutex
 }
 
-var (
-	userManagerInstance *UserManager
-	userManagerOnce     sync.Once
-)
-
-func GetUserManager() *UserManager {
-	userManagerOnce.Do(func() {
-		userManagerInstance = &UserManager{
-			users: make(map[string]*User),
-		}
-	})
-	return userManagerInstance
-}
 func NewUserManager() *UserManager {
-	return GetUserManager()
+	return &UserManager{
+		users: make(map[string]*User),
+	}
 }
 
 func (um *UserManager) RegisterUser(user *User) {

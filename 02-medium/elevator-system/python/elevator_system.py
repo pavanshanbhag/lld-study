@@ -8,20 +8,9 @@ from elevator_observer import Display
 from elevator import Elevator
 
 class ElevatorSystem:
-    _instance = None
     _lock = threading.Lock()
 
-    def __new__(cls, num_elevators: int):
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-                    cls._instance._initialized = False
-        return cls._instance
-
     def __init__(self, num_elevators: int):
-        if self._initialized:
-            return
         
         self.selection_strategy = NearestElevatorStrategy()
         self.executor_service = ThreadPoolExecutor(max_workers=num_elevators)
@@ -35,11 +24,6 @@ class ElevatorSystem:
             elevator_list.append(elevator)
 
         self.elevators = {elevator.get_id(): elevator for elevator in elevator_list}
-        self._initialized = True
-
-    @classmethod
-    def get_instance(cls, num_elevators: int):
-        return cls(num_elevators)
 
     def start(self):
         for elevator in self.elevators.values():

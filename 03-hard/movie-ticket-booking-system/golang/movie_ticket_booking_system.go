@@ -16,22 +16,6 @@ type MovieTicketBookingSystem struct {
 	bookingCount int64
 }
 
-var (
-	instance *MovieTicketBookingSystem
-	once     sync.Once
-)
-
-func GetBookingSystem() *MovieTicketBookingSystem {
-	once.Do(func() {
-		instance = &MovieTicketBookingSystem{
-			movies:   make([]*Movie, 0),
-			theaters: make([]*Theater, 0),
-			shows:    make(map[string]*Show),
-			bookings: make(map[string]*Booking),
-		}
-	})
-	return instance
-}
 func NewBookingSystem() *MovieTicketBookingSystem {
 	return &MovieTicketBookingSystem{
 		movies:   make([]*Movie, 0),
@@ -72,7 +56,7 @@ func (bs *MovieTicketBookingSystem) BookTickets(user *User, show *Show, selected
 	// Check seat availability
 	for _, seat := range selectedSeats {
 		showSeat, exists := show.Seats[seat.ID]
-		if !exists || showSeat.GetStatus() != SeatStatusAvailable {
+		if !exists || showSeat.Status() != SeatStatusAvailable {
 			return nil, fmt.Errorf("seat %s is not available", seat.ID)
 		}
 	}
@@ -85,7 +69,7 @@ func (bs *MovieTicketBookingSystem) BookTickets(user *User, show *Show, selected
 	// Calculate total price
 	var totalPrice float64
 	for _, seat := range selectedSeats {
-		totalPrice += seat.GetPrice()
+		totalPrice += seat.Price()
 	}
 
 	// Generate booking ID
@@ -107,7 +91,7 @@ func (bs *MovieTicketBookingSystem) ConfirmBooking(bookingID string) error {
 		return fmt.Errorf("booking not found")
 	}
 
-	if booking.GetStatus() != BookingStatusPending {
+	if booking.Status() != BookingStatusPending {
 		return fmt.Errorf("booking is not in pending state")
 	}
 
@@ -124,7 +108,7 @@ func (bs *MovieTicketBookingSystem) CancelBooking(bookingID string) error {
 		return fmt.Errorf("booking not found")
 	}
 
-	if booking.GetStatus() == BookingStatusCancelled {
+	if booking.Status() == BookingStatusCancelled {
 		return fmt.Errorf("booking is already cancelled")
 	}
 
