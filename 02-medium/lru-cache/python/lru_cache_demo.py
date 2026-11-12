@@ -1,22 +1,27 @@
+"""LRU cache demo entrypoint."""
+
+from __future__ import annotations
+
+import logging
+
 from lru_cache import LRUCache
 
-class LRUCacheDemo:
-    @staticmethod
-    def main():
-        cache: LRUCache[str, int] = LRUCache(3)
+logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
+logger = logging.getLogger(__name__)
 
-        cache.put("a", 1)
-        cache.put("b", 2)
-        cache.put("c", 3)
 
-        # Accessing 'a' makes it the most recently used
-        print(cache.get("a"))  # 1
+def main() -> None:
+    cache: LRUCache[str, int] = LRUCache(3)
 
-        # Adding 'd' will cause 'b' (the current LRU item) to be evicted
-        cache.put("d", 4)
+    cache.put("a", 1)
+    cache.put("b", 2)
+    cache.put("c", 3)
 
-        # Trying to get 'b' should now return None
-        print(cache.get("b"))  # None
+    logger.info("get(a)=%s", cache.get("a"))
+
+    cache.put("d", 4)
+    logger.info("get(b)=%s (evicted)", cache.get("b"))
+
 
 if __name__ == "__main__":
-    LRUCacheDemo.main()
+    main()

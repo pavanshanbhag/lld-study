@@ -9,6 +9,7 @@ type Logger struct {
 	mu     sync.RWMutex
 }
 
+// NewLogger creates a logger. If config is nil, defaults to Info + console.
 func NewLogger(config *LoggerConfig) *Logger {
 	if config == nil {
 		config = NewLoggerConfig(LogLevelInfo, NewConsoleAppender())

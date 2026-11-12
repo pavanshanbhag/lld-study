@@ -4,18 +4,4 @@ package chainofresponsibility
 type Request struct {
 	Type string
 	Data string
-	User         string
-	UserRole     string
-	RequestCount int
-	Payload      string
-}
-
-// NewRequest creates a new Request
-func NewRequest(user, role string, requestCount int, payload string) *Request {
-	return &Request{
-		User:         user,
-		UserRole:     role,
-		RequestCount: requestCount,
-		Payload:      payload,
-	}
 }

@@ -27,7 +27,7 @@ func (h *HotelManagementSystem) AddGuest(guest *Guest) {
 	h.guests[guest.ID] = guest
 }
 
-func (h *HotelManagementSystem) GetGuest(guestID string) *Guest {
+func (h *HotelManagementSystem) Guest(guestID string) *Guest {
 	h.mu.RLock()
 	defer h.mu.RUnlock()
 	return h.guests[guestID]
@@ -39,7 +39,7 @@ func (h *HotelManagementSystem) AddRoom(room *Room) {
 	h.rooms[room.ID] = room
 }
 
-func (h *HotelManagementSystem) GetRoom(roomID string) *Room {
+func (h *HotelManagementSystem) Room(roomID string) *Room {
 	h.mu.RLock()
 	defer h.mu.RUnlock()
 	return h.rooms[roomID]
@@ -49,7 +49,7 @@ func (h *HotelManagementSystem) BookRoom(guest *Guest, room *Room, checkInDate, 
 	h.mu.Lock()
 	defer h.mu.Unlock()
 
-	if room.GetStatus() != RoomStatusAvailable {
+	if room.Status() != RoomStatusAvailable {
 		return nil, fmt.Errorf("room is not available")
 	}
 
@@ -113,8 +113,8 @@ func (h *HotelManagementSystem) CheckOut(reservationID string, payment Payment) 
 	days := reservation.CheckOutDate.Sub(reservation.CheckInDate).Hours() / 24
 	amount := reservation.Room.Price * days
 
-	if !payment.ProcessPayment(amount) {
-		return fmt.Errorf("payment failed")
+	if err := payment.ProcessPayment(amount); err != nil {
+		return fmt.Errorf("payment failed: %w", err)
 	}
 
 	if err := reservation.Room.CheckOut(); err != nil {

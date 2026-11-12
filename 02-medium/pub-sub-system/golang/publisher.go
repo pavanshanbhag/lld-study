@@ -14,10 +14,10 @@ func (p *Publisher) RegisterTopic(topic *Topic) {
 	p.Topics[topic] = struct{}{}
 }
 
-func (p *Publisher) Publish(topic *Topic, message *Message) {
+func (p *Publisher) Publish(topic *Topic, message *Message) error {
 	if _, exists := p.Topics[topic]; !exists {
-		fmt.Printf("This publisher can't publish to topic: %s\n", topic.Name)
-		return
+		return fmt.Errorf("publisher not registered for topic %s", topic.Name)
 	}
 	topic.Publish(message)
+	return nil
 }

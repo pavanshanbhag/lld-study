@@ -12,12 +12,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/fooddeliveryservice-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/fooddeliveryservice/) 
+#### [Python Implementation](../solutions/python/fooddeliveryservice/)
+#### [C++ Implementation](../solutions/cpp/fooddeliveryservice/)
+#### [C# Implementation](../solutions/csharp/fooddeliveryservice/)
+#### [Go Implementation](../solutions/golang/fooddeliveryservice/)
 
 ## Classes, Interfaces and Enumerations
 1. The **Customer** class represents a customer who can place orders. It contains customer details such as ID, name, email, and phone number.

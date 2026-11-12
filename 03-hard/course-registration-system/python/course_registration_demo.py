@@ -5,7 +5,7 @@ from student import Student
 class CourseRegistrationDemo:
     @staticmethod
     def run():
-        registration_system = CourseRegistrationSystem()
+        registration_system = CourseRegistrationSystem.get_instance()
 
         # Create courses
         course1 = Course("CS101", "Introduction to Programming", "John Doe", 50, 0)

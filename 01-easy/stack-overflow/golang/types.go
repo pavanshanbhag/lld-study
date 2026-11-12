@@ -9,12 +9,12 @@ import (
 // Interfaces
 type Votable interface {
 	Vote(user *User, value int) error
-	GetVoteCount() int
+	VoteCount() int
 }
 
 type Commentable interface {
 	AddComment(comment *Comment) error
-	GetComments() []*Comment
+	Comments() []*Comment
 }
 
 // Reputation constants
@@ -93,7 +93,7 @@ func (u *User) UpdateReputation(value int) {
 	}
 }
 
-func (u *User) GetReputation() int {
+func (u *User) Reputation() int {
 	u.mu.RLock()
 	defer u.mu.RUnlock()
 	return u.reputation
@@ -103,14 +103,14 @@ func (u *User) AddQuestion(q *Question) {
 	u.mu.Lock()
 	defer u.mu.Unlock()
 	u.questions = append(u.questions, q)
-	u.UpdateReputation(QuestionReputation)
+	u.reputation += QuestionReputation
 }
 
 func (u *User) AddAnswer(a *Answer) {
 	u.mu.Lock()
 	defer u.mu.Unlock()
 	u.answers = append(u.answers, a)
-	u.UpdateReputation(AnswerReputation)
+	u.reputation += AnswerReputation
 }
 
 func (u *User) AddComment(c *Comment) {
@@ -120,7 +120,7 @@ func (u *User) AddComment(c *Comment) {
 	u.UpdateReputation(CommentReputation)
 }
 
-func (u *User) GetQuestions() []*Question {
+func (u *User) Questions() []*Question {
 	u.mu.RLock()
 	defer u.mu.RUnlock()
 	questions := make([]*Question, len(u.questions))
@@ -198,7 +198,7 @@ func (q *Question) Vote(user *User, value int) error {
 	return nil
 }
 
-func (q *Question) GetVoteCount() int {
+func (q *Question) VoteCount() int {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
 
@@ -216,7 +216,7 @@ func (q *Question) AddComment(comment *Comment) error {
 	return nil
 }
 
-func (q *Question) GetComments() []*Comment {
+func (q *Question) Comments() []*Comment {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
 	comments := make([]*Comment, len(q.comments))
@@ -224,7 +224,7 @@ func (q *Question) GetComments() []*Comment {
 	return comments
 }
 
-func (q *Question) GetAnswers() []*Answer {
+func (q *Question) Answers() []*Answer {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
 	answers := make([]*Answer, len(q.answers))
@@ -232,7 +232,7 @@ func (q *Question) GetAnswers() []*Answer {
 	return answers
 }
 
-func (q *Question) GetTags() []*Tag {
+func (q *Question) Tags() []*Tag {
 	q.mu.RLock()
 	defer q.mu.RUnlock()
 	tags := make([]*Tag, len(q.tags))

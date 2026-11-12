@@ -11,6 +11,21 @@ type Restaurant struct {
 	mu           sync.Mutex
 }
 
+var restaurantInstance *Restaurant
+var once sync.Once
+
+func GetRestaurantInstance() *Restaurant {
+	once.Do(func() {
+		restaurantInstance = &Restaurant{
+			menu:         []MenuItem{},
+			orders:       make(map[int]*Order),
+			reservations: []Reservation{},
+			payments:     make(map[int]*Payment),
+			staff:        []Staff{},
+		}
+	})
+	return restaurantInstance
+}
 func NewRestaurant() *Restaurant {
 	return &Restaurant{
 		menu:         []MenuItem{},

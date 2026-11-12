@@ -1,11 +1,19 @@
-# Voting System (Go)
+# Voting System — Go
 
-**Status:** Not implemented yet — placeholder from upstream.
-
-When added, follow the same layout as other topics:
+Idiomatic Go 1.25 bonus implementation:
 
 - `NewVotingSystem()` constructor (no singleton)
-- `voting_system.go` + demo + `voting_system_test.go`
-- `class-diagram.mmd` alongside upstream `class-diagram.png` (if present)
+- Typed errors (`ErrAlreadyVoted`, `ErrInvalidState`, …)
+- `sync.Mutex` / `RWMutex` for concurrent ballots
+- Plurality tally via `TallyStrategy`
+- `log/slog` demo + `-race` tests
 
-Run demo via root `main.go` after implementation.
+## Run
+
+```bash
+# from repo root — uncomment in main.go:
+# votingsystem "lld-study/04-bonus/voting-system/golang"
+go run .
+
+go test -race ./04-bonus/voting-system/golang/
+```

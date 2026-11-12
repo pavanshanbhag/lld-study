@@ -1,11 +1,11 @@
-from enum import Enum
+from enum import Enum, StrEnum
 
-class PaymentStatus(Enum):
+class PaymentStatus(StrEnum):
     SUCCESS = "SUCCESS"
     FAILURE = "FAILURE"
     PENDING = "PENDING"
 
-class SeatStatus(Enum):
+class SeatStatus(StrEnum):
     AVAILABLE = "AVAILABLE"
     LOCKED = "LOCKED"  # Temporarily held during booking process
     BOOKED = "BOOKED"

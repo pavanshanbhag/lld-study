@@ -1,15 +1,13 @@
-from datetime import date
-
 from task_management_system import TaskManagementSystem
 from task_priority import TaskPriority
-from task_sort_strategy import SortByDueDate
 from task_status import TaskStatus
-
+from datetime import date
+from task_sort_strategy import SortByDueDate
 
 class TaskManagementSystemDemo:
     @staticmethod
     def main():
-        task_management_system = TaskManagementSystem()
+        task_management_system = TaskManagementSystem.get_instance()
         
         # Create users
         user1 = task_management_system.create_user("John Doe", "john@example.com")

@@ -1,40 +1,39 @@
 package trafficsignalsystem
 
-import "time"
+import (
+	"log/slog"
+	"os"
+	"time"
+)
 
-// Run demonstrates the Traffic Signal System functionality
 func Run() {
-	// Initialize the traffic controller
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	trafficController := NewTrafficController()
 
-	// Create roads
 	road1 := NewRoad("R1", "Main Street")
 	road2 := NewRoad("R2", "Broadway")
 	road3 := NewRoad("R3", "Park Avenue")
 	road4 := NewRoad("R4", "Elm Street")
 
-	// Create traffic lights
-	trafficLight1 := NewTrafficLight("TL1", 6000, 3000, 9000)
-	trafficLight2 := NewTrafficLight("TL2", 6000, 3000, 9000)
-	trafficLight3 := NewTrafficLight("TL3", 6000, 3000, 9000)
-	trafficLight4 := NewTrafficLight("TL4", 6000, 3000, 9000)
+	road1.SetTrafficLight(NewTrafficLight("TL1", 100, 50, 100))
+	road2.SetTrafficLight(NewTrafficLight("TL2", 100, 50, 100))
+	road3.SetTrafficLight(NewTrafficLight("TL3", 100, 50, 100))
+	road4.SetTrafficLight(NewTrafficLight("TL4", 100, 50, 100))
 
-	// Assign traffic lights to roads
-	road1.SetTrafficLight(trafficLight1)
-	road2.SetTrafficLight(trafficLight2)
-	road3.SetTrafficLight(trafficLight3)
-	road4.SetTrafficLight(trafficLight4)
-
-	// Add roads to the traffic controller
 	trafficController.AddRoad(road1)
 	trafficController.AddRoad(road2)
 	trafficController.AddRoad(road3)
 	trafficController.AddRoad(road4)
+	logger.Info("roads registered", "count", trafficController.RoadCount())
 
-	// Start traffic control
-	go trafficController.StartTrafficControl()
+	stop := make(chan struct{})
+	go trafficController.StartTrafficControl(stop)
 
-	// Simulate an emergency after some time
-	time.Sleep(10 * time.Second)
-	trafficController.HandleEmergency("R2")
+	time.Sleep(250 * time.Millisecond)
+	if err := trafficController.HandleEmergency("R2"); err != nil {
+		logger.Error("emergency failed", "err", err)
+	} else {
+		logger.Info("emergency green", "road", "R2", "signal", road2.TrafficLight.Signal())
+	}
+	close(stop)
 }

@@ -12,12 +12,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/onlineshoppingservice-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/onlineshoppingservice/)
+#### [Python Implementation](../solutions/python/onlineshoppingservice/)
+#### [C++ Implementation](../solutions/cpp/onlineshoppingservice/)
+#### [C# Implementation](../solutions/csharp/onlineshoppingservice/)
+#### [Go Implementation](../solutions/golang/onlineshoppingservice/)
 
 ## Classes, Interfaces and Enumerations
 1. The **User** class represents a user in the online shopping service, with properties such as ID, name, email, password, and a list of orders.

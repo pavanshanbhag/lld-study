@@ -23,24 +23,24 @@ func NewVendingMachine() *VendingMachine {
 	return vm
 }
 
-func (vm *VendingMachine) SelectProduct(product *Product) {
-	vm.currentState.SelectProduct(product)
+func (vm *VendingMachine) SelectProduct(product *Product) error {
+	return vm.currentState.SelectProduct(product)
 }
 
-func (vm *VendingMachine) InsertCoin(coin Coin) {
-	vm.currentState.InsertCoin(coin)
+func (vm *VendingMachine) InsertCoin(coin Coin) error {
+	return vm.currentState.InsertCoin(coin)
 }
 
-func (vm *VendingMachine) InsertNote(note Note) {
-	vm.currentState.InsertNote(note)
+func (vm *VendingMachine) InsertNote(note Note) error {
+	return vm.currentState.InsertNote(note)
 }
 
-func (vm *VendingMachine) DispenseProduct() {
-	vm.currentState.DispenseProduct()
+func (vm *VendingMachine) DispenseProduct() error {
+	return vm.currentState.DispenseProduct()
 }
 
-func (vm *VendingMachine) ReturnChange() {
-	vm.currentState.ReturnChange()
+func (vm *VendingMachine) ReturnChange() error {
+	return vm.currentState.ReturnChange()
 }
 
 func (vm *VendingMachine) SetState(state VendingMachineState) {
@@ -53,4 +53,12 @@ func (vm *VendingMachine) ResetPayment() {
 
 func (vm *VendingMachine) ResetSelectedProduct() {
 	vm.selectedProduct = nil
+}
+
+func (vm *VendingMachine) TotalPayment() float64 {
+	return vm.totalPayment
+}
+
+func (vm *VendingMachine) SelectedProduct() *Product {
+	return vm.selectedProduct
 }

@@ -1,6 +1,5 @@
 from enum import Enum
 
-
 class CoffeeType(Enum):
     ESPRESSO = "ESPRESSO"
     LATTE = "LATTE"

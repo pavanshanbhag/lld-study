@@ -12,12 +12,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/concertticketbookingsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/concertticketbookingsystem/) 
+#### [Python Implementation](../solutions/python/concertticketbookingsystem/)
+#### [C++ Implementation](../solutions/cpp/concertticketbookingsystem/)
+#### [C# Implementation](../solutions/csharp/concertticketbookingsystem/)
+#### [Go Implementation](../solutions/golang/concertticketbookingsystem/)
 
 ## Classes, Interfaces and Enumerations
 1. The **Concert** class represents a concert event, with properties such as ID, artist, venue, date and time, and a list of seats.

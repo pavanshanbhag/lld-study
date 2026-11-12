@@ -5,7 +5,7 @@ from symbol import Symbol
 class TicTacToeDemo:
     @staticmethod
     def main():
-        system = TicTacToeSystem()
+        system = TicTacToeSystem.get_instance()
         
         alice = Player("Alice", Symbol.X)
         bob = Player("Bob", Symbol.O)

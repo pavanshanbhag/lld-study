@@ -11,12 +11,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/restaurantmanagementsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/restaurantmanagementsystem/) 
+#### [Python Implementation](../solutions/python/restaurantmanagementsystem/)
+#### [C++ Implementation](../solutions/cpp/restaurantmanagementsystem/)
+#### [C# Implementation](../solutions/csharp/restaurantmanagementsystem/)
+#### [Go Implementation](../solutions/golang/restaurantmanagementsystem/)
 
 ## Classes, Interfaces and Enumerations
 1. The **MenuItem** class represents a menu item in the restaurant, with properties such as ID, name, description, price, and availability.

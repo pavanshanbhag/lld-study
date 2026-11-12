@@ -4,11 +4,6 @@ import (
 	"sync"
 )
 
-type ParkResult struct {
-	LevelFloor int
-	Spot       *ParkingSpot
-}
-
 type ParkingLot struct {
 	mu     sync.RWMutex
 	levels []*Level
@@ -24,9 +19,9 @@ func (p *ParkingLot) AddLevel(level *Level) {
 	p.levels = append(p.levels, level)
 }
 
-func (p *ParkingLot) Park(v Vehicle) (ParkResult, error) {
+func (p *ParkingLot) Park(v Vehicle) (*ParkingSpot, error) {
 	if v == nil || v.LicensePlate() == "" {
-		return ParkResult{}, ErrInvalidVehicle
+		return nil, ErrInvalidVehicle
 	}
 
 	p.mu.Lock()
@@ -35,13 +30,13 @@ func (p *ParkingLot) Park(v Vehicle) (ParkResult, error) {
 	for _, level := range p.levels {
 		spot, err := level.Park(v)
 		if err == nil {
-			return ParkResult{LevelFloor: level.Floor(), Spot: spot}, nil
+			return spot, nil
 		}
 		if err != ErrLotFull {
-			return ParkResult{}, err
+			return nil, err
 		}
 	}
-	return ParkResult{}, ErrLotFull
+	return nil, ErrLotFull
 }
 
 func (p *ParkingLot) Unpark(licensePlate string) (*ParkingSpot, error) {

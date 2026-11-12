@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class Logger:
-    def __init__(self, name: str, parent: Logger | None, manager: LogManager) -> None:
+    def __init__(self, name: str, parent: "Logger | None", manager: "LogManager") -> None:
         self.name = name
         self.level: LogLevel | None = None
         self.parent = parent

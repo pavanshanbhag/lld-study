@@ -31,3 +31,5 @@ func (c *Course) IncrementEnrolled() {
 	defer c.mu.Unlock()
 	c.enrolledStudents++
 }
+
+func (c *Course) EnrolledStudents() int { return c.GetEnrolledStudents() }

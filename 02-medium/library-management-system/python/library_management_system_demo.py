@@ -5,7 +5,7 @@ from search_strategy import SearchByTitleStrategy, SearchByAuthorStrategy
 class LibraryManagementDemo:
     @staticmethod
     def main():
-        library = LibraryManagementSystem()
+        library = LibraryManagementSystem.get_instance()
 
         # === Setup: Add items and members using the Facade ===
         print("=== Setting up the Library ===")

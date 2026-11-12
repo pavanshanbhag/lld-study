@@ -1,6 +1,8 @@
 package taskmanagementsystem
 
 import (
+	"fmt"
+	"strings"
 	"sync"
 	"time"
 )
@@ -18,40 +20,55 @@ func NewTaskManager() *TaskManager {
 	}
 }
 
-func (tm *TaskManager) CreateTask(task *Task) {
+func (tm *TaskManager) CreateTask(task *Task) error {
+	if task == nil || task.AssignedUser == nil {
+		return fmt.Errorf("task and assigned user required")
+	}
 	tm.mu.Lock()
 	defer tm.mu.Unlock()
 
-	tm.tasks[task.GetId()] = task
-	tm.assignTaskToUser(task.GetAssignedUser(), task)
+	tm.tasks[task.Id] = task
+	tm.assignTaskToUser(task.AssignedUser, task)
+	return nil
 }
 
-func (tm *TaskManager) UpdateTask(updatedTask *Task) {
+func (tm *TaskManager) UpdateTask(updatedTask *Task) error {
+	if updatedTask == nil {
+		return fmt.Errorf("task required")
+	}
 	tm.mu.Lock()
 	defer tm.mu.Unlock()
 
-	if existingTask, exists := tm.tasks[updatedTask.GetId()]; exists {
-		existingTask.SetTitle(updatedTask.GetTitle())
-		existingTask.SetDescription(updatedTask.GetDescription())
-		existingTask.SetDueDate(updatedTask.GetDueDate())
-		existingTask.SetPriority(updatedTask.GetPriority())
-		existingTask.SetStatus(updatedTask.GetStatus())
-
-		if existingTask.GetAssignedUser() != updatedTask.GetAssignedUser() {
-			tm.unassignTaskFromUser(existingTask.GetAssignedUser(), existingTask)
-			tm.assignTaskToUser(updatedTask.GetAssignedUser(), existingTask)
-		}
+	existingTask, exists := tm.tasks[updatedTask.Id]
+	if !exists {
+		return fmt.Errorf("task not found: %s", updatedTask.Id)
 	}
+
+	existingTask.Title = updatedTask.Title
+	existingTask.Description = updatedTask.Description
+	existingTask.DueDate = updatedTask.DueDate
+	existingTask.Priority = updatedTask.Priority
+	existingTask.Status = updatedTask.Status
+
+	if existingTask.AssignedUser != updatedTask.AssignedUser {
+		tm.unassignTaskFromUser(existingTask.AssignedUser, existingTask)
+		tm.assignTaskToUser(updatedTask.AssignedUser, existingTask)
+		existingTask.AssignedUser = updatedTask.AssignedUser
+	}
+	return nil
 }
 
-func (tm *TaskManager) DeleteTask(taskId string) {
+func (tm *TaskManager) DeleteTask(taskId string) error {
 	tm.mu.Lock()
 	defer tm.mu.Unlock()
 
-	if task, exists := tm.tasks[taskId]; exists {
-		delete(tm.tasks, taskId)
-		tm.unassignTaskFromUser(task.GetAssignedUser(), task)
+	task, exists := tm.tasks[taskId]
+	if !exists {
+		return fmt.Errorf("task not found: %s", taskId)
 	}
+	delete(tm.tasks, taskId)
+	tm.unassignTaskFromUser(task.AssignedUser, task)
+	return nil
 }
 
 func (tm *TaskManager) SearchTasks(keyword string) []*Task {
@@ -60,7 +77,7 @@ func (tm *TaskManager) SearchTasks(keyword string) []*Task {
 
 	var matchingTasks []*Task
 	for _, task := range tm.tasks {
-		if contains(task.GetTitle(), keyword) || contains(task.GetDescription(), keyword) {
+		if strings.Contains(task.Title, keyword) || strings.Contains(task.Description, keyword) {
 			matchingTasks = append(matchingTasks, task)
 		}
 	}
@@ -73,46 +90,45 @@ func (tm *TaskManager) FilterTasks(status TaskStatus, startDate, endDate time.Ti
 
 	var filteredTasks []*Task
 	for _, task := range tm.tasks {
-		if task.GetStatus() == status &&
-			task.GetDueDate().After(startDate) &&
-			task.GetDueDate().Before(endDate) &&
-			task.GetPriority() == priority {
+		if task.Status == status &&
+			task.DueDate.After(startDate) &&
+			task.DueDate.Before(endDate) &&
+			task.Priority == priority {
 			filteredTasks = append(filteredTasks, task)
 		}
 	}
 	return filteredTasks
 }
 
-func (tm *TaskManager) MarkTaskAsCompleted(taskId string) {
+func (tm *TaskManager) MarkTaskAsCompleted(taskId string) error {
 	tm.mu.Lock()
 	defer tm.mu.Unlock()
 
-	if task, exists := tm.tasks[taskId]; exists {
-		task.SetStatus(Completed)
+	task, exists := tm.tasks[taskId]
+	if !exists {
+		return fmt.Errorf("task not found: %s", taskId)
 	}
+	task.Status = Completed
+	return nil
 }
 
-func (tm *TaskManager) GetTaskHistory(user *User) []*Task {
+func (tm *TaskManager) TaskHistory(user *User) []*Task {
 	tm.mu.Lock()
 	defer tm.mu.Unlock()
 
-	return tm.userTasks[user.GetId()]
+	return tm.userTasks[user.Id]
 }
 
 func (tm *TaskManager) assignTaskToUser(user *User, task *Task) {
-	tm.userTasks[user.GetId()] = append(tm.userTasks[user.GetId()], task)
+	tm.userTasks[user.Id] = append(tm.userTasks[user.Id], task)
 }
 
 func (tm *TaskManager) unassignTaskFromUser(user *User, task *Task) {
-	tasks := tm.userTasks[user.GetId()]
+	tasks := tm.userTasks[user.Id]
 	for i, t := range tasks {
 		if t == task {
-			tm.userTasks[user.GetId()] = append(tasks[:i], tasks[i+1:]...)
+			tm.userTasks[user.Id] = append(tasks[:i], tasks[i+1:]...)
 			break
 		}
 	}
-}
-
-func contains(text, substr string) bool {
-	return len(text) >= len(substr) && text[:len(substr)] == substr
 }

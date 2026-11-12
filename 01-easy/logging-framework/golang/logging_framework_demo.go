@@ -1,27 +1,26 @@
 package loggingframework
 
 import (
-	"fmt"
+	"log/slog"
+	"os"
 )
 
 func Run() {
-	logger := NewLogger(nil)
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+	appLogger := NewLogger(nil)
 
-	// Logging with default configuration
-	logger.Info("This is an information message")
-	logger.Warning("This is a warning message")
-	logger.Error("This is an error message")
+	_ = appLogger.Info("This is an information message")
+	_ = appLogger.Warning("This is a warning message")
+	_ = appLogger.Error("This is an error message")
 
-	// Changing log level and appender
 	fileAppender := NewFileAppender("app.log")
 	config := NewLoggerConfig(LogLevelDebug, fileAppender)
-	logger.SetConfig(config)
+	appLogger.SetConfig(config)
 
-	if err := logger.Debug("This is a debug message"); err != nil {
-		fmt.Printf("Error logging debug message: %v\n", err)
+	if err := appLogger.Debug("This is a debug message"); err != nil {
+		logger.Error("debug log failed", "err", err)
 	}
-
-	if err := logger.Info("This is an information message"); err != nil {
-		fmt.Printf("Error logging info message: %v\n", err)
+	if err := appLogger.Info("This is an information message"); err != nil {
+		logger.Error("info log failed", "err", err)
 	}
 }

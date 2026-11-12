@@ -53,7 +53,7 @@ def test_ticket_duration_uses_datetime() -> None:
     lot.add_floor(floor)
 
     ticket = lot.park_vehicle(Truck("T-1"))
-    ticket.entry_time = datetime.now(UTC) - timedelta(hours=2)
+    object.__setattr__(ticket, "entry_time", datetime.now(UTC) - timedelta(hours=2))
     ticket.close()
     fee = lot.fee_strategy.calculate_fee(ticket)
     assert fee >= 20.0

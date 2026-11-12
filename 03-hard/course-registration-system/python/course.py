@@ -1,15 +1,17 @@
-from datetime import datetime
-from typing import List, Dict
+from __future__ import annotations
 
+from dataclasses import dataclass
+
+
+@dataclass(slots=True)
 class Course:
-    def __init__(self, code: str, name: str, instructor: str, max_capacity: int, enrolled_students: int):
-        self.code = code
-        self.name = name
-        self.instructor = instructor
-        self.max_capacity = max_capacity
-        self.enrolled_students = enrolled_students
+    code: str
+    name: str
+    instructor: str
+    max_capacity: int
+    enrolled_students: int
 
-    def set_enrolled_students(self, enrolled_students: int):
+    def set_enrolled_students(self, enrolled_students: int) -> None:
         self.enrolled_students = enrolled_students
 
     def get_code(self) -> str:

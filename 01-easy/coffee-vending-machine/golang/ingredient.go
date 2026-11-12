@@ -15,11 +15,11 @@ func NewIngredient(name string, quantity int) *Ingredient {
 	}
 }
 
-func (i *Ingredient) GetName() string {
+func (i *Ingredient) Name() string {
 	return i.name
 }
 
-func (i *Ingredient) GetQuantity() int {
+func (i *Ingredient) Quantity() int {
 	i.mu.Lock()
 	defer i.mu.Unlock()
 	return i.quantity

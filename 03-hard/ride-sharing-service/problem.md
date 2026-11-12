@@ -12,12 +12,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/ridesharingservice-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/ridesharingservice/) 
+#### [Python Implementation](../solutions/python/ridesharingservice/)
+#### [C++ Implementation](../solutions/cpp/ridesharingservice/)
+#### [C# Implementation](../solutions/csharp/ridesharingservice/)
+#### [Go Implementation](../solutions/golang/ridesharingservice/)
 
 ## Classes, Interfaces and Enumerations
 1. The **Passenger** class represents a passenger in the ride sharing service, with properties such as ID, name, contact information, and location.

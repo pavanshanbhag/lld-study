@@ -1,9 +1,9 @@
-
 from direction import Direction
 from light_color import LightColor
+from signal_state import SignalState
 from observer import TrafficObserver
-from signal_state import GreenState, RedState, SignalState
-
+from typing import List
+from signal_state import RedState, GreenState
 
 class TrafficLight:
     def __init__(self, intersection_id: int, direction: Direction):
@@ -12,7 +12,7 @@ class TrafficLight:
         self._current_color = None
         self._current_state = RedState()  # Default state is Red
         self._next_state = None
-        self._observers: list[TrafficObserver] = []
+        self._observers: List[TrafficObserver] = []
         self._current_state.handle(self)
 
     # This is called by the IntersectionController to initiate a G-Y-R cycle

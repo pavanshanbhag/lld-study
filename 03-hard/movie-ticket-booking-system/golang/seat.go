@@ -7,7 +7,7 @@ type Seat struct {
 	Row    int
 	Column int
 	Type   SeatType
-	Price  float64
+	price  float64
 	status SeatStatus
 	mu     sync.RWMutex
 }
@@ -18,12 +18,12 @@ func NewSeat(id string, row, column int, seatType SeatType, price float64, statu
 		Row:    row,
 		Column: column,
 		Type:   seatType,
-		Price:  price,
+		price:  price,
 		status: status,
 	}
 }
 
-func (s *Seat) GetStatus() SeatStatus {
+func (s *Seat) Status() SeatStatus {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 	return s.status
@@ -35,6 +35,9 @@ func (s *Seat) SetStatus(status SeatStatus) {
 	s.status = status
 }
 
-func (s *Seat) GetPrice() float64 {
-	return s.Price
+func (s *Seat) Price() float64 {
+	return s.price
 }
+
+func (s *Seat) GetStatus() SeatStatus { return s.Status() }
+func (s *Seat) GetPrice() float64     { return s.Price() }

@@ -1,7 +1,13 @@
+from __future__ import annotations
+
+import logging
+
 from coin import Coin
 from inventory import Inventory
 from item import Item
 from states import IdleState, VendingMachineState
+
+logger = logging.getLogger(__name__)
 
 
 class VendingMachine:
@@ -27,17 +33,22 @@ class VendingMachine:
 
     def dispense_item(self) -> None:
         item = self.inventory.get_item(self.selected_item_code)
-        if self.balance >= item.get_price():
+        if item is None:
+            logger.warning("no selected item to dispense")
+            self.reset()
+            self.set_state(IdleState(self))
+            return
+        if self.balance >= item.price:
             self.inventory.reduce_stock(self.selected_item_code)
-            self.balance -= item.get_price()
-            print(f"Dispensed: {item.get_name()}")
+            self.balance -= item.price
+            logger.info("dispensed %s", item.name)
             if self.balance > 0:
-                print(f"Returning change: {self.balance}")
+                logger.info("returning change: %s", self.balance)
         self.reset()
         self.set_state(IdleState(self))
 
     def refund_balance(self) -> None:
-        print(f"Refunding: {self.balance}")
+        logger.info("refunding: %s", self.balance)
         self.balance = 0
 
     def reset(self) -> None:
@@ -47,7 +58,7 @@ class VendingMachine:
     def add_balance(self, value: int) -> None:
         self.balance += value
 
-    def get_selected_item(self) -> Item:
+    def get_selected_item(self) -> Item | None:
         return self.inventory.get_item(self.selected_item_code)
 
     def set_selected_item_code(self, code: str) -> None:

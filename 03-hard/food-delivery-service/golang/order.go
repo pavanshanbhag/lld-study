@@ -19,7 +19,7 @@ type Order struct {
 	Customer      *Customer
 	Restaurant    *Restaurant
 	Items         []*OrderItem
-	Status        OrderStatus
+	status        OrderStatus
 	DeliveryAgent *DeliveryAgent
 	mu            sync.RWMutex
 }
@@ -30,7 +30,7 @@ func NewOrder(id string, customer *Customer, restaurant *Restaurant) *Order {
 		Customer:   customer,
 		Restaurant: restaurant,
 		Items:      make([]*OrderItem, 0),
-		Status:     OrderStatusPending,
+		status:     OrderStatusPending,
 	}
 }
 
@@ -54,13 +54,13 @@ func (o *Order) RemoveItem(item *OrderItem) {
 func (o *Order) SetStatus(status OrderStatus) {
 	o.mu.Lock()
 	defer o.mu.Unlock()
-	o.Status = status
+	o.status = status
 }
 
-func (o *Order) GetStatus() OrderStatus {
+func (o *Order) Status() OrderStatus {
 	o.mu.RLock()
 	defer o.mu.RUnlock()
-	return o.Status
+	return o.status
 }
 
 func (o *Order) AssignDeliveryAgent(agent *DeliveryAgent) {
@@ -68,3 +68,5 @@ func (o *Order) AssignDeliveryAgent(agent *DeliveryAgent) {
 	defer o.mu.Unlock()
 	o.DeliveryAgent = agent
 }
+
+func (o *Order) GetStatus() OrderStatus { return o.Status() }

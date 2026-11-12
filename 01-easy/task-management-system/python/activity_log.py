@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 class ActivityLog:
     def __init__(self, description: str):
         self._description = description

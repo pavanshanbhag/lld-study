@@ -10,12 +10,22 @@ type CurrencyConverter struct {
 	mu            sync.RWMutex
 }
 
+var (
+	currencyConverter *CurrencyConverter
+	converterOnce     sync.Once
+)
+
+func GetCurrencyConverter() *CurrencyConverter {
+	converterOnce.Do(func() {
+		currencyConverter = &CurrencyConverter{
+			exchangeRates: make(map[Currency]*big.Float),
+		}
+		currencyConverter.initializeRates()
+	})
+	return currencyConverter
+}
 func NewCurrencyConverter() *CurrencyConverter {
-	converter := &CurrencyConverter{
-		exchangeRates: make(map[Currency]*big.Float),
-	}
-	converter.initializeRates()
-	return converter
+	return GetCurrencyConverter()
 }
 
 func (cc *CurrencyConverter) initializeRates() {

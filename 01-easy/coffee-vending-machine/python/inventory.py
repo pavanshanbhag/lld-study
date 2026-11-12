@@ -1,18 +1,19 @@
+from typing import Dict
 
 from enums import Ingredient
 
 
 class Inventory:
     def __init__(self) -> None:
-        self._stock: dict[Ingredient, int] = {}
+        self._stock: Dict[Ingredient, int] = {}
 
     def add_stock(self, ingredient: Ingredient, quantity: int) -> None:
         self._stock[ingredient] = self._stock.get(ingredient, 0) + quantity
 
-    def has_ingredients(self, recipe: dict[Ingredient, int]) -> bool:
+    def has_ingredients(self, recipe: Dict[Ingredient, int]) -> bool:
         return all(self._stock.get(ingredient, 0) >= quantity for ingredient, quantity in recipe.items())
 
-    def deduct_ingredients(self, recipe: dict[Ingredient, int]) -> None:
+    def deduct_ingredients(self, recipe: Dict[Ingredient, int]) -> None:
         if not self.has_ingredients(recipe):
             print("Not enough ingredients to make coffee.")
             return

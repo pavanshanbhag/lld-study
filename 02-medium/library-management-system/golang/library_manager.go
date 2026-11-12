@@ -17,6 +17,20 @@ type LibraryManager struct {
 	mu      sync.RWMutex
 }
 
+var (
+	instance *LibraryManager
+	once     sync.Once
+)
+
+func GetLibraryManager() *LibraryManager {
+	once.Do(func() {
+		instance = &LibraryManager{
+			catalog: make(map[string]*Book),
+			members: make(map[string]*Member),
+		}
+	})
+	return instance
+}
 func NewLibraryManager() *LibraryManager {
 	return &LibraryManager{
 		catalog: make(map[string]*Book),

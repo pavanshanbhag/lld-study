@@ -1,13 +1,16 @@
-# Voting System (Python)
+# Voting System — Python
 
-**Status:** Not implemented yet — placeholder from upstream.
+Single-module implementation in `voting_system.py`:
 
-When added, follow the same layout as other topics:
+- `@dataclass` / `StrEnum`
+- Constructor-based `VotingSystem` (no singleton)
+- Thread-safe election ballots
+- Plurality tally strategy
+- Domain exceptions; demo uses logging
 
-- Plain constructor (no `get_instance()`)
-- Domain module + demo + `tests/test_voting_system.py`
-- `class-diagram.mmd` alongside upstream `class-diagram.png` (if present)
+## Run
 
 ```bash
 uv run python 04-bonus/voting-system/python/voting_system_demo.py
+PYTHONPATH=04-bonus/voting-system/python uv run pytest 04-bonus/voting-system/python/tests -q
 ```

@@ -1,3 +1,4 @@
+import logging
 from typing import TYPE_CHECKING
 
 from async_log_processor import AsyncLogProcessor
@@ -5,6 +6,8 @@ from logger import Logger
 
 if TYPE_CHECKING:
     pass
+
+logger = logging.getLogger(__name__)
 
 
 class LogManager:
@@ -38,11 +41,11 @@ class LogManager:
         self.processor.stop()
 
         all_appenders = set()
-        for logger in self.loggers.values():
-            for appender in logger.get_appenders():
+        for lg in self.loggers.values():
+            for appender in lg.get_appenders():
                 all_appenders.add(appender)
 
         for appender in all_appenders:
             appender.close()
 
-        print("Logging framework shut down gracefully.")
+        logger.info("Logging framework shut down gracefully.")

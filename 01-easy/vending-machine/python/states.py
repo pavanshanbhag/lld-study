@@ -1,128 +1,113 @@
+from __future__ import annotations
+
+import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 from coin import Coin
 
 if TYPE_CHECKING:
-    from .vending_machine import VendingMachine
+    from vending_machine import VendingMachine
+
+logger = logging.getLogger(__name__)
 
 
 class VendingMachineState(ABC):
-    """Abstract base class for all vending machine states."""
-    
     def __init__(self, machine: VendingMachine):
         self.machine = machine
-    
+
     @abstractmethod
-    def insert_coin(self, coin: Coin):
-        """Handle coin insertion."""
-        pass
-    
+    def insert_coin(self, coin: Coin) -> None: ...
+
     @abstractmethod
-    def select_item(self, code: str):
-        """Handle item selection."""
-        pass
-    
+    def select_item(self, code: str) -> None: ...
+
     @abstractmethod
-    def dispense(self):
-        """Handle dispense request."""
-        pass
-    
+    def dispense(self) -> None: ...
+
     @abstractmethod
-    def refund(self):
-        """Handle refund request."""
-        pass
+    def refund(self) -> None: ...
 
 
 class IdleState(VendingMachineState):
-    """State when machine is waiting for user interaction."""
-    
-    def insert_coin(self, coin: Coin):
-        print("Please select an item before inserting money.")
-    
-    def select_item(self, code: str):
+    def insert_coin(self, coin: Coin) -> None:
+        logger.info("please select an item before inserting money")
+
+    def select_item(self, code: str) -> None:
         if not self.machine.get_inventory().is_available(code):
-            print("Item not available.")
+            logger.warning("item not available: %s", code)
             return
-        
+
         self.machine.set_selected_item_code(code)
-        # Import here to avoid circular dependency
         from states import ItemSelectedState
+
         self.machine.set_state(ItemSelectedState(self.machine))
-        print(f"Item selected: {code}")
-    
-    def dispense(self):
-        print("No item selected.")
-    
-    def refund(self):
-        print("No money to refund.")
+        logger.info("item selected: %s", code)
+
+    def dispense(self) -> None:
+        logger.info("no item selected")
+
+    def refund(self) -> None:
+        logger.info("no money to refund")
 
 
 class ItemSelectedState(VendingMachineState):
-    """State when an item has been selected but insufficient money inserted."""
-    
-    def insert_coin(self, coin: Coin):
-        self.machine.add_balance(coin.get_value())
-        print(f"Coin inserted: {coin.get_value()}¢ ({coin.name})")
-        
+    def insert_coin(self, coin: Coin) -> None:
+        self.machine.add_balance(int(coin))
+        logger.info("coin inserted: %s¢ (%s)", int(coin), coin.name)
+
         selected_item = self.machine.get_selected_item()
-        if selected_item and self.machine.get_balance() >= selected_item.get_price():
-            print("Sufficient money received.")
-            # Import here to avoid circular dependency
+        if selected_item and self.machine.get_balance() >= selected_item.price:
+            logger.info("sufficient money received")
             from states import HasMoneyState
+
             self.machine.set_state(HasMoneyState(self.machine))
-    
-    def select_item(self, code: str):
-        print("Item already selected. Please insert money or request refund to select a different item.")
-    
-    def dispense(self):
-        print("Please insert sufficient money.")
-    
-    def refund(self):
+
+    def select_item(self, code: str) -> None:
+        logger.info("item already selected")
+
+    def dispense(self) -> None:
+        logger.info("please insert sufficient money")
+
+    def refund(self) -> None:
         self.machine.refund_balance()
         self.machine.reset()
-        # Import here to avoid circular dependency
         from states import IdleState
+
         self.machine.set_state(IdleState(self.machine))
 
 
 class HasMoneyState(VendingMachineState):
-    """State when sufficient money has been inserted."""
-    
-    def insert_coin(self, coin: Coin):
-        # Allow more coins (will be returned as change)
-        self.machine.add_balance(coin.get_value())
-        print(f"Additional coin inserted: {coin.get_value()}¢ ({coin.name}) - will be returned as change.")
-    
-    def select_item(self, code: str):
-        print("Item already selected. Please dispense or request refund to select a different item.")
-    
-    def dispense(self):
-        # Import here to avoid circular dependency
+    def insert_coin(self, coin: Coin) -> None:
+        self.machine.add_balance(int(coin))
+        logger.info("additional coin inserted: %s¢", int(coin))
+
+    def select_item(self, code: str) -> None:
+        logger.info("item already selected")
+
+    def dispense(self) -> None:
         from states import DispensingState
+
         self.machine.set_state(DispensingState(self.machine))
         self.machine.dispense_item()
-    
-    def refund(self):
+
+    def refund(self) -> None:
         self.machine.refund_balance()
         self.machine.reset()
-        # Import here to avoid circular dependency
         from states import IdleState
+
         self.machine.set_state(IdleState(self.machine))
 
 
 class DispensingState(VendingMachineState):
-    """State when item is being dispensed - blocks all user input."""
-    
-    def insert_coin(self, coin: Coin):
-        print("Currently dispensing. Please wait.")
-    
-    def select_item(self, code: str):
-        print("Currently dispensing. Please wait.")
-    
-    def dispense(self):
-        # Already triggered by HasMoneyState
-        print("Dispensing in progress...")
-    
-    def refund(self):
-        print("Dispensing in progress. Refund not allowed.")
+    def insert_coin(self, coin: Coin) -> None:
+        logger.info("currently dispensing")
+
+    def select_item(self, code: str) -> None:
+        logger.info("currently dispensing")
+
+    def dispense(self) -> None:
+        logger.info("dispensing in progress")
+
+    def refund(self) -> None:
+        logger.info("refund not allowed while dispensing")

@@ -1,3 +1,4 @@
+from typing import List
 
 from coffee import Coffee
 from coffee_factory import CoffeeFactory
@@ -14,7 +15,7 @@ class CoffeeVendingMachine:
         self._selected_coffee: Coffee | None = None
         self._money_inserted = 0
 
-    def select_coffee(self, coffee_type: CoffeeType, toppings: list[ToppingType]) -> None:
+    def select_coffee(self, coffee_type: CoffeeType, toppings: List[ToppingType]) -> None:
         coffee = CoffeeFactory.create_coffee(coffee_type)
 
         for topping in toppings:

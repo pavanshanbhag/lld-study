@@ -1,50 +1,47 @@
 package atm
 
 import (
-	"fmt"
+	"log/slog"
+	"os"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+
 	bankingService := NewBankingService()
 	cashDispenser := NewCashDispenser(10000)
 	atmMachine := NewATM(bankingService, cashDispenser)
 
-	// Create sample accounts
 	bankingService.CreateAccount("1234567890", 1000.0)
 	bankingService.CreateAccount("9876543210", 500.0)
 
-	// Create card and authenticate
 	card := NewCard("1234567890", "1234")
 	if err := atmMachine.AuthenticateUser(card); err != nil {
-		fmt.Printf("Authentication failed: %v\n", err)
+		logger.Error("authentication failed", "err", err)
 		return
 	}
 
-	// Check balance
-	if balance, err := atmMachine.CheckBalance("1234567890"); err == nil {
-		fmt.Printf("Account balance: %.2f\n", balance)
+	if balance, err := atmMachine.CheckBalance("1234567890"); err != nil {
+		logger.Error("check balance failed", "err", err)
 	} else {
-		fmt.Printf("Error checking balance: %v\n", err)
+		logger.Info("account balance", "balance", balance)
 	}
 
-	// Withdraw cash
-	if err := atmMachine.WithdrawCash("1234567890", 500.0); err == nil {
-		fmt.Println("Successfully withdrew $500")
+	if err := atmMachine.WithdrawCash("1234567890", 500.0); err != nil {
+		logger.Error("withdraw failed", "err", err)
 	} else {
-		fmt.Printf("Error withdrawing cash: %v\n", err)
+		logger.Info("withdrew cash", "amount", 500.0)
 	}
 
-	// Deposit cash
-	if err := atmMachine.DepositCash("9876543210", 200.0); err == nil {
-		fmt.Println("Successfully deposited $200")
+	if err := atmMachine.DepositCash("9876543210", 200.0); err != nil {
+		logger.Error("deposit failed", "err", err)
 	} else {
-		fmt.Printf("Error depositing cash: %v\n", err)
+		logger.Info("deposited cash", "amount", 200.0)
 	}
 
-	// Check updated balance
-	if balance, err := atmMachine.CheckBalance("1234567890"); err == nil {
-		fmt.Printf("Updated account balance: %.2f\n", balance)
+	if balance, err := atmMachine.CheckBalance("1234567890"); err != nil {
+		logger.Error("check balance failed", "err", err)
 	} else {
-		fmt.Printf("Error checking balance: %v\n", err)
+		logger.Info("updated balance", "balance", balance)
 	}
 }

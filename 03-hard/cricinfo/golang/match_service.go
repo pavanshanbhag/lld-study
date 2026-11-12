@@ -9,10 +9,21 @@ type MatchService struct {
 	mu      sync.RWMutex
 }
 
+var (
+	matchServiceInstance *MatchService
+	matchServiceOnce     sync.Once
+)
+
+func GetMatchService() *MatchService {
+	matchServiceOnce.Do(func() {
+		matchServiceInstance = &MatchService{
+			matches: make(map[string]*Match),
+		}
+	})
+	return matchServiceInstance
+}
 func NewMatchService() *MatchService {
-	return &MatchService{
-		matches: make(map[string]*Match),
-	}
+	return GetMatchService()
 }
 
 func (ms *MatchService) AddMatch(match *Match) {

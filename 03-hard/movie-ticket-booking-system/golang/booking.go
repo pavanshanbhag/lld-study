@@ -8,7 +8,7 @@ type Booking struct {
 	Show       *Show
 	Seats      []*Seat
 	TotalPrice float64
-	Status     BookingStatus
+	status     BookingStatus
 	mu         sync.RWMutex
 }
 
@@ -19,18 +19,20 @@ func NewBooking(id string, user *User, show *Show, seats []*Seat, totalPrice flo
 		Show:       show,
 		Seats:      seats,
 		TotalPrice: totalPrice,
-		Status:     status,
+		status:     status,
 	}
 }
 
-func (b *Booking) GetStatus() BookingStatus {
+func (b *Booking) Status() BookingStatus {
 	b.mu.RLock()
 	defer b.mu.RUnlock()
-	return b.Status
+	return b.status
 }
 
 func (b *Booking) SetStatus(status BookingStatus) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
-	b.Status = status
+	b.status = status
 }
+
+func (b *Booking) GetStatus() BookingStatus { return b.Status() }

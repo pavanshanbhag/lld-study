@@ -1,57 +1,64 @@
 package vending_machine
 
-import "fmt"
+import (
+	"log/slog"
+	"os"
+)
 
-// Run demonstrates the Vending Machine functionality.
 func Run() {
-	// Initialize the vending machine
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
+
 	vm := NewVendingMachine()
 
-	// Create some products
 	coke := NewProduct("Coke", 1.5)
 	pepsi := NewProduct("Pepsi", 1.5)
 	water := NewProduct("Water", 1.0)
 
-	// Add products to the inventory
 	vm.inventory.AddProduct(coke, 5)
 	vm.inventory.AddProduct(pepsi, 3)
 	vm.inventory.AddProduct(water, 2)
 
-	// Demonstrate a transaction
-	fmt.Println("Starting Vending Machine Demo")
+	logger.Info("starting vending machine demo")
 
-	fmt.Println("\nSelecting Coke")
-	vm.SelectProduct(coke)
+	logger.Info("selecting product", "name", coke.Name())
+	if err := vm.SelectProduct(coke); err != nil {
+		logger.Error("select failed", "err", err)
+	}
 
-	fmt.Println("Inserting coins")
-	vm.InsertCoin(QUARTER)
-	vm.InsertCoin(QUARTER)
-	vm.InsertCoin(QUARTER)
-	vm.InsertCoin(QUARTER)
+	logger.Info("inserting coins")
+	for range 4 {
+		if err := vm.InsertCoin(QUARTER); err != nil {
+			logger.Error("insert coin failed", "err", err)
+		}
+	}
 
-	fmt.Println("Dispensing product")
-	vm.DispenseProduct()
+	logger.Info("dispensing product")
+	if err := vm.DispenseProduct(); err != nil {
+		logger.Error("dispense failed", "err", err)
+	}
 
-	fmt.Println("Returning change")
-	vm.ReturnChange()
+	logger.Info("returning change")
+	if err := vm.ReturnChange(); err != nil {
+		logger.Error("return change failed", "err", err)
+	}
 
-	// Another example with insufficient funds
-	fmt.Println("\nSelecting Pepsi with insufficient funds")
-	vm.SelectProduct(pepsi)
-	vm.InsertCoin(QUARTER)
+	logger.Info("selecting product with insufficient funds", "name", pepsi.Name())
+	_ = vm.SelectProduct(pepsi)
+	_ = vm.InsertCoin(QUARTER)
 
-	fmt.Println("Trying to dispense Pepsi")
-	vm.DispenseProduct()
+	if err := vm.DispenseProduct(); err != nil {
+		logger.Info("dispense blocked as expected", "err", err)
+	}
 
-	fmt.Println("Adding more coins for Pepsi")
-	vm.InsertCoin(QUARTER)
-	vm.InsertCoin(QUARTER)
-	vm.InsertCoin(QUARTER)
-	vm.InsertCoin(QUARTER)
+	logger.Info("adding more coins")
+	for range 4 {
+		_ = vm.InsertCoin(QUARTER)
+	}
 
-	fmt.Println("Dispensing product")
-	vm.DispenseProduct()
-
-	fmt.Println("Returning change")
-	vm.ReturnChange()
+	if err := vm.DispenseProduct(); err != nil {
+		logger.Error("dispense failed", "err", err)
+	}
+	if err := vm.ReturnChange(); err != nil {
+		logger.Error("return change failed", "err", err)
+	}
 }

@@ -47,7 +47,7 @@ func (so *StackOverflow) AskQuestion(user *User, title, content string, tags []s
 	user.AddQuestion(question)
 
 	// Register tags
-	for _, tag := range question.GetTags() {
+	for _, tag := range question.Tags() {
 		so.tags[tag.Name] = tag
 	}
 
@@ -121,7 +121,7 @@ func (so *StackOverflow) SearchQuestions(query string) []*Question {
 		}
 
 		// Search in tags
-		for _, tag := range q.GetTags() {
+		for _, tag := range q.Tags() {
 			if strings.EqualFold(tag.Name, query) {
 				results = append(results, q)
 				break
@@ -132,9 +132,9 @@ func (so *StackOverflow) SearchQuestions(query string) []*Question {
 	return results
 }
 
-func (so *StackOverflow) GetQuestionsByUser(user *User) []*Question {
+func (so *StackOverflow) QuestionsByUser(user *User) []*Question {
 	if user == nil {
 		return nil
 	}
-	return user.GetQuestions()
+	return user.Questions()
 }

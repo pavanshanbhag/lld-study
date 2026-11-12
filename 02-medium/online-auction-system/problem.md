@@ -15,12 +15,14 @@ This system allows for the creation and management of auctions, user participati
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/onlineauctionsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/onlineauctionsystem/) 
+#### [Python Implementation](../solutions/python/onlineauctionsystem/)
+#### [C++ Implementation](../solutions/cpp/onlineauctionsystem/)
+#### [C# Implementation](../solutions/csharp/onlineauctionsystem/)
+#### [Go Implementation](../solutions/golang/onlineauctionsystem/)
 
 ## Classes, Interfaces and Enumerations
 1. The **User** class represents a user in the online auction system, with properties such as id, username, and email.

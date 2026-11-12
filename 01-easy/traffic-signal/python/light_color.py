@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class LightColor(Enum):
+class LightColor(StrEnum):
     GREEN = "GREEN"
     YELLOW = "YELLOW"
     RED = "RED"

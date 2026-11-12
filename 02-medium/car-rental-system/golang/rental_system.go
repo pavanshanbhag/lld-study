@@ -89,7 +89,7 @@ func (rs *RentalSystem) CancelReservation(reservationID string) {
 	}
 }
 
-func (rs *RentalSystem) ProcessPayment(reservation *Reservation) bool {
+func (rs *RentalSystem) ProcessPayment(reservation *Reservation) error {
 	return rs.processor.ProcessPayment(reservation.TotalPrice)
 }
 

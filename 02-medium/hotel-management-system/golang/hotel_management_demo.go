@@ -1,55 +1,50 @@
 package hotelmanagement
 
 import (
-	"fmt"
+	"log/slog"
+	"os"
 	"time"
 )
 
 func Run() {
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	hotelSystem := NewHotelManagementSystem()
 
-	// Create guests
 	guest1 := NewGuest("G001", "John Doe", "john@example.com", "1234567890")
 	guest2 := NewGuest("G002", "Jane Smith", "jane@example.com", "9876543210")
 	hotelSystem.AddGuest(guest1)
 	hotelSystem.AddGuest(guest2)
 
-	// Create rooms
 	room1 := NewRoom("R001", RoomTypeSingle, 100.0)
 	room2 := NewRoom("R002", RoomTypeDouble, 200.0)
 	hotelSystem.AddRoom(room1)
 	hotelSystem.AddRoom(room2)
 
-	// Book a room
 	checkInDate := time.Now()
 	checkOutDate := checkInDate.AddDate(0, 0, 3)
 
 	reservation1, err := hotelSystem.BookRoom(guest1, room1, checkInDate, checkOutDate)
 	if err != nil {
-		fmt.Printf("Failed to book room: %v\n", err)
+		logger.Error("book failed", "err", err)
 		return
 	}
-	fmt.Printf("Reservation created: %s\n", reservation1.ID)
+	logger.Info("reservation created", "id", reservation1.ID)
 
-	// Check-in
 	if err := hotelSystem.CheckIn(reservation1.ID); err != nil {
-		fmt.Printf("Failed to check in: %v\n", err)
+		logger.Error("check-in failed", "err", err)
 		return
 	}
-	fmt.Printf("Checked in: %s\n", reservation1.ID)
+	logger.Info("checked in", "id", reservation1.ID)
 
-	// Check-out and process payment
-	payment := NewCreditCardPayment()
-	if err := hotelSystem.CheckOut(reservation1.ID, payment); err != nil {
-		fmt.Printf("Failed to check out: %v\n", err)
+	if err := hotelSystem.CheckOut(reservation1.ID, NewCreditCardPayment()); err != nil {
+		logger.Error("check-out failed", "err", err)
 		return
 	}
-	fmt.Printf("Checked out: %s\n", reservation1.ID)
+	logger.Info("checked out", "id", reservation1.ID)
 
-	// Cancel a reservation
 	if err := hotelSystem.CancelReservation(reservation1.ID); err != nil {
-		fmt.Printf("Failed to cancel reservation: %v\n", err)
+		logger.Info("cancel after checkout (expected)", "err", err)
 		return
 	}
-	fmt.Printf("Reservation cancelled: %s\n", reservation1.ID)
+	logger.Info("reservation cancelled", "id", reservation1.ID)
 }

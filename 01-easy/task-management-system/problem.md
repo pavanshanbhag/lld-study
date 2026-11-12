@@ -11,12 +11,15 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/taskmanagementsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/taskmanagementsystem/) 
+#### [Python Implementation](../solutions/python/taskmanagementsystem/)
+#### [C++ Implementation](../solutions/cpp/taskmanagementsystem/)
+#### [C# Implementation](../solutions/csharp/taskmanagementsystem/)
+#### [Go Implementation](../solutions/golang/taskmanagementsystem/)
+#### [TypeScript Implementation](../solutions/typescript/src/TaskManagement/)
 
 ## Classes, Interfaces and Enumerations
 1. The **User** class represents a user in the task management system, with properties such as id, name, and email.

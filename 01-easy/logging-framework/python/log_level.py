@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class LogLevel(Enum):
+class LogLevel(IntEnum):
     DEBUG = 1
     INFO = 2
     WARN = 3

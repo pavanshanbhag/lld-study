@@ -9,7 +9,7 @@ def print_account_status(user: User) -> None:
 class StockBrokerageSystemDemo:
     def run():
         # System Setup
-        system = StockBrokerageSystem()
+        system = StockBrokerageSystem.get_instance()
 
         # Create Stocks
         apple = system.add_stock("AAPL", 150.00)

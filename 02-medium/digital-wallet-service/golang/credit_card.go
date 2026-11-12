@@ -11,14 +11,13 @@ type CreditCard struct {
 
 func NewCreditCard(id string, user *User, cardNumber, expirationDate, cvv string) *CreditCard {
 	return &CreditCard{
-		BasePaymentMethod: BasePaymentMethod{ID: id, User: user},
+		BasePaymentMethod: NewBasePaymentMethod(id, user),
 		CardNumber:        cardNumber,
 		ExpirationDate:    expirationDate,
 		CVV:               cvv,
 	}
 }
 
-func (c *CreditCard) ProcessPayment(amount *big.Float, currency Currency) bool {
-	// Process credit card payment
-	return true
+func (c *CreditCard) ProcessPayment(amount *big.Float, currency Currency) error {
+	return nil
 }

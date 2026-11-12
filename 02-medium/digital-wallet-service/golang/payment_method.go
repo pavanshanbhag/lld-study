@@ -3,20 +3,24 @@ package digitalwallet
 import "math/big"
 
 type PaymentMethod interface {
-	ProcessPayment(amount *big.Float, currency Currency) bool
-	GetID() string
-	GetUser() *User
+	ProcessPayment(amount *big.Float, currency Currency) error
+	ID() string
+	User() *User
 }
 
 type BasePaymentMethod struct {
-	ID   string
-	User *User
+	id   string
+	user *User
 }
 
-func (b *BasePaymentMethod) GetID() string {
-	return b.ID
+func NewBasePaymentMethod(id string, user *User) BasePaymentMethod {
+	return BasePaymentMethod{id: id, user: user}
 }
 
-func (b *BasePaymentMethod) GetUser() *User {
-	return b.User
+func (b *BasePaymentMethod) ID() string {
+	return b.id
+}
+
+func (b *BasePaymentMethod) User() *User {
+	return b.user
 }

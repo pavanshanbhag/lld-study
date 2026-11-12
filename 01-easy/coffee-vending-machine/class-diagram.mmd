@@ -4,20 +4,20 @@ classDiagram
 
     class CoffeeMachine {
         +NewCoffeeMachine()
-        +DisplayMenu()
-        +SelectCoffee(name string) Coffee
-        +DispenseCoffee(coffee Coffee, payment Payment) error
+        +Menu() []string
+        +SelectCoffee(name string) Coffee, error
+        +DispenseCoffee(coffee Coffee, payment Payment) float64, error
     }
 
     class Coffee {
-        +GetName() string
-        +GetPrice() float64
-        +GetRecipe() map
+        +Name() string
+        +Price() float64
+        +Recipe() map
     }
 
     class Ingredient {
-        +GetName() string
-        +GetQuantity() int
+        +Name() string
+        +Quantity() int
         +UpdateQuantity(delta int)
     }
 

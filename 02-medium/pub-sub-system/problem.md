@@ -10,12 +10,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/pubsubsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/pubsubsystem/)
+#### [Python Implementation](../solutions/python/pubsubsystem/)
+#### [C++ Implementation](../solutions/cpp/pubsubsystem/)
+#### [C# Implementation](../solutions/csharp/pubsubsystem/)
+#### [Go Implementation](../solutions/golang/pubsubsystem/)
 
 ## Classes, Interfaces and Enumerations
 1. The **Message** class represents a message that can be published and received by subscribers. It contains the message content.

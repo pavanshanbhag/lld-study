@@ -11,12 +11,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/courseregistrationsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/courseregistrationsystem/) 
+#### [Python Implementation](../solutions/python/courseregistrationsystem/)
+#### [C++ Implementation](../solutions/cpp/courseregistrationsystem/)
+#### [C# Implementation](../solutions/csharp/courseregistrationsystem/)
+#### [Go Implementation](../solutions/golang/courseregistrationsystem/)
 
 ## Classes, Interfaces and Enumerations
 1. The **Student** class represents a student in the course registration system, with properties such as ID, name, email, and a list of registered courses.

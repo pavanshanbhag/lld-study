@@ -14,14 +14,14 @@ func NewCoffee(name string, price float64, recipe map[*Ingredient]int) *Coffee {
 	}
 }
 
-func (c *Coffee) GetName() string {
+func (c *Coffee) Name() string {
 	return c.name
 }
 
-func (c *Coffee) GetPrice() float64 {
+func (c *Coffee) Price() float64 {
 	return c.price
 }
 
-func (c *Coffee) GetRecipe() map[*Ingredient]int {
+func (c *Coffee) Recipe() map[*Ingredient]int {
 	return c.recipe
 }

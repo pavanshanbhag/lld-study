@@ -9,7 +9,7 @@ class OnlineShoppingDemo:
     @staticmethod
     def main():
         # System Setup (Singleton and Services)
-        system = OnlineShoppingSystem()
+        system = OnlineShoppingSystem.get_instance()
 
         # Create and Add Products to Catalog (Builder Pattern)
         laptop = Product.Builder("Dell XPS 15", 1499.99) \

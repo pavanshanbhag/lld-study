@@ -12,12 +12,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/chessgame-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/chessgame/) 
+#### [Python Implementation](../solutions/python/chessgame/)
+#### [C++ Implementation](../solutions/cpp/chessgame/)
+#### [C# Implementation](../solutions/csharp/chessgame/)
+#### [Go Implementation](../solutions/golang/chessgame/)
 
 ## Classes, Interfaces and Enumerations
 1. The **Piece** class is an abstract base class representing a chess piece. It contains common attributes such as color, row, and column, and declares an abstract method canMove to be implemented by each specific piece class.

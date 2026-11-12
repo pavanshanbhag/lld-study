@@ -6,7 +6,7 @@ type Restaurant struct {
 	ID      string
 	Name    string
 	Address string
-	Menu    []*MenuItem
+	menu    []*MenuItem
 	mu      sync.RWMutex
 }
 
@@ -15,31 +15,33 @@ func NewRestaurant(id, name, address string, menu []*MenuItem) *Restaurant {
 		ID:      id,
 		Name:    name,
 		Address: address,
-		Menu:    menu,
+		menu:    menu,
 	}
 }
 
 func (r *Restaurant) AddMenuItem(item *MenuItem) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	r.Menu = append(r.Menu, item)
+	r.menu = append(r.menu, item)
 }
 
 func (r *Restaurant) RemoveMenuItem(item *MenuItem) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	for i, menuItem := range r.Menu {
+	for i, menuItem := range r.menu {
 		if menuItem == item {
-			r.Menu = append(r.Menu[:i], r.Menu[i+1:]...)
+			r.menu = append(r.menu[:i], r.menu[i+1:]...)
 			break
 		}
 	}
 }
 
-func (r *Restaurant) GetMenu() []*MenuItem {
+func (r *Restaurant) Menu() []*MenuItem {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
-	menuCopy := make([]*MenuItem, len(r.Menu))
-	copy(menuCopy, r.Menu)
+	menuCopy := make([]*MenuItem, len(r.menu))
+	copy(menuCopy, r.menu)
 	return menuCopy
 }
+
+func (r *Restaurant) GetMenu() []*MenuItem { return r.Menu() }

@@ -3,64 +3,71 @@ package vending_machine
 import "fmt"
 
 type VendingMachineState interface {
-	SelectProduct(product *Product)
-	InsertCoin(coin Coin)
-	InsertNote(note Note)
-	DispenseProduct()
-	ReturnChange()
+	SelectProduct(product *Product) error
+	InsertCoin(coin Coin) error
+	InsertNote(note Note) error
+	DispenseProduct() error
+	ReturnChange() error
 }
 
-// IdleState struct
 type IdleState struct {
 	vendingMachine *VendingMachine
 }
 
-func (s *IdleState) SelectProduct(product *Product) {
-	if s.vendingMachine.inventory.IsAvailable(product) {
-		s.vendingMachine.selectedProduct = product
-		s.vendingMachine.SetState(s.vendingMachine.readyState)
-		fmt.Println("Product selected:", product.name)
-	} else {
-		fmt.Println("Product not available:", product.name)
+func (s *IdleState) SelectProduct(product *Product) error {
+	if !s.vendingMachine.inventory.IsAvailable(product) {
+		return fmt.Errorf("product not available: %s", product.name)
 	}
+	s.vendingMachine.selectedProduct = product
+	s.vendingMachine.SetState(s.vendingMachine.readyState)
+	return nil
 }
 
-func (s *IdleState) InsertCoin(coin Coin) { fmt.Println("Please select a product first.") }
-func (s *IdleState) InsertNote(note Note) { fmt.Println("Please select a product first.") }
-func (s *IdleState) DispenseProduct()     { fmt.Println("Please select a product and make payment.") }
-func (s *IdleState) ReturnChange()        { fmt.Println("No change to return.") }
+func (s *IdleState) InsertCoin(coin Coin) error {
+	return fmt.Errorf("please select a product first")
+}
+func (s *IdleState) InsertNote(note Note) error {
+	return fmt.Errorf("please select a product first")
+}
+func (s *IdleState) DispenseProduct() error {
+	return fmt.Errorf("please select a product and make payment")
+}
+func (s *IdleState) ReturnChange() error {
+	return fmt.Errorf("no change to return")
+}
 
-// ReadyState struct
 type ReadyState struct {
 	vendingMachine *VendingMachine
 }
 
-func (s *ReadyState) SelectProduct(product *Product) {
-	fmt.Println("Product already selected. Please make payment.")
+func (s *ReadyState) SelectProduct(product *Product) error {
+	return fmt.Errorf("product already selected; please make payment")
 }
 
-func (s *ReadyState) InsertCoin(coin Coin) {
+func (s *ReadyState) InsertCoin(coin Coin) error {
 	s.vendingMachine.totalPayment += float64(coin)
-	fmt.Println("Coin inserted:", coin)
 	s.checkPaymentStatus()
+	return nil
 }
 
-func (s *ReadyState) InsertNote(note Note) {
+func (s *ReadyState) InsertNote(note Note) error {
 	s.vendingMachine.totalPayment += float64(note)
-	fmt.Println("Note inserted:", note)
 	s.checkPaymentStatus()
+	return nil
 }
 
-func (s *ReadyState) DispenseProduct() { fmt.Println("Please make payment first.") }
-func (s *ReadyState) ReturnChange() {
+func (s *ReadyState) DispenseProduct() error {
+	return fmt.Errorf("please make payment first")
+}
+
+func (s *ReadyState) ReturnChange() error {
 	change := s.vendingMachine.totalPayment - s.vendingMachine.selectedProduct.price
-	if change > 0 {
-		fmt.Printf("Change returned: $%.2f\n", change)
-		s.vendingMachine.ResetPayment()
-	} else {
-		fmt.Println("No change to return.")
-	}
+	s.vendingMachine.ResetPayment()
 	s.vendingMachine.SetState(s.vendingMachine.idleState)
+	if change <= 0 {
+		return nil
+	}
+	return nil
 }
 
 func (s *ReadyState) checkPaymentStatus() {
@@ -69,42 +76,52 @@ func (s *ReadyState) checkPaymentStatus() {
 	}
 }
 
-// DispenseState struct
 type DispenseState struct {
 	vendingMachine *VendingMachine
 }
 
-func (s *DispenseState) SelectProduct(product *Product) { fmt.Println("Product already selected.") }
-func (s *DispenseState) InsertCoin(coin Coin)           { fmt.Println("Please collect the product.") }
-func (s *DispenseState) InsertNote(note Note)           { fmt.Println("Please collect the product.") }
-func (s *DispenseState) DispenseProduct() {
-	fmt.Println("Product dispensed:", s.vendingMachine.selectedProduct.name)
+func (s *DispenseState) SelectProduct(product *Product) error {
+	return fmt.Errorf("product already selected")
+}
+func (s *DispenseState) InsertCoin(coin Coin) error {
+	return fmt.Errorf("please collect the product")
+}
+func (s *DispenseState) InsertNote(note Note) error {
+	return fmt.Errorf("please collect the product")
+}
+func (s *DispenseState) DispenseProduct() error {
+	product := s.vendingMachine.selectedProduct
+	if err := s.vendingMachine.inventory.Dispense(product); err != nil {
+		return err
+	}
 	s.vendingMachine.SetState(s.vendingMachine.returnChangeState)
+	return nil
+}
+func (s *DispenseState) ReturnChange() error {
+	return fmt.Errorf("please collect the product first")
 }
 
-func (s *DispenseState) ReturnChange() { fmt.Println("Please collect the product first.") }
-
-// ReturnChangeState struct
 type ReturnChangeState struct {
 	vendingMachine *VendingMachine
 }
 
-func (s *ReturnChangeState) SelectProduct(product *Product) {
-	fmt.Println("Please collect the change first.")
+func (s *ReturnChangeState) SelectProduct(product *Product) error {
+	return fmt.Errorf("please collect the change first")
 }
-func (s *ReturnChangeState) InsertCoin(coin Coin) { fmt.Println("Please collect the change first.") }
-func (s *ReturnChangeState) InsertNote(note Note) { fmt.Println("Please collect the change first.") }
-func (s *ReturnChangeState) DispenseProduct() {
-	fmt.Println("Product already dispensed. Please collect the change.")
+func (s *ReturnChangeState) InsertCoin(coin Coin) error {
+	return fmt.Errorf("please collect the change first")
 }
-func (s *ReturnChangeState) ReturnChange() {
+func (s *ReturnChangeState) InsertNote(note Note) error {
+	return fmt.Errorf("please collect the change first")
+}
+func (s *ReturnChangeState) DispenseProduct() error {
+	return fmt.Errorf("product already dispensed; please collect the change")
+}
+func (s *ReturnChangeState) ReturnChange() error {
 	change := s.vendingMachine.totalPayment - s.vendingMachine.selectedProduct.price
-	if change > 0 {
-		fmt.Printf("Change returned: $%.2f\n", change)
-		s.vendingMachine.ResetPayment()
-	} else {
-		fmt.Println("No change to return.")
-	}
+	s.vendingMachine.ResetPayment()
 	s.vendingMachine.ResetSelectedProduct()
 	s.vendingMachine.SetState(s.vendingMachine.idleState)
+	_ = change
+	return nil
 }

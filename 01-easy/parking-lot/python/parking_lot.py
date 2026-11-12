@@ -20,13 +20,6 @@ class VehicleSize(StrEnum):
     LARGE = "LARGE"
 
 
-_SIZE_RANK: dict[VehicleSize, int] = {
-    VehicleSize.SMALL: 0,
-    VehicleSize.MEDIUM: 1,
-    VehicleSize.LARGE: 2,
-}
-
-
 class Vehicle(ABC):
     @property
     @abstractmethod
@@ -76,7 +69,7 @@ class TicketNotFoundError(ParkingError):
     """Raised when no active ticket exists for a vehicle."""
 
 
-@dataclass(slots=True)
+@dataclass(frozen=True, slots=True)
 class ParkingTicket:
     vehicle: Vehicle
     spot_id: str
@@ -85,7 +78,7 @@ class ParkingTicket:
     exit_time: datetime | None = None
 
     def close(self) -> None:
-        self.exit_time = datetime.now(UTC)
+        object.__setattr__(self, "exit_time", datetime.now(UTC))
 
     @property
     def duration(self) -> timedelta:
@@ -181,7 +174,7 @@ class ParkingFloor:
             candidates = [s for s in self.spots.values() if s.is_available and s.can_fit(vehicle)]
             if not candidates:
                 return None
-            return min(candidates, key=lambda s: _SIZE_RANK[s.spot_size])
+            return min(candidates, key=lambda s: s.spot_size.value)
 
     def availability(self) -> dict[VehicleSize, int]:
         counts = dict.fromkeys(VehicleSize, 0)

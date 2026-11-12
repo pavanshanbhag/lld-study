@@ -12,7 +12,7 @@ func NewBuyOrder(orderID string, account *Account, stock *Stock, quantity int, p
 			Stock:    stock,
 			Quantity: quantity,
 			Price:    price,
-			Status:   OrderStatusPending,
+			status:   OrderStatusPending,
 		},
 	}
 }
@@ -21,11 +21,11 @@ func (o *BuyOrder) Execute() error {
 	totalCost := float64(o.Quantity) * o.Price
 
 	if err := o.Account.Withdraw(totalCost); err != nil {
-		o.Status = OrderStatusRejected
+		o.SetStatus(OrderStatusRejected)
 		return err
 	}
 
 	o.Account.Portfolio.AddStock(o.Stock, o.Quantity)
-	o.Status = OrderStatusExecuted
+	o.SetStatus(OrderStatusExecuted)
 	return nil
 }

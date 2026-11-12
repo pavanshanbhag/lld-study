@@ -24,10 +24,10 @@ func NewElevatorController(numElevators, capacity int) *ElevatorController {
 	return controller
 }
 
-func (ec *ElevatorController) RequestElevator(sourceFloor, destinationFloor int) {
+func (ec *ElevatorController) RequestElevator(sourceFloor, destinationFloor int) error {
 	elevator := ec.findOptimalElevator(sourceFloor, destinationFloor)
 	request := NewRequest(sourceFloor, destinationFloor)
-	elevator.AddRequest(request)
+	return elevator.AddRequest(request)
 }
 
 func (ec *ElevatorController) findOptimalElevator(sourceFloor, destinationFloor int) *Elevator {
@@ -38,7 +38,7 @@ func (ec *ElevatorController) findOptimalElevator(sourceFloor, destinationFloor 
 	minDistance := math.MaxInt32
 
 	for _, elevator := range ec.elevators {
-		distance := int(math.Abs(float64(sourceFloor - elevator.getCurrentFloor())))
+		distance := int(math.Abs(float64(sourceFloor - elevator.CurrentFloor())))
 		if distance < minDistance {
 			minDistance = distance
 			optimalElevator = elevator

@@ -45,11 +45,10 @@ func (a *ATM) WithdrawCash(accountNumber string, amount float64) error {
 	}
 
 	if err := a.cashDispenser.DispenseCash(int(amount)); err != nil {
-		deposit := NewDepositTransaction(a.generateTransactionID(), account, amount)
-		_ = a.bankingService.ProcessTransaction(deposit)
+		// Roll back account debit if ATM cannot dispense cash.
+		_ = account.Credit(amount)
 		return err
 	}
-
 	return nil
 }
 

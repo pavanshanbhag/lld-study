@@ -30,12 +30,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/socialnetworkingservice-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/socialnetworkingservice/) 
+#### [Python Implementation](../solutions/python/socialnetworkingservice/)
+#### [C++ Implementation](../solutions/cpp/socialnetworkingservice/)
+#### [C# Implementation](../solutions/csharp/socialnetworkingservice/)
+#### [Go Implementation](../solutions/golang/socialnetworkingservice/)
 
 ## Classes, Interfaces and Enumerations
 1. The **User** class represents a user in the social networking system, containing properties such as ID, name, email, password, profile picture, bio, list of friends, and list of posts.

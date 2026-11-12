@@ -14,15 +14,15 @@ func TestParkingLotParkAndUnpark(t *testing.T) {
 	lot.AddLevel(NewLevel(1, 10))
 
 	car := NewCar("ABC123")
-	result, err := lot.Park(car)
+	spot, err := lot.Park(car)
 	if err != nil {
 		t.Fatalf("park car: %v", err)
 	}
-	if result.Spot == nil {
+	if spot == nil {
 		t.Fatal("expected spot")
 	}
-	if result.LevelFloor != 1 {
-		t.Fatalf("level = %d, want 1", result.LevelFloor)
+	if spot.ParkedVehicle() == nil || spot.ParkedVehicle().LicensePlate() != "ABC123" {
+		t.Fatal("expected parked vehicle ABC123")
 	}
 
 	if lot.AvailableCount() == 10 {
@@ -42,7 +42,8 @@ func TestParkingLotFull(t *testing.T) {
 	t.Parallel()
 
 	lot := NewParkingLot()
-	lot.AddLevel(NewLevel(1, 2)) // 1 motorcycle spot + 1 truck spot
+	// numSpots=2 => 1 motorcycle spot (50%) + 0 car + 1 truck
+	lot.AddLevel(NewLevel(1, 2))
 	if _, err := lot.Park(NewMotorcycle("M1")); err != nil {
 		t.Fatalf("park first motorcycle: %v", err)
 	}

@@ -4,7 +4,7 @@ from operation_type import OperationType
 class ATMDemo:
     @staticmethod
     def main():
-        atm = ATM()
+        atm = ATM.get_instance()
         
         # Perform Check Balance operation
         atm.insert_card("1234-5678-9012-3456")

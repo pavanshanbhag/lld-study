@@ -1,6 +1,5 @@
 import uuid
 
-
 class User:
     def __init__(self, name: str, email: str):
         self._id = str(uuid.uuid4())

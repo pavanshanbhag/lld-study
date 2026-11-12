@@ -3,15 +3,29 @@ from auction import Auction
 from typing import Dict, List
 from decimal import Decimal
 from datetime import datetime
-import time
+import threading
 from concurrent.futures import ThreadPoolExecutor
+import time
 
 class AuctionService:
+    _instance = None
+    _lock = threading.Lock()
+
     def __init__(self):
+        if AuctionService._instance is not None:
+            raise Exception("This class is a singleton!")
         self.users: Dict[str, User] = {}
         self.auctions: Dict[str, Auction] = {}
         self.scheduler = ThreadPoolExecutor(max_workers=10)
         self._shutdown = False
+
+    @staticmethod
+    def get_instance():
+        if AuctionService._instance is None:
+            with AuctionService._lock:
+                if AuctionService._instance is None:
+                    AuctionService._instance = AuctionService()
+        return AuctionService._instance
 
     def create_user(self, name: str) -> User:
         user = User(name)

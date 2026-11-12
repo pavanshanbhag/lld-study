@@ -9,7 +9,8 @@ class ElevatorSystemDemo:
         
         # Setup: A building with 2 elevators
         num_elevators = 2
-        elevator_system = ElevatorSystem(num_elevators)
+        # The get_instance method now initializes the elevators and attaches the Display (Observer).
+        elevator_system = ElevatorSystem.get_instance(num_elevators)
 
         # Start the elevator system
         elevator_system.start()

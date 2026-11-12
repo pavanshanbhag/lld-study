@@ -1,7 +1,6 @@
-
 from coffee import Coffee
+from typing import Dict
 from enums import Ingredient
-
 
 class CoffeeDecorator(Coffee):
     def __init__(self, coffee: Coffee):
@@ -11,7 +10,7 @@ class CoffeeDecorator(Coffee):
     def get_price(self) -> int:
         return self.decorated_coffee.get_price()
     
-    def get_recipe(self) -> dict[Ingredient, int]:
+    def get_recipe(self) -> Dict[Ingredient, int]:
         return self.decorated_coffee.get_recipe()
     
     def add_condiments(self):
@@ -33,7 +32,7 @@ class CaramelSyrupDecorator(CoffeeDecorator):
     def get_price(self) -> int:
         return self.decorated_coffee.get_price() + self.COST
     
-    def get_recipe(self) -> dict[Ingredient, int]:
+    def get_recipe(self) -> Dict[Ingredient, int]:
         new_recipe = self.decorated_coffee.get_recipe().copy()
         for ingredient, qty in self.RECIPE_ADDITION.items():
             new_recipe[ingredient] = new_recipe.get(ingredient, 0) + qty
@@ -58,7 +57,7 @@ class ExtraSugarDecorator(CoffeeDecorator):
     def get_price(self) -> int:
         return self.decorated_coffee.get_price() + self.COST
     
-    def get_recipe(self) -> dict[Ingredient, int]:
+    def get_recipe(self) -> Dict[Ingredient, int]:
         new_recipe = self.decorated_coffee.get_recipe().copy()
         for ingredient, qty in self.RECIPE_ADDITION.items():
             new_recipe[ingredient] = new_recipe.get(ingredient, 0) + qty

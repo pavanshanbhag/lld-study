@@ -4,25 +4,26 @@ classDiagram
 
     class TaskManager {
         +NewTaskManager()
-        +CreateTask(task Task)
-        +UpdateTask(task Task)
-        +DeleteTask(taskID string)
+        +CreateTask(task Task) error
+        +UpdateTask(task Task) error
+        +DeleteTask(taskID string) error
         +SearchTasks(keyword string) Task[]
         +FilterTasks(status, dates, priority) Task[]
-        +MarkTaskAsCompleted(taskID string)
-        +GetTaskHistory(user User) Task[]
+        +MarkTaskAsCompleted(taskID string) error
+        +TaskHistory(user User) Task[]
     }
 
     class Task {
         +NewTask(id, title, desc, dueDate, priority, user)
-        +GetId() string
-        +GetStatus() TaskStatus
-        +SetStatus(status TaskStatus)
+        Id string
+        Title string
+        Status TaskStatus
     }
 
     class User {
         +NewUser(id, name, email string)
-        +GetId() string
+        Id string
+        Name string
     }
 
     class TaskStatus {

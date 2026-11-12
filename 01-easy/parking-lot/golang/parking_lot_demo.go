@@ -17,12 +17,12 @@ func Run() {
 	motorcycle := NewMotorcycle("M1234")
 
 	for _, v := range []Vehicle{car, truck, motorcycle} {
-		result, err := lot.Park(v)
+		spot, err := lot.Park(v)
 		if err != nil {
 			logger.Error("park failed", "plate", v.LicensePlate(), "err", err)
 			continue
 		}
-		logger.Info("parked", "plate", v.LicensePlate(), "level", result.LevelFloor, "spot", result.Spot.Number())
+		logger.Info("parked", "plate", v.LicensePlate(), "level", spot.Status(0).Level, "spot", spot.Number())
 	}
 
 	logAvailability(logger, lot, "after parking")

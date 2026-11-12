@@ -1,6 +1,7 @@
 package trafficsignalsystem
 
 import (
+	"fmt"
 	"sync"
 	"time"
 )
@@ -20,32 +21,55 @@ func (tc *TrafficController) AddRoad(road *Road) {
 	tc.roads[road.ID] = road
 }
 
-func (tc *TrafficController) StartTrafficControl() {
+func (tc *TrafficController) RoadCount() int {
 	tc.mu.Lock()
 	defer tc.mu.Unlock()
+	return len(tc.roads)
+}
 
+func (tc *TrafficController) StartTrafficControl(stop <-chan struct{}) {
+	tc.mu.Lock()
+	roads := make([]*Road, 0, len(tc.roads))
 	for _, road := range tc.roads {
+		roads = append(roads, road)
+	}
+	tc.mu.Unlock()
+
+	for _, road := range roads {
 		trafficLight := road.TrafficLight
 		go func(tl *TrafficLight) {
 			for {
-				time.Sleep(time.Duration(tl.RedDuration) * time.Millisecond)
+				select {
+				case <-stop:
+					return
+				case <-time.After(time.Duration(tl.RedDuration) * time.Millisecond):
+				}
 				tl.ChangeSignal(Green)
-				time.Sleep(time.Duration(tl.GreenDuration) * time.Millisecond)
+				select {
+				case <-stop:
+					return
+				case <-time.After(time.Duration(tl.GreenDuration) * time.Millisecond):
+				}
 				tl.ChangeSignal(Yellow)
-				time.Sleep(time.Duration(tl.YellowDuration) * time.Millisecond)
+				select {
+				case <-stop:
+					return
+				case <-time.After(time.Duration(tl.YellowDuration) * time.Millisecond):
+				}
 				tl.ChangeSignal(Red)
 			}
 		}(trafficLight)
 	}
 }
 
-func (tc *TrafficController) HandleEmergency(roadID string) {
+func (tc *TrafficController) HandleEmergency(roadID string) error {
 	tc.mu.Lock()
 	defer tc.mu.Unlock()
 
-	if road, exists := tc.roads[roadID]; exists {
-		trafficLight := road.TrafficLight
-		trafficLight.ChangeSignal(Green)
-		// Emergency handling logic here
+	road, exists := tc.roads[roadID]
+	if !exists {
+		return fmt.Errorf("road not found: %s", roadID)
 	}
+	road.TrafficLight.ChangeSignal(Green)
+	return nil
 }

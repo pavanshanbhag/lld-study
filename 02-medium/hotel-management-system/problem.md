@@ -12,12 +12,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/hotelmanagementsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/hotelmanagementsystem/) 
+#### [Python Implementation](../solutions/python/hotelmanagementsystem/)
+#### [C++ Implementation](../solutions/cpp/hotelmanagementsystem/)
+#### [C# Implementation](../solutions/csharp/hotelmanagementsystem/)
+#### [Go Implementation](../solutions/golang/hotelmanagementsystem/)
 
 ## Classes, Interfaces and Enumerations
 1. The **Guest** class represents a guest of the hotel, with properties such as ID, name, email, and phone number.

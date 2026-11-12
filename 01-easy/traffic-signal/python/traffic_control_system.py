@@ -1,6 +1,12 @@
+from __future__ import annotations
+
+import logging
+from concurrent.futures import ThreadPoolExecutor
 
 from intersection_controller import IntersectionController
 from observer import CentralMonitor
+
+logger = logging.getLogger(__name__)
 
 
 class TrafficControlSystem:
@@ -19,18 +25,16 @@ class TrafficControlSystem:
 
     def start_system(self) -> None:
         if not self._intersections:
-            print("No intersections to manage. System not starting.")
+            logger.warning("No intersections to manage. System not starting.")
             return
 
-        print("--- Starting Traffic Control System ---")
-        from concurrent.futures import ThreadPoolExecutor
-
+        logger.info("Starting Traffic Control System")
         self._executor_service = ThreadPoolExecutor(max_workers=len(self._intersections))
         for intersection in self._intersections:
             self._executor_service.submit(intersection.run)
 
     def stop_system(self) -> None:
-        print("\n--- Shutting Down Traffic Control System ---")
+        logger.info("Shutting Down Traffic Control System")
 
         for intersection in self._intersections:
             intersection.stop()
@@ -38,7 +42,7 @@ class TrafficControlSystem:
         if self._executor_service:
             self._executor_service.shutdown(wait=True)
 
-        print("All intersections stopped. System shut down.")
+        logger.info("All intersections stopped. System shut down.")
 
     @property
     def intersections(self) -> list[IntersectionController]:

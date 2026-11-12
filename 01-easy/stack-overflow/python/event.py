@@ -1,16 +1,20 @@
+from __future__ import annotations
+
+from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from enums import EventType
 from user import User
 
 if TYPE_CHECKING:
-    from post import Post
+    from content import Post
 
+
+@dataclass(slots=True)
 class Event:
-    def __init__(self, event_type: EventType, actor: User, target_post: Post):
-        self.type = event_type
-        self.actor = actor
-        self.target_post = target_post
+    type: EventType
+    actor: User
+    target_post: Post
 
     def get_type(self) -> EventType:
         return self.type

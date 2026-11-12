@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-
+from typing import Dict
 from enums import Ingredient
-
 
 class Coffee(ABC):
     def __init__(self):
@@ -39,7 +38,7 @@ class Coffee(ABC):
         pass
     
     @abstractmethod
-    def get_recipe(self) -> dict[Ingredient, int]:
+    def get_recipe(self) -> Dict[Ingredient, int]:
         pass
 
 class Espresso(Coffee):
@@ -53,7 +52,7 @@ class Espresso(Coffee):
     def get_price(self) -> int:
         return 150
     
-    def get_recipe(self) -> dict[Ingredient, int]:
+    def get_recipe(self) -> Dict[Ingredient, int]:
         return {Ingredient.COFFEE_BEANS: 7, Ingredient.WATER: 30}
 
 class Cappuccino(Coffee):
@@ -67,7 +66,7 @@ class Cappuccino(Coffee):
     def get_price(self) -> int:
         return 250
     
-    def get_recipe(self) -> dict[Ingredient, int]:
+    def get_recipe(self) -> Dict[Ingredient, int]:
         return {Ingredient.COFFEE_BEANS: 7, Ingredient.WATER: 30, Ingredient.MILK: 100}
 
 class Latte(Coffee):
@@ -81,5 +80,5 @@ class Latte(Coffee):
     def get_price(self) -> int:
         return 220
     
-    def get_recipe(self) -> dict[Ingredient, int]:
+    def get_recipe(self) -> Dict[Ingredient, int]:
         return {Ingredient.COFFEE_BEANS: 7, Ingredient.WATER: 30, Ingredient.MILK: 150}

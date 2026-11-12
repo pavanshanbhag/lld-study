@@ -3,6 +3,7 @@ package tictactoe
 import (
 	"bufio"
 	"fmt"
+	"log/slog"
 	"os"
 	"strconv"
 )
@@ -23,17 +24,20 @@ func NewGame(player1, player2 *Player) *Game {
 	}
 }
 
-func (g *Game) Play() {
+func (g *Game) Play(logger *slog.Logger) {
+	if logger == nil {
+		logger = slog.Default()
+	}
 	g.Board.PrintBoard()
 
 	for !g.Board.IsFull() && !g.Board.HasWinner() {
-		fmt.Printf("%s's turn.\n", g.CurrentPlayer.Name)
+		logger.Info("turn", "player", g.CurrentPlayer.Name)
 		row := g.getValidInput("Enter row (0-2): ")
 		col := g.getValidInput("Enter column (0-2): ")
 
 		err := g.Board.MakeMove(row, col, g.CurrentPlayer.Symbol)
 		if err != nil {
-			fmt.Println(err.Error())
+			logger.Error("invalid move", "err", err)
 			continue
 		}
 
@@ -42,10 +46,10 @@ func (g *Game) Play() {
 	}
 
 	if g.Board.HasWinner() {
-		g.switchPlayer() // Switch back to the winner
-		fmt.Printf("%s wins!\n", g.CurrentPlayer.Name)
+		g.switchPlayer()
+		logger.Info("winner", "player", g.CurrentPlayer.Name)
 	} else {
-		fmt.Println("It's a draw!")
+		logger.Info("draw")
 	}
 }
 

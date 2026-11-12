@@ -27,18 +27,16 @@ func NewElevator(id, capacity int) *Elevator {
 	}
 }
 
-func (e *Elevator) AddRequest(request *Request) bool {
+func (e *Elevator) AddRequest(request *Request) error {
 	select {
 	case e.requests <- request:
-		fmt.Printf("Elevator %d added request: Floor %d to %d\n",
-			e.id, request.SourceFloor, request.DestinationFloor)
-		return true
+		return nil
 	default:
-		return false
+		return fmt.Errorf("elevator %d at capacity", e.id)
 	}
 }
 
-func (e *Elevator) getCurrentFloor() int {
+func (e *Elevator) CurrentFloor() int {
 	e.mu.RLock()
 	defer e.mu.RUnlock()
 	return e.currentFloor
@@ -68,22 +66,20 @@ func (e *Elevator) Stop() {
 }
 
 func (e *Elevator) processRequest(request *Request) {
-	startFloor := e.getCurrentFloor()
+	startFloor := e.CurrentFloor()
 	endFloor := request.DestinationFloor
 
 	if startFloor < endFloor {
 		e.currentDirection = DirectionUp
 		for i := startFloor; i <= endFloor; i++ {
 			e.setCurrentFloor(i)
-			fmt.Printf("Elevator %d reached floor %d\n", e.id, i)
-			time.Sleep(time.Second) // Simulating elevator movement
+			time.Sleep(10 * time.Millisecond)
 		}
 	} else if startFloor > endFloor {
 		e.currentDirection = DirectionDown
 		for i := startFloor; i >= endFloor; i-- {
 			e.setCurrentFloor(i)
-			fmt.Printf("Elevator %d reached floor %d\n", e.id, i)
-			time.Sleep(time.Second) // Simulating elevator movement
+			time.Sleep(10 * time.Millisecond)
 		}
 	}
 }

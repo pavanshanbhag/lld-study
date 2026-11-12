@@ -11,16 +11,29 @@ type DigitalWallet struct {
 	users          map[string]*User
 	accounts       map[string]*Account
 	paymentMethods map[string]PaymentMethod
-	converter      *CurrencyConverter
 	mu             sync.RWMutex
 }
 
+var (
+	instance *DigitalWallet
+	once     sync.Once
+)
+
+func GetDigitalWallet() *DigitalWallet {
+	once.Do(func() {
+		instance = &DigitalWallet{
+			users:          make(map[string]*User),
+			accounts:       make(map[string]*Account),
+			paymentMethods: make(map[string]PaymentMethod),
+		}
+	})
+	return instance
+}
 func NewDigitalWallet() *DigitalWallet {
 	return &DigitalWallet{
 		users:          make(map[string]*User),
 		accounts:       make(map[string]*Account),
 		paymentMethods: make(map[string]PaymentMethod),
-		converter:      NewCurrencyConverter(),
 	}
 }
 
@@ -40,14 +53,14 @@ func (dw *DigitalWallet) CreateAccount(account *Account) {
 func (dw *DigitalWallet) AddPaymentMethod(method PaymentMethod) {
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
-	dw.paymentMethods[method.GetID()] = method
+	dw.paymentMethods[method.ID()] = method
 }
 
 func (dw *DigitalWallet) TransferFunds(sourceAccount, destinationAccount *Account, amount *big.Float, currency Currency) error {
 	dw.mu.Lock()
 	defer dw.mu.Unlock()
 
-	converter := dw.converter
+	converter := GetCurrencyConverter()
 
 	// Convert amount to source account currency
 	sourceAmount := amount

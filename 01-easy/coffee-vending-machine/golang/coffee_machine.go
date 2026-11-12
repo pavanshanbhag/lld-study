@@ -28,20 +28,17 @@ func (cm *CoffeeMachine) initializeIngredients() {
 }
 
 func (cm *CoffeeMachine) initializeCoffeeMenu() {
-	// Espresso Recipe
 	espressoRecipe := make(map[*Ingredient]int)
 	espressoRecipe[cm.ingredients["Coffee"]] = 1
 	espressoRecipe[cm.ingredients["Water"]] = 1
 	cm.coffeeMenu = append(cm.coffeeMenu, NewCoffee("Espresso", 2.5, espressoRecipe))
 
-	// Cappuccino Recipe
 	cappuccinoRecipe := make(map[*Ingredient]int)
 	cappuccinoRecipe[cm.ingredients["Coffee"]] = 1
 	cappuccinoRecipe[cm.ingredients["Water"]] = 1
 	cappuccinoRecipe[cm.ingredients["Milk"]] = 1
 	cm.coffeeMenu = append(cm.coffeeMenu, NewCoffee("Cappuccino", 3.5, cappuccinoRecipe))
 
-	// Latte Recipe
 	latteRecipe := make(map[*Ingredient]int)
 	latteRecipe[cm.ingredients["Coffee"]] = 1
 	latteRecipe[cm.ingredients["Water"]] = 1
@@ -49,55 +46,49 @@ func (cm *CoffeeMachine) initializeCoffeeMenu() {
 	cm.coffeeMenu = append(cm.coffeeMenu, NewCoffee("Latte", 4.0, latteRecipe))
 }
 
-func (cm *CoffeeMachine) DisplayMenu() {
-	fmt.Println("Coffee Menu:")
+func (cm *CoffeeMachine) Menu() []string {
+	items := make([]string, 0, len(cm.coffeeMenu))
 	for _, coffee := range cm.coffeeMenu {
-		fmt.Printf("%s - $%.2f\n", coffee.GetName(), coffee.GetPrice())
+		items = append(items, fmt.Sprintf("%s - $%.2f", coffee.Name(), coffee.Price()))
 	}
+	return items
 }
 
-func (cm *CoffeeMachine) SelectCoffee(coffeeName string) *Coffee {
+func (cm *CoffeeMachine) SelectCoffee(coffeeName string) (*Coffee, error) {
 	cm.mu.Lock()
 	defer cm.mu.Unlock()
 
 	for _, coffee := range cm.coffeeMenu {
-		if coffee.GetName() == coffeeName {
-			return coffee
+		if coffee.Name() == coffeeName {
+			return coffee, nil
 		}
 	}
-	return nil
+	return nil, fmt.Errorf("unknown coffee: %s", coffeeName)
 }
 
-func (cm *CoffeeMachine) DispenseCoffee(coffee *Coffee, payment *Payment) error {
+func (cm *CoffeeMachine) DispenseCoffee(coffee *Coffee, payment *Payment) (float64, error) {
 	cm.mu.Lock()
 	defer cm.mu.Unlock()
 
 	if coffee == nil {
-		return fmt.Errorf("invalid coffee selection")
+		return 0, fmt.Errorf("invalid coffee selection")
 	}
 
-	if payment.amount < coffee.GetPrice() {
-		return fmt.Errorf("insufficient payment for %s", coffee.GetName())
+	if payment.amount < coffee.Price() {
+		return 0, fmt.Errorf("insufficient payment for %s", coffee.Name())
 	}
 
 	if !cm.hasEnoughIngredients(coffee) {
-		return fmt.Errorf("insufficient ingredients to make %s", coffee.GetName())
+		return 0, fmt.Errorf("insufficient ingredients to make %s", coffee.Name())
 	}
 
 	cm.updateIngredients(coffee)
-	fmt.Printf("Dispensing %s...\n", coffee.GetName())
-
-	change := payment.amount - coffee.GetPrice()
-	if change > 0 {
-		fmt.Printf("Please collect your change: $%.2f\n", change)
-	}
-
-	return nil
+	return payment.amount - coffee.Price(), nil
 }
 
 func (cm *CoffeeMachine) hasEnoughIngredients(coffee *Coffee) bool {
-	for ingredient, requiredQuantity := range coffee.GetRecipe() {
-		if ingredient.GetQuantity() < requiredQuantity {
+	for ingredient, requiredQuantity := range coffee.Recipe() {
+		if ingredient.Quantity() < requiredQuantity {
 			return false
 		}
 	}
@@ -105,10 +96,15 @@ func (cm *CoffeeMachine) hasEnoughIngredients(coffee *Coffee) bool {
 }
 
 func (cm *CoffeeMachine) updateIngredients(coffee *Coffee) {
-	for ingredient, requiredQuantity := range coffee.GetRecipe() {
+	for ingredient, requiredQuantity := range coffee.Recipe() {
 		ingredient.UpdateQuantity(-requiredQuantity)
-		if ingredient.GetQuantity() < 3 {
-			fmt.Printf("Low inventory alert: %s\n", ingredient.GetName())
-		}
 	}
+}
+
+func (cm *CoffeeMachine) IngredientQuantity(name string) int {
+	ing, ok := cm.ingredients[name]
+	if !ok {
+		return 0
+	}
+	return ing.Quantity()
 }

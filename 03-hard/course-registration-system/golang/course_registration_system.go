@@ -2,6 +2,7 @@ package courseregistrationsystem
 
 import (
 	"fmt"
+	"log/slog"
 	"strings"
 	"sync"
 )
@@ -64,7 +65,7 @@ func (rs *CourseRegistrationSystem) RegisterCourse(student *Student, course *Cou
 	}
 
 	// Check capacity
-	if course.GetEnrolledStudents() >= course.MaxCapacity {
+	if course.EnrolledStudents() >= course.MaxCapacity {
 		return fmt.Errorf("course %s is full", course.Code)
 	}
 
@@ -87,7 +88,7 @@ func (rs *CourseRegistrationSystem) RegisterCourse(student *Student, course *Cou
 	return nil
 }
 
-func (rs *CourseRegistrationSystem) GetRegisteredCourses(student *Student) []*Course {
+func (rs *CourseRegistrationSystem) RegisteredCourses(student *Student) []*Course {
 	rs.mu.RLock()
 	defer rs.mu.RUnlock()
 
@@ -98,8 +99,15 @@ func (rs *CourseRegistrationSystem) GetRegisteredCourses(student *Student) []*Co
 	return student.RegisteredCourses
 }
 
+func (rs *CourseRegistrationSystem) GetRegisteredCourses(student *Student) []*Course {
+	return rs.RegisteredCourses(student)
+}
+
 func (rs *CourseRegistrationSystem) notifyObservers(course *Course) {
 	// TODO: Implement observer pattern for notifications
-	fmt.Printf("Course %s updated: %d/%d students enrolled\n",
-		course.Code, course.GetEnrolledStudents(), course.MaxCapacity)
+	slog.Default().Info("course enrollment updated",
+		"code", course.Code,
+		"enrolled", course.EnrolledStudents(),
+		"capacity", course.MaxCapacity,
+	)
 }

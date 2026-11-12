@@ -9,7 +9,7 @@ from match_observer import CommentaryDisplay, ScorecardDisplay, UserNotifier
 class CricinfoDemo:
     @staticmethod
     def main():
-        service = CricInfoService()
+        service = CricInfoService.get_instance()
 
         # Setup Players and Teams
         p1 = service.add_player("P1", "Virat", PlayerRole.BATSMAN)

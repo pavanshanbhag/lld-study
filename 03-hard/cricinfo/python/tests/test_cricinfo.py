@@ -8,3 +8,10 @@ def test_cricinfo_service() -> None:
 
     assert player.get_name() == "Virat"
     assert service.player_repository.find_by_id("P1") is not None
+
+
+def test_add_multiple_players() -> None:
+    service = CricInfoService()
+    service.add_player("P1", "Virat", PlayerRole.BATSMAN)
+    service.add_player("P2", "Bumrah", PlayerRole.BOWLER)
+    assert service.player_repository.find_by_id("P2").get_name() == "Bumrah"

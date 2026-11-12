@@ -12,24 +12,25 @@ classDiagram
         +VoteAnswer(user User, answer Answer, value int)
         +AcceptAnswer(answer Answer)
         +SearchQuestions(query string) Question
+        +QuestionsByUser(user User) Question
     }
 
     class Votable {
         <<interface>>
         +Vote(user User, value int) error
-        +GetVoteCount() int
+        +VoteCount() int
     }
 
     class Commentable {
         <<interface>>
         +AddComment(comment Comment) error
-        +GetComments() Comment
+        +Comments() Comment
     }
 
     class User {
         +NewUser(id, username, email string)
         +UpdateReputation(value int)
-        +GetReputation() int
+        +Reputation() int
         +AddQuestion(q Question)
         +AddAnswer(a Answer)
     }
@@ -38,7 +39,7 @@ classDiagram
         +NewQuestion(author User, title, content string, tagNames []string)
         +AddAnswer(answer Answer) error
         +Vote(user User, value int) error
-        +GetVoteCount() int
+        +VoteCount() int
         +AddComment(comment Comment) error
     }
 

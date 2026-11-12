@@ -12,12 +12,23 @@ type MusicLibrary struct {
 	mu      sync.RWMutex
 }
 
+var (
+	libraryInstance *MusicLibrary
+	libraryOnce     sync.Once
+)
+
+func GetMusicLibrary() *MusicLibrary {
+	libraryOnce.Do(func() {
+		libraryInstance = &MusicLibrary{
+			songs:   make(map[string]*Song),
+			albums:  make(map[string]*Album),
+			artists: make(map[string]*Artist),
+		}
+	})
+	return libraryInstance
+}
 func NewMusicLibrary() *MusicLibrary {
-	return &MusicLibrary{
-		songs:   make(map[string]*Song),
-		albums:  make(map[string]*Album),
-		artists: make(map[string]*Artist),
-	}
+	return GetMusicLibrary()
 }
 
 func (ml *MusicLibrary) AddSong(song *Song) {

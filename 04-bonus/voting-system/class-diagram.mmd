@@ -1,0 +1,72 @@
+%% Modernized design (Go). Bonus topic — no upstream PNG required.
+classDiagram
+    direction TB
+
+    class VotingSystem {
+        +NewVotingSystem()
+        +CreateElection(id, title string) Election
+        +RegisterVoter(id, name string) Voter
+        +AddCandidate(electionID, candidateID, name string) error
+        +OpenElection(electionID string) error
+        +CloseElection(electionID string) error
+        +CastVote(electionID, voterID, candidateID string) error
+        +Results(electionID string) TallyResult, error
+    }
+
+    class Election {
+        +ID string
+        +Title string
+        +Status ElectionStatus
+        +AddCandidate(c Candidate) error
+        +Open() error
+        +Close() error
+        +CastVote(voterID, candidateID string) error
+        +Ballots() Ballot[]
+    }
+
+    class Candidate {
+        +ID string
+        +Name string
+    }
+
+    class Voter {
+        +ID string
+        +Name string
+    }
+
+    class Ballot {
+        +VoterID string
+        +CandidateID string
+    }
+
+    class ElectionStatus {
+        <<enumeration>>
+        Created
+        Open
+        Closed
+    }
+
+    class TallyStrategy {
+        <<interface>>
+        +Tally(election Election) TallyResult
+    }
+
+    class PluralityTally {
+        +Tally(election Election) TallyResult
+    }
+
+    class TallyResult {
+        +Counts map
+        +WinnerID string
+        +WinnerName string
+        +TotalVotes int
+    }
+
+    VotingSystem "1" --> "*" Election
+    VotingSystem "1" --> "*" Voter
+    VotingSystem --> TallyStrategy
+    Election "1" --> "*" Candidate
+    Election "1" --> "*" Ballot
+    Election --> ElectionStatus
+    TallyStrategy <|.. PluralityTally
+    PluralityTally ..> TallyResult

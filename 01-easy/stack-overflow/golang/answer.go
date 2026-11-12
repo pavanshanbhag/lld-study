@@ -51,7 +51,7 @@ func (a *Answer) Vote(user *User, value int) error {
 	return nil
 }
 
-func (a *Answer) GetVoteCount() int {
+func (a *Answer) VoteCount() int {
 	a.mu.RLock()
 	defer a.mu.RUnlock()
 
@@ -69,7 +69,7 @@ func (a *Answer) AddComment(comment *Comment) error {
 	return nil
 }
 
-func (a *Answer) GetComments() []*Comment {
+func (a *Answer) Comments() []*Comment {
 	a.mu.RLock()
 	defer a.mu.RUnlock()
 	comments := make([]*Comment, len(a.comments))

@@ -1,7 +1,5 @@
 package trafficsignalsystem
 
-import "fmt"
-
 type TrafficLight struct {
 	ID             string
 	CurrentSignal  Signal
@@ -22,9 +20,8 @@ func NewTrafficLight(id string, redDuration, yellowDuration, greenDuration int) 
 
 func (tl *TrafficLight) ChangeSignal(newSignal Signal) {
 	tl.CurrentSignal = newSignal
-	tl.notifyObservers()
 }
 
-func (tl *TrafficLight) notifyObservers() {
-	fmt.Printf("Traffic Light %s changed to %s\n", tl.ID, tl.CurrentSignal)
+func (tl *TrafficLight) Signal() Signal {
+	return tl.CurrentSignal
 }

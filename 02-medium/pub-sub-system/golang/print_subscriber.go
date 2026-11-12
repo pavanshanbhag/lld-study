@@ -1,15 +1,16 @@
 package pubsubsystem
 
-import "fmt"
+import "log/slog"
 
 type PrintSubscriber struct {
-	Name string
+	Name   string
+	logger *slog.Logger
 }
 
 func NewPrintSubscriber(name string) *PrintSubscriber {
-	return &PrintSubscriber{Name: name}
+	return &PrintSubscriber{Name: name, logger: slog.Default()}
 }
 
 func (ps *PrintSubscriber) OnMessage(message *Message) {
-	fmt.Printf("Subscriber %s received message: %s\n", ps.Name, message.Content)
+	ps.logger.Info("message received", "subscriber", ps.Name, "content", message.Content)
 }

@@ -13,12 +13,19 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/airlinemanagementsystem-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
 
+#### [Java Implementation](../solutions/java/src/airlinemanagementsystem/)
+
+#### [Python Implementation](../solutions/python/airlinemanagementsystem/)
+
+#### [C++ Implementation](../solutions/cpp/airlinemanagementsystem/)
+
+#### [C# Implementation](../solutions/csharp/airlinemanagementsystem/)
+
+#### [Go Implementation](../solutions/golang/airlinemanagementsystem/)
 
 ## Classes, Interfaces and Enumerations
 

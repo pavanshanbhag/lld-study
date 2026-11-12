@@ -8,3 +8,11 @@ def test_snake_and_ladder_board() -> None:
     assert board.get_final_position(1) == 38
     assert board.get_final_position(16) == 6
     assert board.get_final_position(5) == 5
+
+
+def test_ladder_rejects_invalid_range() -> None:
+    try:
+        Ladder(40, 10)
+        raise AssertionError("expected ValueError")
+    except ValueError:
+        pass

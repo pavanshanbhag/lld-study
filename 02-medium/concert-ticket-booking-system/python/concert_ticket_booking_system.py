@@ -8,10 +8,15 @@ from user import User
 from threading import Lock
 
 class ConcertTicketBookingSystem:
-    def __init__(self):
-        self.concerts = {}
-        self.bookings = {}
-        self._lock = Lock()
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.concerts = {}
+            cls._instance.bookings = {}
+            cls._instance._lock = Lock()
+        return cls._instance
 
     def add_concert(self, concert: Concert):
         self.concerts[concert.id] = concert

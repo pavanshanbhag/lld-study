@@ -1,8 +1,10 @@
-import sys
+import logging
 from concurrent.futures import ThreadPoolExecutor
 
 from log_appender import LogAppender
 from log_message import LogMessage
+
+logger = logging.getLogger(__name__)
 
 
 class AsyncLogProcessor:
@@ -12,7 +14,7 @@ class AsyncLogProcessor:
 
     def process(self, log_message: LogMessage, appenders: list[LogAppender]):
         if self.shutdown_flag:
-            print("Logger is shut down. Cannot process log message.", file=sys.stderr)
+            logger.warning("Logger is shut down. Cannot process log message.")
             return
 
         def process_task():

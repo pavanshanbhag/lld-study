@@ -9,7 +9,7 @@ from playable import Playlist
 class MusicStreamingDemo:
     @staticmethod
     def main():
-        system = MusicStreamingSystem()
+        system = MusicStreamingSystem.get_instance()
         
         # --- Setup Catalog ---
         daft_punk = Artist("art1", "Daft Punk")

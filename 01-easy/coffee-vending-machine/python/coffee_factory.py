@@ -1,6 +1,5 @@
-from coffee import Cappuccino, Coffee, Espresso, Latte
 from enums import CoffeeType
-
+from coffee import Coffee, Espresso, Latte, Cappuccino
 
 class CoffeeFactory:
     @staticmethod

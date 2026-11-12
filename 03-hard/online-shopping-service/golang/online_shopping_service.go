@@ -12,7 +12,19 @@ type OnlineShoppingService struct {
 	Orders   map[string]*Order
 }
 
-func NewOnlineShoppingService() *OnlineShoppingService {
+var instance *OnlineShoppingService
+
+func GetInstance() *OnlineShoppingService {
+	if instance == nil {
+		instance = &OnlineShoppingService{
+			Users:    make(map[string]*User),
+			Products: make(map[string]*Product),
+			Orders:   make(map[string]*Order),
+		}
+	}
+	return instance
+}
+func NewInstance() *OnlineShoppingService {
 	return &OnlineShoppingService{
 		Users:    make(map[string]*User),
 		Products: make(map[string]*Product),
@@ -68,4 +80,8 @@ func (s *OnlineShoppingService) PlaceOrder(user *User, cart *ShoppingCart, payme
 	}
 
 	return order, nil
+}
+
+func NewOnlineShoppingService() *OnlineShoppingService {
+	return NewInstance()
 }

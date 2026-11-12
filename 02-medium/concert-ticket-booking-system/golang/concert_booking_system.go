@@ -12,6 +12,20 @@ type ConcertTicketBookingSystem struct {
 	mu       sync.Mutex
 }
 
+var (
+	instance *ConcertTicketBookingSystem
+	once     sync.Once
+)
+
+func GetBookingSystem() *ConcertTicketBookingSystem {
+	once.Do(func() {
+		instance = &ConcertTicketBookingSystem{
+			concerts: make(map[string]*Concert),
+			bookings: make(map[string]*Booking),
+		}
+	})
+	return instance
+}
 func NewBookingSystem() *ConcertTicketBookingSystem {
 	return &ConcertTicketBookingSystem{
 		concerts: make(map[string]*Concert),

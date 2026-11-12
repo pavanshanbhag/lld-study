@@ -1,6 +1,7 @@
 package onlineauctionsystem
 
 import (
+	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -25,7 +26,7 @@ func (as *AuctionSystem) RegisterUser(user *User) {
 	as.users[user.ID] = user
 }
 
-func (as *AuctionSystem) GetUser(userID string) *User {
+func (as *AuctionSystem) User(userID string) *User {
 	as.mu.RLock()
 	defer as.mu.RUnlock()
 	return as.users[userID]
@@ -59,13 +60,13 @@ func (as *AuctionSystem) SearchAuctionListings(keyword string) []*AuctionListing
 	return matchingListings
 }
 
-func (as *AuctionSystem) PlaceBid(auctionListingID string, bid *Bid) bool {
+func (as *AuctionSystem) PlaceBid(auctionListingID string, bid *Bid) error {
 	as.mu.RLock()
 	listing, exists := as.auctionListings[auctionListingID]
 	as.mu.RUnlock()
 
-	if exists {
-		return listing.PlaceBid(bid)
+	if !exists {
+		return fmt.Errorf("auction listing %s not found", auctionListingID)
 	}
-	return false
+	return listing.PlaceBid(bid)
 }

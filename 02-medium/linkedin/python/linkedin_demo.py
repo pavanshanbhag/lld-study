@@ -7,7 +7,7 @@ from datetime import date
 class LinkedInDemo:
     @staticmethod
     def main():
-        system = LinkedInSystem()
+        system = LinkedInSystem.get_instance()
 
         # 1. Create Members using the Builder Pattern
         print("--- 1. Member Registration ---")

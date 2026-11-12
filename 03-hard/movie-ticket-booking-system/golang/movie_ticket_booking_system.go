@@ -16,7 +16,23 @@ type MovieTicketBookingSystem struct {
 	bookingCount int64
 }
 
-func NewMovieTicketBookingSystem() *MovieTicketBookingSystem {
+var (
+	instance *MovieTicketBookingSystem
+	once     sync.Once
+)
+
+func GetBookingSystem() *MovieTicketBookingSystem {
+	once.Do(func() {
+		instance = &MovieTicketBookingSystem{
+			movies:   make([]*Movie, 0),
+			theaters: make([]*Theater, 0),
+			shows:    make(map[string]*Show),
+			bookings: make(map[string]*Booking),
+		}
+	})
+	return instance
+}
+func NewBookingSystem() *MovieTicketBookingSystem {
 	return &MovieTicketBookingSystem{
 		movies:   make([]*Movie, 0),
 		theaters: make([]*Theater, 0),

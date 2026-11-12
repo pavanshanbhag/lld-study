@@ -12,19 +12,19 @@ func NewSellOrder(orderID string, account *Account, stock *Stock, quantity int, 
 			Stock:    stock,
 			Quantity: quantity,
 			Price:    price,
-			Status:   OrderStatusPending,
+			status:   OrderStatusPending,
 		},
 	}
 }
 
 func (o *SellOrder) Execute() error {
 	if err := o.Account.Portfolio.RemoveStock(o.Stock, o.Quantity); err != nil {
-		o.Status = OrderStatusRejected
+		o.SetStatus(OrderStatusRejected)
 		return err
 	}
 
 	totalProceeds := float64(o.Quantity) * o.Price
 	o.Account.Deposit(totalProceeds)
-	o.Status = OrderStatusExecuted
+	o.SetStatus(OrderStatusExecuted)
 	return nil
 }

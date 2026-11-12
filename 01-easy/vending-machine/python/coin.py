@@ -1,11 +1,8 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class Coin(Enum):
+class Coin(IntEnum):
     PENNY = 1
     NICKEL = 5
     DIME = 10
     QUARTER = 25
-
-    def get_value(self) -> int:
-        return self.value

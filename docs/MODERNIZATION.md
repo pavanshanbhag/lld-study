@@ -21,79 +21,53 @@ uv sync
 
 ### LLD solutions (01-easy … 03-hard)
 
-**We removed singletons from modernized LLD code on purpose.**
-
-| Before (upstream) | After (modernized) |
-|-------------------|-------------------|
-| `GetParkingLotInstance()` | `NewParkingLot()` |
-| `ParkingLot.get_instance()` | `ParkingLot()` constructor |
-| Global hidden state | Explicit dependency injection |
-
-**Nothing is broken** for interview study — the **design** (classes, relationships, patterns) is unchanged. Only the **lifecycle** is better: you create the object, pass it around, test it in isolation.
-
-Singleton is still available as a **pattern to learn** in:
+**Singletons removed on purpose.** Use `NewService()` / constructors. Learn singleton only in:
 
 ```
 00-foundations/design-patterns/creational/singleton/
 ```
 
-Learn singleton **there**. Use constructors **in LLD problems**.
-
-## Class diagrams (PNG files)
-
-### Keep the existing PNGs — add Mermaid sources alongside
-
-Each topic has `class-diagram.png` copied from upstream (interview reference). **Do not delete these.**
-
-When modernized code diverges from upstream naming, add **`class-diagram.mmd`** next to the PNG:
+## Class diagrams
 
 | File | Purpose |
 |------|---------|
-| `class-diagram.png` | Original upstream UML (kept) |
-| `class-diagram.mmd` | Mermaid source matching modernized Go/Python code |
+| `class-diagram.png` | Upstream UML (kept) |
+| `class-diagram.mmd` | Mermaid matching modernized Go types |
 
-**All 33 LLD topics** (01-easy through 03-hard) now have `class-diagram.mmd` reflecting modernized Go types. Original `class-diagram.png` files are unchanged.
-
-Preview in VS Code (Mermaid extension), GitHub markdown, or export:
-
-```bash
-# optional, after installing @mermaid-js/mermaid-cli
-mmdc -i class-diagram.mmd -o class-diagram-modern.png
-```
-
-**Not yet:** `04-bonus/voting-system` — no implementation; add `.mmd` when code lands.
+All 33 LLD topics have both. Do not delete PNGs.
 
 ## Modernization status
 
 | Tier | Topics | Status |
 |------|--------|--------|
-| **Reference** | parking-lot | Full idiomatic (Go + Python, tests, ruff, mypy strict) |
-| **01-easy** | 6 others | Singleton → constructor, smoke tests pass |
-| **02-medium** | 15 | Singleton → constructor, Go + Python smoke tests |
-| **03-hard** | 11 | Singleton → constructor, Go + Python smoke tests |
-| **Design patterns** | 19 | All Go demos via `cmd/demo/`; Python demos unchanged |
-| **04-bonus** | voting-system | Stub only (README placeholders; no code yet) |
+| **Reference** | parking-lot | Full idiomatic + ruff + mypy strict |
+| **01-easy** | 7 | Parking-lot pattern: slog demos, errors, Get→idiomatic, dataclasses/StrEnum/logging, READMEs, tests |
+| **02-medium** | 15 | Same pattern |
+| **03-hard** | 11 | Same pattern |
+| **Design patterns** | 19 | Go `cmd/demo/` + Go 1.25; catalog README accurate |
+| **04-bonus** | voting-system | Constructor-based + Go/Python tests |
 
-## Go modernization checklist (per topic)
+## Go checklist (applied across LLD)
 
-- [x] `NewService()` constructor (no deprecated `Get*` wrappers)
-- [ ] Return `error` from fallible operations (where applicable)
-- [ ] Idiomatic names (`LicensePlate()` not `GetLicensePlate()`)
-- [ ] `log/slog` in demos, not domain `println`
-- [x] `*_test.go` with table-driven or smoke tests
-- [x] `go test -race ./…`
+- [x] `NewService()` constructor (no `Get*` singleton wrappers)
+- [x] `error` from fallible operations (where applicable)
+- [x] Idiomatic names (`LicensePlate()` not `GetLicensePlate()`)
+- [x] `log/slog` in demos
+- [x] `*_test.go` + `go test -race`
+- [x] Short `golang/README.md` per topic
 
-## Python modernization checklist (per topic)
+## Python checklist (applied across LLD)
 
-- [ ] Single module or proper package with `__init__.py`
-- [ ] `@dataclass`, `StrEnum`, `Protocol` (parking-lot reference only so far)
-- [ ] `datetime` not millisecond ints
-- [ ] `logging` in domain; prints only in demo
 - [x] Constructor, not `get_instance()`
-- [x] Tests under `tests/` (mypy strict: parking-lot only)
+- [x] Domain `logging` (demos may still print UX)
+- [x] `@dataclass` / `StrEnum` where models are simple
+- [x] Tests under `tests/`
+- [x] Short `python/README.md` per topic
+- [ ] mypy strict — parking-lot only (expand later)
+- [ ] Single-module consolidation — parking-lot only
 
-## Next steps (optional depth)
+## Next steps (optional)
 
-1. Full idiomatic refactor per topic (like parking-lot) — dataclasses, consolidated modules
-2. Expand mypy strict coverage beyond parking-lot
-3. Implement `04-bonus/voting-system` (Go + Python + tests + `class-diagram.mmd`)
+1. Expand mypy strict beyond parking-lot
+2. Implement `04-bonus/voting-system`
+3. Optional: consolidate multi-file Python topics like parking-lot

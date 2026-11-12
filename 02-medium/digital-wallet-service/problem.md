@@ -12,12 +12,14 @@
 
 ## UML Class Diagram
 
-![](./class-diagram.png)
+![](../class-diagrams/digitalwalletservice-class-diagram.png)
 
 ## Implementations
-- [Go](./golang/)
-- [Python](./python/)
-
+#### [Java Implementation](../solutions/java/src/digitalwalletservice/) 
+#### [Python Implementation](../solutions/python/digitalwalletservice/)
+#### [C++ Implementation](../solutions/cpp/digitalwalletservice/)
+#### [C# Implementation](../solutions/csharp/digitalwalletservice/)
+#### [Go Implementation](../solutions/golang/digitalwalletservice/)
 
 ## Classes, Interfaces and Enumerations
 1. The **User** class represents a user of the digital wallet, with properties such as ID, name, email, password, and a list of accounts.

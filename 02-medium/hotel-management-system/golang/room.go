@@ -55,6 +55,12 @@ func (r *Room) CheckOut() error {
 	return nil
 }
 
+func (r *Room) Status() RoomStatus {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+	return r.status
+}
+
 func (r *Room) GetStatus() RoomStatus {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
